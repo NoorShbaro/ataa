@@ -1,45 +1,117 @@
 import { Tabs } from 'expo-router';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { useTheme } from '@/constants/ThemeContext';
+import { DarkColors, LightColors } from '@/constants/Colors';
 import React from 'react';
-import { Platform } from 'react-native';
+import { StatusBar, TouchableOpacity, Image, View } from 'react-native';
 
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  const { isDarkMode } = useTheme();
+  const currentColors = isDarkMode ? DarkColors : LightColors;
+
+  const CustomHeader = () => (
+    <View
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '100%',
+        paddingHorizontal: 10,
+      }}
+    >
+      <Image
+        source={require('@/assets/images/icon.png')}
+        style={{ width: 50, height: 50, resizeMode: 'contain', borderRadius: 30 }}
+      />
+
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 15 }}>
+        {/* Notification Icon */}
+        <TouchableOpacity>
+          <Ionicons name="notifications" size={30} color={currentColors.mainColor} />
+        </TouchableOpacity>
+
+        {/* Profile Icon */}
+        <TouchableOpacity>
+          <Ionicons name="person-circle" size={35} color={currentColors.mainColor} />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
 
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
+    <>
+      <StatusBar
+        backgroundColor={currentColors.background}
+        translucent={false}
+      />
+      <Tabs
+        screenOptions={{
+          tabBarActiveTintColor: currentColors.mainColor,
+          headerStyle: {
+            backgroundColor: currentColors.background,
           },
-          default: {},
-        }),
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          headerShadowVisible: false,
+          headerTintColor: currentColors.mainColor,
+          tabBarStyle: {
+            backgroundColor: currentColors.background,
+            height: 70,
+            justifyContent: 'center',
+            paddingTop: 10,
+            paddingBottom:10,
+            borderTopWidth: 0,
+            elevation: 0,
+            shadowOpacity: 0,
+          },
+          headerTitle: () => <CustomHeader />,
         }}
-      />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-        }}
-      />
-    </Tabs>
+      >
+        <Tabs.Screen
+          name="index"
+          options={{
+            title: 'Home',
+            tabBarIcon: ({ color, focused }) => (
+              <Ionicons name={focused ? 'home-sharp' : 'home-outline'} color={color} size={24} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="campaigns"
+          options={{
+            title: 'campaigns',
+            tabBarIcon: ({ color, focused }) => (
+              <Ionicons name={focused ? 'pricetags' : 'pricetags-outline'} color={color} size={24} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="mainDonation"
+          options={{
+            title: 'Donate',
+            tabBarIcon: ({ color, focused }) => (
+              <Ionicons name={focused ? 'heart' : 'heart-outline'} color={color} size={24} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="search"
+          options={{
+            title: 'Search',
+            tabBarIcon: ({ color, focused }) => (
+              <Ionicons name={focused ? 'filter' : 'filter-outline'} color={color} size={24} />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="settings"
+          options={{
+            title: 'Settings',
+            tabBarIcon: ({ color, focused }) => (
+              <Ionicons name={focused ? 'cog' : 'cog-outline'} color={color} size={24} />
+            ),
+          }}
+        />
+      </Tabs>
+    </>
   );
 }
