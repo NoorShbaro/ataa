@@ -1,0 +1,25 @@
+{
+    "home" : "Home",
+    "camp" : "Campaigns",
+    "mainDonation" : "Donate",
+    "search" : "Search",
+    "settings" : "Settings",
+
+    "darkMode": "Dark Mode",
+    "notification" : "Notification",
+    "termsOfUse" : "Terms of Use",
+    "privacy" : "Privacy Policy",
+    "about" : "About",
+    "languages" : "Languages",
+    "profile" : "Profile",
+
+    "selectLanguage": "Select Language",
+    "en": "English",
+    "ar": "Arabic",
+
+    "fullName": "Full Name",
+    "email": "Email",
+    "phoneNumber": "Phone Number",
+    "age": "Age",
+    "pass" : "Password"
+}

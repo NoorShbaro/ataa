@@ -17,7 +17,7 @@ const Header = ({ title }: HeaderProps) => {
   return (
     <SafeAreaView
       edges={['top']}
-      style={[styles.safeArea, { backgroundColor: currentColors.background }]}
+      style={[{ backgroundColor: currentColors.background }]}
     >
       <View style={[styles.container, { backgroundColor: currentColors.background }]}>
         {/* Back Icon */}
@@ -44,9 +44,6 @@ const Header = ({ title }: HeaderProps) => {
 export default Header;
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-  },
   container: {
     flexDirection: 'row',
     alignItems: 'center',

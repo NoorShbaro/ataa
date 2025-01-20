@@ -4,11 +4,14 @@ import { useTheme } from '@/constants/ThemeContext';
 import { DarkColors, LightColors } from '@/constants/Colors';
 import React from 'react';
 import { StatusBar, TouchableOpacity, Image, View } from 'react-native';
+import { useLanguage } from '@/constants/LanguageContext';
 
 
 export default function TabLayout() {
   const { isDarkMode } = useTheme();
   const currentColors = isDarkMode ? DarkColors : LightColors;
+
+  const {i18n} = useLanguage();
 
   const CustomHeader = () => (
     <View
@@ -69,7 +72,7 @@ export default function TabLayout() {
         <Tabs.Screen
           name="index"
           options={{
-            title: 'Home',
+            title: `${i18n.t('home')}`,
             tabBarIcon: ({ color, focused }) => (
               <Ionicons name={focused ? 'home-sharp' : 'home-outline'} color={color} size={24} />
             ),
@@ -78,7 +81,7 @@ export default function TabLayout() {
         <Tabs.Screen
           name="campaigns"
           options={{
-            title: 'campaigns',
+            title: `${i18n.t('camp')}`,
             tabBarIcon: ({ color, focused }) => (
               <Ionicons name={focused ? 'pricetags' : 'pricetags-outline'} color={color} size={24} />
             ),
@@ -87,7 +90,7 @@ export default function TabLayout() {
         <Tabs.Screen
           name="mainDonation"
           options={{
-            title: 'Donate',
+            title: `${i18n.t('mainDonation')}`,
             tabBarIcon: ({ color, focused }) => (
               <Ionicons name={focused ? 'heart' : 'heart-outline'} color={color} size={24} />
             ),
@@ -96,7 +99,7 @@ export default function TabLayout() {
         <Tabs.Screen
           name="search"
           options={{
-            title: 'Search',
+            title: `${i18n.t('search')}`,
             tabBarIcon: ({ color, focused }) => (
               <Ionicons name={focused ? 'filter' : 'filter-outline'} color={color} size={24} />
             ),
@@ -105,7 +108,7 @@ export default function TabLayout() {
         <Tabs.Screen
           name="settings"
           options={{
-            title: 'Settings',
+            title: `${i18n.t('settings')}`,
             tabBarIcon: ({ color, focused }) => (
               <Ionicons name={focused ? 'cog' : 'cog-outline'} color={color} size={24} />
             ),

@@ -1,0 +1,24 @@
+{
+    "home" : "الرئيسية",
+    "camp" : "البرامج",
+    "mainDonation" : "تبرع",
+    "search" : "البحث",
+    "settings" : "الاعدادات",
+
+    "darkMode": "الوضع المظلم",
+    "notification" : "إشعار",
+    "termsOfUse" : "شروط الاستخدام",
+    "privacy" : "سياسة الخصوصية",
+    "about" : "معلومات ",
+    "languages" : "اللغات",
+    "profile" : "حساب تعريفي",
+
+    "selectLanguage": "اختر اللغة",
+    "en": "إنجليزي",
+    "ar": "عربي",
+
+    "fullName": "الاسم الكامل",
+    "email": "بريد إلكتروني",
+    "phoneNumber": "رقم التليفون",
+    "age": "العمر"
+}
