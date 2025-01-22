@@ -61,7 +61,7 @@ export default function Profile() {
                 </View>
                 <View style={styles.padt}>
                 <TouchableOpacity style={[styles.btn ,{backgroundColor: currentColors.button}]}>
-                    <Text style={[styles.textBtn, {color: currentColors.background}]}>Save</Text>
+                    <Text style={[styles.textBtn, {color: currentColors.background}]}>{i18n.t('save')}</Text>
                 </TouchableOpacity>
                 </View>
             </View>

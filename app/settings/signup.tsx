@@ -69,28 +69,28 @@ export default function Signup() {
                         onPress={() => setIsChecked(!isChecked)}
                         color={currentColors.mainColor}
                     />
-                    <Text style={[styles.text2, { color: currentColors.darkGrey }]}>I agree to the </Text>
+                    <Text style={[styles.text2, { color: currentColors.darkGrey }]}>{i18n.t('agree')} </Text>
                     <Link href={`/settings/termofuse`} asChild>
-                        <TouchableOpacity><Text style={[styles.textBtnTo, { color: currentColors.mainColor }]}>Terms of Use </Text></TouchableOpacity>
+                        <TouchableOpacity><Text style={[styles.textBtnTo, { color: currentColors.mainColor }]}>{i18n.t('termsOfUse')} </Text></TouchableOpacity>
                     </Link>
-                    <Text style={[styles.text2, { color: currentColors.darkGrey }]}>and </Text>
+                    <Text style={[styles.text2, { color: currentColors.darkGrey }]}>{i18n.t('and')} </Text>
                     <Link href={`/settings/privacy`} asChild>
-                        <TouchableOpacity ><Text style={[styles.textBtnTo, { color: currentColors.mainColor }]}>Privacy Policy</Text></TouchableOpacity>
+                        <TouchableOpacity ><Text style={[styles.textBtnTo, { color: currentColors.mainColor }]}>{i18n.t('privacy')}</Text></TouchableOpacity>
                     </Link>
                 </View>
                 <View style={styles.padt}>
                     <Link href={`/settings/profile`} asChild style={[styles.btn, { backgroundColor: currentColors.button }]}>
                         <TouchableOpacity>
-                            <Text style={[styles.textBtn, { color: currentColors.background }]}>Sign up</Text>
+                            <Text style={[styles.textBtn, { color: currentColors.background }]}>{i18n.t('signup')}</Text>
                         </TouchableOpacity>
                     </Link>
                 </View>
 
                 <View style={[styles.padt, styles.noAccount]}>
 
-                    <Text style={[styles.text, { color: currentColors.darkGrey }]}>Already have an account? </Text>
+                    <Text style={[styles.text, { color: currentColors.darkGrey }]}>{i18n.t('account')} </Text>
                     <Link href={`/settings/login`} asChild>
-                        <TouchableOpacity ><Text style={[styles.textBtnT, { color: currentColors.mainColor }]}>Sign in</Text></TouchableOpacity>
+                        <TouchableOpacity ><Text style={[styles.textBtnT, { color: currentColors.mainColor }]}>{i18n.t('login')}</Text></TouchableOpacity>
                     </Link>
 
                 </View>

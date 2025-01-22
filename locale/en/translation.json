@@ -5,6 +5,8 @@
     "search" : "Search",
     "settings" : "Settings",
 
+    "and":"and",
+
     "darkMode": "Dark Mode",
     "notification" : "Notification",
     "termsOfUse" : "Terms of Use",
@@ -21,5 +23,17 @@
     "email": "Email",
     "phoneNumber": "Phone Number",
     "age": "Age",
-    "pass" : "Password"
+    "pass" : "Password",
+
+    "login":"Login",
+    "signup" : "Sign up",
+    "noAccount": "Don't have an account?",
+    "signing":"By signing in you accept the",
+
+    "allowingNotification": "Allow Notification",
+
+    "save": "Save",
+
+    "agree": "I agree to the",
+    "account": "Already have an account?"
 }

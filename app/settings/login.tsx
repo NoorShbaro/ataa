@@ -20,7 +20,7 @@ export default function Login() {
         <View style={[styles.container, { backgroundColor: currentColors.background }]}>
             <Stack.Screen options={{ headerShown: false }} />
 
-            <Header title='Login'/>
+            <Header title={i18n.t('login')} />
 
             <View style={styles.content}>
 
@@ -55,29 +55,29 @@ export default function Login() {
                 <View style={styles.padt}>
                     <Link href={`/settings/profile`} asChild style={[styles.btn, { backgroundColor: currentColors.button }]}>
                         <TouchableOpacity>
-                            <Text style={[styles.textBtn, { color: currentColors.background }]}>Sign in</Text>
+                            <Text style={[styles.textBtn, { color: currentColors.background }]}>{i18n.t('login')}</Text>
                         </TouchableOpacity>
                     </Link>
                 </View>
 
                 <View style={[styles.padt, styles.noAccount]}>
 
-                    <Text style={[styles.text, { color: currentColors.darkGrey }]}>Don't have an account? </Text>
+                    <Text style={[styles.text, { color: currentColors.darkGrey }]}>{i18n.t('noAccount')} </Text>
                     <Link href={`/settings/signup`} asChild>
-                        <TouchableOpacity ><Text style={[styles.textBtnT,{color: currentColors.mainColor}]}>Sign up</Text></TouchableOpacity>
+                        <TouchableOpacity ><Text style={[styles.textBtnT,{color: currentColors.mainColor}]}>{i18n.t('signup')}</Text></TouchableOpacity>
                     </Link>
 
                 </View>
 
                 <View style={[styles.padt, styles.noAccount]}>
 
-                    <Text style={[styles.text2, { color: currentColors.darkGrey }]}>By signing in you accept the </Text>
+                    <Text style={[styles.text2, { color: currentColors.darkGrey }]}>{i18n.t('signing')} </Text>
                     <Link href={`/settings/termofuse`} asChild>
-                        <TouchableOpacity><Text style={[styles.textBtnTo,{color: currentColors.mainColor}]}>Terms of Use </Text></TouchableOpacity>
+                        <TouchableOpacity><Text style={[styles.textBtnTo,{color: currentColors.mainColor}]}>{i18n.t('termsOfUse')} </Text></TouchableOpacity>
                     </Link>
-                    <Text style={[styles.text2, { color: currentColors.darkGrey }]}>and </Text>
+                    <Text style={[styles.text2, { color: currentColors.darkGrey }]}>{i18n.t('and')} </Text>
                     <Link href={`/settings/privacy`} asChild>
-                        <TouchableOpacity ><Text style={[styles.textBtnTo,{color: currentColors.mainColor}]}>Privacy Policy</Text></TouchableOpacity>
+                        <TouchableOpacity ><Text style={[styles.textBtnTo,{color: currentColors.mainColor}]}>{i18n.t('privacy')}</Text></TouchableOpacity>
                     </Link>
                 </View>
             </View>
