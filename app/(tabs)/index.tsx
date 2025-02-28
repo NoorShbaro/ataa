@@ -12,8 +12,8 @@ export default function Index() {
 
   return (
     <View style={[styles.container, { backgroundColor: currentColors.background }]}>
-      <Text style={{ color: currentColors.mainColor }}>
-        {i18n.t('home')}
+      <Text style={{ color: currentColors.mainColor }}> 
+      {i18n.t('home')}
       </Text>
     </View>
   );
@@ -24,9 +24,5 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  button: {
-    fontSize: 20,
-    textDecorationLine: 'underline',
   },
 });

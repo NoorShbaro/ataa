@@ -1,8 +1,20 @@
+import React, { useState } from 'react';
 import { Stack } from 'expo-router';
 import { ThemeProvider } from '@/constants/ThemeContext';
 import { LanguageProvider } from '@/constants/LanguageContext';
+import CustomSplashScreen from '@/components/SplashScreen';
 
-export default function RootLayout() {
+const RootLayout: React.FC = () => {
+  const [isSplashScreenVisible, setSplashScreenVisible] = useState(true);
+
+  const handleSplashScreenFinish = () => {
+    setSplashScreenVisible(false);
+  };
+
+  if (isSplashScreenVisible) {
+    return <CustomSplashScreen onFinish={handleSplashScreenFinish} />;
+  }
+
   return (
     <ThemeProvider>
       <LanguageProvider>
@@ -12,4 +24,6 @@ export default function RootLayout() {
       </LanguageProvider>
     </ThemeProvider>
   );
-}
+};
+
+export default RootLayout;
