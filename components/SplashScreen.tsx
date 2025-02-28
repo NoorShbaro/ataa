@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import * as SplashScreen from 'expo-splash-screen';
+import { View, StyleSheet, Dimensions } from 'react-native';
 import { useTheme } from '@/constants/ThemeContext';
 import { DarkColors, LightColors } from '@/constants/Colors';
+import LottieView from 'lottie-react-native';
+
+const { width, height } = Dimensions.get("window");
 
 type CustomSplashScreenProps = {
   onFinish: () => void;
@@ -10,40 +12,40 @@ type CustomSplashScreenProps = {
 
 const CustomSplashScreen: React.FC<CustomSplashScreenProps> = ({ onFinish }) => {
     const { isDarkMode } = useTheme();
-      const currentColors = isDarkMode ? DarkColors : LightColors;
+    const currentColors = isDarkMode ? DarkColors : LightColors;
       
-  useEffect(() => {
-    const prepare = async () => {
-      await SplashScreen.preventAutoHideAsync();
-      // Simulate some asynchronous work like loading assets
-      setTimeout(async () => {
-        await SplashScreen.hideAsync();
-        if (onFinish) {
-          onFinish();
-        }
-      }, 3000); // Adjust the delay as needed
-    };
+    useEffect(() => {
+        // Simulate loading time, then call onFinish
+        const timeout = setTimeout(() => {
+            onFinish();
+        }, 1500); // Adjust the delay as needed
 
-    prepare();
-  }, []);
+        return () => clearTimeout(timeout); // Cleanup on unmount
+    }, []);
 
-  return (
-    <View style={[styles.container,{backgroundColor: currentColors.button}]}>
-      <Text style={[styles.text,{color: currentColors.lightGrey}]}>ATAA DONATION APP</Text>
-    </View>
-  );
+    return (
+        <View style={[styles.container, { backgroundColor: currentColors.button }]}>
+            <LottieView
+                source={require('@/assets/Lottie/Animation - 1740739459878.json')}
+                autoPlay
+                loop
+                style={styles.animation}
+            />
+        </View>
+    );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  text: {
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    animation: {
+        height: height,
+        width: width,
+        resizeMode: 'contain'
+    },
 });
 
 export default CustomSplashScreen;

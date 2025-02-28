@@ -45,7 +45,8 @@
     "react-native-webview": "13.12.5",
     "expo-updates": "0.27.1",
     "jest-expo": "52.0.5",
-    "expo-linear-gradient": "~14.0.2"
+    "expo-linear-gradient": "~14.0.2",
+    "lottie-react-native": "7.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
