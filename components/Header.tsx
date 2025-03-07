@@ -22,7 +22,7 @@ const Header = ({ title }: HeaderProps) => {
       <View style={[styles.container, { backgroundColor: currentColors.background }]}>
         {/* Back Icon */}
         <TouchableOpacity
-          onPress={() => router.back()}
+          onPress={() => router.replace('/(tabs)/settings')}
           style={styles.backButton}
         >
           <MaterialIcons
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   title: {
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: '600',
   },
 });

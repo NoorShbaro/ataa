@@ -1,5 +1,5 @@
-import { Text, View, StyleSheet, Image, TextInput, TouchableOpacity} from 'react-native';
-import { Link, Stack } from 'expo-router';
+import { Text, View, StyleSheet, Image, TextInput, TouchableOpacity } from 'react-native';
+import { Link, router, Stack } from 'expo-router';
 import { DarkColors, LightColors } from '@/constants/Colors';
 import { useTheme } from '@/constants/ThemeContext';
 import Header from '@/components/Header';
@@ -22,7 +22,7 @@ export default function Signup() {
         <View style={[styles.container, { backgroundColor: currentColors.background }]}>
             <Stack.Screen options={{ headerShown: false }} />
 
-            <Header title='Sign up'/>
+            <Header title='Sign up' />
 
             <View style={styles.content}>
 
@@ -64,7 +64,7 @@ export default function Signup() {
 
 
                 <View style={[styles.padt, styles.noAccount]}>
-                <Checkbox
+                    <Checkbox
                         status={isChecked ? 'checked' : 'unchecked'}
                         onPress={() => setIsChecked(!isChecked)}
                         color={currentColors.mainColor}
@@ -79,20 +79,24 @@ export default function Signup() {
                     </Link>
                 </View>
                 <View style={styles.padt}>
-                    <Link href={`/settings/profile`} asChild style={[styles.btn, { backgroundColor: currentColors.button }]}>
-                        <TouchableOpacity>
-                            <Text style={[styles.textBtn, { color: currentColors.background }]}>{i18n.t('signup')}</Text>
-                        </TouchableOpacity>
-                    </Link>
+                    <TouchableOpacity
+                        onPress={() => {
+                            if (!isChecked) {
+                                alert(i18n.t('pleaseAgreeToTerms'));
+                            } else {
+                                router.push('/settings/profile');
+                            }
+                        }}
+                        style={[styles.btn, { backgroundColor: currentColors.button }]}
+                    >
+                        <Text style={[styles.textBtn, { color: currentColors.background }]}>{i18n.t('signup')}</Text>
+                    </TouchableOpacity>
                 </View>
 
                 <View style={[styles.padt, styles.noAccount]}>
 
                     <Text style={[styles.text, { color: currentColors.darkGrey }]}>{i18n.t('account')} </Text>
-                    <Link href={`/settings/login`} asChild>
-                        <TouchableOpacity ><Text style={[styles.textBtnT, { color: currentColors.mainColor }]}>{i18n.t('login')}</Text></TouchableOpacity>
-                    </Link>
-
+                        <TouchableOpacity onPress={() => {router.replace('/settings/login')}}><Text style={[styles.textBtnT, { color: currentColors.mainColor }]}>{i18n.t('login')}</Text></TouchableOpacity>
                 </View>
             </View>
 

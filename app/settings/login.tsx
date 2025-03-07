@@ -1,5 +1,5 @@
 import { Text, View, StyleSheet, Image, TextInput, TouchableOpacity } from 'react-native';
-import { Link, Stack } from 'expo-router';
+import { Link, router, Stack } from 'expo-router';
 import { DarkColors, LightColors } from '@/constants/Colors';
 import { useTheme } from '@/constants/ThemeContext';
 import Header from '@/components/Header';
@@ -53,20 +53,17 @@ export default function Login() {
 
                 </View>
                 <View style={styles.padt}>
-                    <Link href={`/settings/profile`} asChild style={[styles.btn, { backgroundColor: currentColors.button }]}>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={()=> {router.replace('/settings/profile')}} style={[styles.btn, { backgroundColor: currentColors.button }]}>
                             <Text style={[styles.textBtn, { color: currentColors.background }]}>{i18n.t('login')}</Text>
                         </TouchableOpacity>
-                    </Link>
                 </View>
 
                 <View style={[styles.padt, styles.noAccount]}>
 
                     <Text style={[styles.text, { color: currentColors.darkGrey }]}>{i18n.t('noAccount')} </Text>
-                    <Link href={`/settings/signup`} asChild>
-                        <TouchableOpacity ><Text style={[styles.textBtnT,{color: currentColors.mainColor}]}>{i18n.t('signup')}</Text></TouchableOpacity>
-                    </Link>
-
+                        <TouchableOpacity onPress={()=> {router.replace('/settings/signup')}} >
+                            <Text style={[styles.textBtnT,{color: currentColors.mainColor}]}>{i18n.t('signup')}</Text>
+                            </TouchableOpacity>
                 </View>
 
                 <View style={[styles.padt, styles.noAccount]}>

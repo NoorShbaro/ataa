@@ -35,5 +35,6 @@
     "save": "Save",
 
     "agree": "I agree to the",
-    "account": "Already have an account?"
+    "account": "Already have an account?",
+    "pleaseAgreeToTerms": "You have missing informations"
 }
