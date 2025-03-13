@@ -1,38 +1,104 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import { Alert } from 'react-native';
 import { useRouter } from 'expo-router';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
-type UserContextType = {
-    logout: () => void;
-    refreshTokenHandler: () => void;
+type AuthContextType = {
+    accessToken: string | null;
+    refreshToken: string | null;
     login: (email: string, password: string) => Promise<void>;
+    signup: (fullName: string, email: string, password: string) => Promise<void>;
+    logout: () => Promise<void>;
+    isAuthenticated: boolean;
     error: string;
+    isChecked: boolean; // Add this if needed
+    toggleCheckbox: () => void; // Add this if needed
 };
 
-const UserContext = createContext<UserContextType | null>(null);
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const UserProvider = ({ children }: { children: React.ReactNode }) => {
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const [accessToken, setAccessToken] = useState<string | null>(null);
+    const [refreshToken, setRefreshToken] = useState<string | null>(null);
     const [error, setError] = useState<string>('');
     const router = useRouter();
+    const [isChecked, setIsChecked] = useState(false);
+
+    const toggleCheckbox = () => {
+        setIsChecked(!isChecked);
+    };
 
     useEffect(() => {
-        const checkTokenValidity = async () => {
-            const expired = await isTokenExpired();
-            if (expired) {
-                await refreshTokenHandler();
+        const loadTokens = async () => {
+            const storedAccessToken = await SecureStore.getItemAsync('accessToken');
+            const storedRefreshToken = await SecureStore.getItemAsync('refreshToken');
+            if (storedAccessToken && storedRefreshToken) {
+                setAccessToken(storedAccessToken);
+                setRefreshToken(storedRefreshToken);
+                //refreshAccessToken();
             }
         };
-
-        const interval = setInterval(checkTokenValidity, 10 * 1000); // Check every 30 seconds
-        checkTokenValidity(); // Run immediately on mount
-
-        return () => clearInterval(interval); // Cleanup on unmount
+        loadTokens();
     }, []);
 
+    const login = async (email: string, password: string) => {
+        if (!email || !password) {
+            alert('Please Fill All Fields');
+            return;
+        }
+        setError('');
+
+        try {
+            const response = await axios.post('https://be.donation.matrixvert.com/api/donor/login', { email, password });
+            const data = response.data;
+            const accessToken = data.access_token.access_token;
+            const refreshToken = data.refresh_token;
+
+            await SecureStore.setItemAsync('accessToken', accessToken);
+            await SecureStore.setItemAsync('refreshToken', refreshToken);
+
+            setAccessToken(accessToken);
+            setRefreshToken(refreshToken);
+
+            router.replace('/settings/profile');
+        } catch (error) {
+            console.error('Login failed', error);
+            setError('Invalid email or password.');
+        }
+    };
+
+    const signup = async (fullName: string, email: string, password: string) => {
+        if (!fullName || !email || !password) {
+            alert('Please Fill All Fields');
+            return;
+        }
+
+        if (!isChecked) {
+            alert('Please Agree To Terms');
+            return;
+        }
+
+        setError('');
+
+        try {
+            const response = await axios.post('https://be.donation.matrixvert.com/api/donor/register', { fullName, email, password });
+            const data = response.data;
+            const accessToken = data.access_token;
+            const refreshToken = data.refresh_token;
+
+            await SecureStore.setItemAsync('accessToken', accessToken);
+            await SecureStore.setItemAsync('refreshToken', refreshToken);
+
+            setAccessToken(accessToken);
+            setRefreshToken(refreshToken);
+
+            router.replace('/settings/profile');
+        } catch (error) {
+            console.error('Signup failed', error);
+            setError('Invalid email.');
+        }
+    };
 
     const logout = async () => {
         Alert.alert(
@@ -46,35 +112,24 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
                 {
                     text: 'Logout',
                     onPress: async () => {
-                        try {
-                            const token = await SecureStore.getItemAsync('userToken');
-                            if (!token) {
-                                console.log('No token found');
-                                return;
+                        if (accessToken) {
+                            try {
+                                await axios.post('http://be.donation.matrixvert.com/api/donor/logout', {}, {
+                                    headers: {
+                                        Authorization: `Bearer ${accessToken}`,
+                                    },
+                                });
+                            } catch (error) {
+                                console.error('Logout API call failed', error);
                             }
-
-                            const response = await fetch('http://be.donation.matrixvert.com/api/donor/logout', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'Authorization': `Bearer ${token}`,
-                                },
-                            });
-
-                            if (response.ok) {
-                                // Remove token from storage
-                                await SecureStore.deleteItemAsync('userToken');
-                                await SecureStore.deleteItemAsync('refreshToken');
-                                await AsyncStorage.removeItem('tokenExpiry');
-                                await AsyncStorage.setItem('isLoggedIn', 'false');
-                                setIsLoggedIn(false);
-                                router.replace('/settings/login');
-                            } else {
-                                console.log('Logout failed');
-                            }
-                        } catch (error) {
-                            console.log('Error during logout:', error);
                         }
+
+                        await SecureStore.deleteItemAsync('accessToken');
+                        await SecureStore.deleteItemAsync('refreshToken');
+                        setAccessToken(null);
+                        setRefreshToken(null);
+
+                        router.replace('/settings/login');
                     },
                 },
             ],
@@ -83,137 +138,88 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     };
 
     const refreshLogout = async () => {
-        try {
-            await SecureStore.deleteItemAsync('userToken');
-            await SecureStore.deleteItemAsync('refreshToken');
-            await AsyncStorage.removeItem('tokenExpiry');
-            await AsyncStorage.setItem('isLoggedIn', 'false');
-            setIsLoggedIn(false);
-        } catch (error) {
-            console.log('Error during logout:', error);
+        if (accessToken) {
+            try {
+                await axios.post('http://be.donation.matrixvert.com/api/donor/logout', {}, {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                });
+            } catch (error) {
+                console.error('Logout API call failed', error);
+            }
         }
+
+        await SecureStore.deleteItemAsync('accessToken');
+        await SecureStore.deleteItemAsync('refreshToken');
+        setAccessToken(null);
+        setRefreshToken(null);
+
     };
 
-    const saveToken = async (accessToken: string, refreshToken: string, expiresIn: number): Promise<void> => {
-        try {
-            const expiryTimestamp = Date.now() + expiresIn;
-            await SecureStore.setItemAsync('userToken', accessToken);
-            await SecureStore.setItemAsync('refreshToken', refreshToken);
-            await AsyncStorage.setItem('tokenExpiry', expiryTimestamp.toString());
-        } catch (error) {
-            console.error('Failed to save token:', error);
-        }
-    };
-
-    const isTokenExpired = async (): Promise<boolean> => {
-        try {
-            const expiryTimestamp = await AsyncStorage.getItem('tokenExpiry');
-            return !expiryTimestamp || Date.now() > Number(expiryTimestamp);
-        } catch (error) {
-            console.error('Failed to check token expiration:', error);
-            return true;
-        }
-    };
-
-    const refreshTokenHandler = async (): Promise<void> => {
+    const refreshAccessToken = async () => {
         try {
             console.log('Checking stored refresh token...');
-            const storedRefreshToken = await SecureStore.getItemAsync('refreshToken');
 
-            if (!storedRefreshToken) {
-                console.log('No valid refresh token found');
-                await refreshLogout();
-                return;
-            }
-
-            console.log('Stored refresh token found:', storedRefreshToken);
-            console.log('Attempting token refresh request...');
-
-            const response = await fetch('http://be.donation.matrixvert.com/api/donor/refresh', {
-                method: 'POST',
+            const response = await axios.post('http://be.donation.matrixvert.com/api/donor/refresh', {}, {
                 headers: {
-                    'Authorization': `Bearer ${storedRefreshToken}`,
-                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${refreshToken}`,
                 },
             });
+            const newAccessToken = response.data.access_token.access_token;
+            const newRefreshToken = response.data.refresh_token;
+            const expiresIn = response.data.access_token.expires_in;
 
             console.log('Response status:', response.status);
 
-            if (!response.ok) {
-                console.log('Refresh token expired or invalid, deleting data...');
-                await refreshLogout();
-                return;
+            if (typeof newAccessToken !== 'string' || typeof newRefreshToken !== 'string') {
+                throw new Error('Tokens are not valid strings');
             }
 
-            const data = await response.json();
-            console.log('Refresh token response:', data);
+            await SecureStore.setItemAsync('accessToken', newAccessToken);
+            await SecureStore.setItemAsync('refreshToken', newRefreshToken);
 
-            if (!data.access_token) {
-                console.log('No access token received, deleting data...');
-                await refreshLogout();
-                return;
-            }
+            setAccessToken(newAccessToken);
+            setRefreshToken(newRefreshToken);
 
-            await saveToken(data.access_token.access_token, data.refresh_token, data.expires_in);
-
-            console.log('Token refreshed successfully! New access token:', data.access_token);
-            if (data.refresh_token) {
+            console.log('Token refreshed successfully! New access token:', newAccessToken);
+            if (newRefreshToken) {
                 console.log('New refresh token received and saved.');
             } else {
                 console.log('No new refresh token received, keeping the old one.');
             }
 
+            const refreshInterval = (expiresIn - 10) * 1000; // Refresh 10 seconds before expiry
+            setTimeout(() => {
+                refreshAccessToken();
+            }, refreshInterval);
+
         } catch (error) {
-            console.error('Error refreshing token:', error);
-            await refreshLogout();
+            console.error('Failed to refresh token', error);
+            refreshLogout();
         }
     };
 
-
-    const login = async (email: string, password: string) => {
-        if (!email || !password) {
-            alert('Please fill all fields');
-            return;
+    useEffect(() => {
+        if (accessToken) {
+            // Start the token refresh process when the accessToken is set
+            refreshAccessToken();
         }
+    }, [accessToken]);
 
-        setIsLoading(true);
-        setError('');
-
-        try {
-            const response = await fetch('https://be.donation.matrixvert.com/api/donor/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password }),
-            });
-
-            const data = await response.json();
-            if (!response.ok) throw new Error(data.message || 'Login failed.');
-
-            await saveToken(data.access_token.access_token, data.refresh_token, data.expires_in);
-            setIsLoggedIn(true);
-            await AsyncStorage.setItem('isLoggedIn', 'true');
-            router.replace('/settings/profile');
-        } catch (error) {
-            console.error('Login error:', error);
-            setIsLoggedIn(false);
-            await AsyncStorage.setItem('isLoggedIn', 'false');
-            setError('Invalid email or password.');
-        } finally {
-            setIsLoading(false);
-        }
-    };
+    const isAuthenticated = !!accessToken;
 
     return (
-        <UserContext.Provider value={{ logout, login, error, refreshTokenHandler }}>
+        <AuthContext.Provider value={{ accessToken, refreshToken, login, signup, logout, isAuthenticated, error, isChecked, toggleCheckbox }}>
             {children}
-        </UserContext.Provider>
+        </AuthContext.Provider>
     );
 };
 
-export const useUser = () => {
-    const context = useContext(UserContext);
-    if (!context) {
-        throw new Error('useUser must be used within a UserProvider');
+export const useAuth = () => {
+    const context = useContext(AuthContext);
+    if (context === undefined) {
+        throw new Error('useAuth must be used within a UserProvider');
     }
     return context;
 };

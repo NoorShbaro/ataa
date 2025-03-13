@@ -7,9 +7,7 @@ import { useLanguage } from '@/constants/LanguageContext';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 import { Checkbox } from 'react-native-paper';
-import * as SecureStore from 'expo-secure-store';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useUser } from '@/constants/userContext';
+import { useAuth } from '@/constants/userContext';
 
 export default function Signup() {
 
@@ -23,141 +21,18 @@ export default function Signup() {
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
-    const { logout } = useUser();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const { signup, error } = useAuth();
 
-    useEffect(() => {
-        const checkTokenValidity = async () => {
-            const expired = await isTokenExpired();
-            if (expired) {
-                await refreshTokenHandler();
-            }
-        };
-
-        const interval = setInterval(checkTokenValidity, 10 * 1000);
-        checkTokenValidity();
-
-        return () => clearInterval(interval);
-    }, []);
-
-    const handleSignup = async () => {
-        if (!fullName || !email || !password) {
-            alert(i18n.t('pleaseFillAllFields'));
-            return;
-        }
-
-        if (!isChecked) {
-            alert(i18n.t('pleaseAgreeToTerms'));
-            return;
-        }
-
-        setLoading(true);
-        setError('');
+    const handleSignup = () => {
+        setIsLoading(true);
 
         try {
-            const response = await fetch('http://be.donation.matrixvert.com/api/donor/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    name: fullName,
-                    email: email,
-                    password: password,
-                }),
-            });
-
-            const data = await response.json();
-            if (response.ok) {
-                // Extract the data from the response
-                const { donor, access_token, refresh_token, expires_in } = data;
-
-                // Save the donor details and tokens in SecureStore/AsyncStorage
-                await saveUserData(donor, access_token, refresh_token, expires_in);
-
-                // Navigate to the profile page
-                router.replace('/settings/profile');
-            } else {
-                setError(data.message || 'Signup failed. Please try again.');
-            }
-        } catch (error) {
-            setError('An error occurred. Please check your internet connection.');
-            console.log(error);
+            signup(fullName, email, password);
+        } catch (err) {
+            console.error('Login failed:', err);
         } finally {
-            setLoading(false);
-        }
-    };
-
-    // Function to save user data, tokens, and other details
-    const saveUserData = async (donor: any, accessToken: string, refreshToken: string, expiresIn: number) => {
-        try {
-            // Save donor data
-            await SecureStore.setItemAsync('donor', JSON.stringify(donor));
-
-            // Save tokens and expiry time
-            const expiryTimestamp = Date.now() + expiresIn * 1000; // Convert expires_in to milliseconds
-            await SecureStore.setItemAsync('userToken', accessToken);
-            await SecureStore.setItemAsync('refreshToken', refreshToken);
-            await AsyncStorage.setItem('tokenExpiry', JSON.stringify(expiryTimestamp));
-
-            // Optionally, save isLoggedIn status to track user state
-            await AsyncStorage.setItem('isLoggedIn', 'true');
-
-            console.log('User data and tokens saved successfully');
-        } catch (error) {
-            console.error('Failed to save user data and tokens:', error);
-        }
-    };
-
-    const saveToken = async (accessToken: string, refreshToken: string, expiresIn: number): Promise<void> => {
-        try {
-            const expiryTimestamp = Date.now() + expiresIn * 1000;
-            await SecureStore.setItemAsync('userToken', accessToken);
-            await SecureStore.setItemAsync('refreshToken', refreshToken);
-            await AsyncStorage.setItem('tokenExpiry', expiryTimestamp.toString());
-        } catch (error) {
-            console.error('Failed to save token:', error);
-        }
-    };
-
-    const isTokenExpired = async (): Promise<boolean> => {
-        try {
-            const expiryTimestamp = await AsyncStorage.getItem('tokenExpiry');
-            return !expiryTimestamp || Date.now() > Number(expiryTimestamp);
-        } catch (error) {
-            console.error('Failed to check token expiration:', error);
-            return true;
-        }
-    };
-
-    const refreshTokenHandler = async (): Promise<void> => {
-        try {
-            const storedRefreshToken = await SecureStore.getItemAsync('refreshToken');
-            if (!storedRefreshToken) {
-                console.log('No valid refresh token found');
-                return;
-            }
-
-            const response = await fetch('http://be.donation.matrixvert.com/api/donor/refresh', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${storedRefreshToken}`,
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            if (!response.ok) {
-                console.log('Refresh token expired or invalid, logging out...');
-                await logout();
-                return;
-            }
-
-            const data = await response.json();
-            await saveToken(data.access_token, storedRefreshToken, data.expires_in);
-        } catch (error) {
-            console.error('Error refreshing token:', error);
-            await logout();
+            setIsLoading(false);
         }
     };
 
@@ -235,10 +110,10 @@ export default function Signup() {
 
                 <View style={styles.padt}>
                     <TouchableOpacity
-                        onPress={handleSignup} // Call the signup function
+                        onPress={ handleSignup } 
                         style={[styles.btn, { backgroundColor: currentColors.button }]}
                     >
-                        {loading ? (
+                        {isLoading ? (
                             <ActivityIndicator color={currentColors.background} />
                         ) : (
                             <Text style={[styles.textBtn, { color: currentColors.background }]}>{i18n.t('signup')}</Text>

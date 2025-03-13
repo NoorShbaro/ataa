@@ -7,7 +7,7 @@ import { useLanguage } from '@/constants/LanguageContext';
 import { MaterialIcons } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useUser } from '@/constants/userContext';
+import { useAuth } from '@/constants/userContext';
 import { useState } from 'react';
 
 export default function Profile() {
@@ -17,7 +17,7 @@ export default function Profile() {
 
     const { i18n } = useLanguage();
 
-    const { logout } = useUser();
+    const { logout } = useAuth();
 
     const profileImage = null;
 

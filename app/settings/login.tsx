@@ -6,7 +6,7 @@ import Header from '@/components/Header';
 import { useLanguage } from '@/constants/LanguageContext';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useState } from 'react';
-import { useUser } from '@/constants/userContext';
+import { useAuth } from '@/constants/userContext';
 
 export default function Login() {
     const { isDarkMode } = useTheme();
@@ -17,13 +17,13 @@ export default function Login() {
     const [password, setPassword] = useState('');
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const { login, error } = useUser();
+    const { login, error } = useAuth();
     
-    const handleLogin = async () => {
+    const handleLogin = () => {
         setIsLoading(true);
 
         try {
-            await login(email, password);
+            login(email, password);
         } catch (err) {
             console.error('Login failed:', err);
         } finally {
