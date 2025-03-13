@@ -2,6 +2,7 @@ import { Text, View, StyleSheet } from 'react-native';
 import { DarkColors, LightColors } from '@/constants/Colors';
 import { useTheme } from '@/constants/ThemeContext';
 import { useLanguage } from '@/constants/LanguageContext';
+import MainHeader from '@/components/MainHeader';
 
 export default function Search() {
 
@@ -12,9 +13,12 @@ export default function Search() {
 
   return (
     <View style={[styles.container, { backgroundColor: currentColors.background }]}>
-      <Text style={{ color: currentColors.mainColor }}>
-        {i18n.t('search')}
-      </Text>
+       <MainHeader />
+      <View style={[styles.view, { backgroundColor: currentColors.background }]}>
+        <Text style={{ color: currentColors.mainColor }}>
+          {i18n.t('search')}
+        </Text>
+      </View>
     </View>
   );
 }
@@ -22,11 +26,9 @@ export default function Search() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  view: {
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  button: {
-    fontSize: 20,
-    textDecorationLine: 'underline',
-  },
+  }
 });

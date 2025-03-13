@@ -17,6 +17,7 @@ export const Colors = {
     button: '#040720cc',
     darkGrey: '#333',
     lightGrey: '#bbbb',
+    tint: '#FF4C4C',
 
     white: '#',
     black: '#',
@@ -35,6 +36,7 @@ export const Colors = {
     button: '#d9d9d9cc',
     darkGrey: '#bbbb',
     lightGrey: '#333',
+    tint: '#FF4C4C',
 
     tabIconDefault: '#',
     tabIconSelected: '#',

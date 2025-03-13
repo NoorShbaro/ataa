@@ -4,6 +4,9 @@ import { DarkColors, LightColors } from '@/constants/Colors';
 import { useTheme } from '@/constants/ThemeContext';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useLanguage } from '@/constants/LanguageContext';
+import * as SecureStore from 'expo-secure-store';
+import { useEffect, useState } from 'react';
+import MainHeader from '@/components/MainHeader';
 
 export default function Settings() {
 
@@ -11,26 +14,42 @@ export default function Settings() {
   const currentColors = isDarkMode ? DarkColors : LightColors;
 
   const { i18n } = useLanguage();
+  const [accessToken, setToken] = useState<string | null>(null);
+  const [refreshToken, setRefreshToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchTokens = async () => {
+      const storedToken = await SecureStore.getItemAsync('userToken');
+      const storedRefreshToken = await SecureStore.getItemAsync('refreshToken');
+      setToken(storedToken); // Set token if available
+      setRefreshToken(storedRefreshToken);
+    };
+    fetchTokens();
+  }, []);
 
   return (
-    <View style={[styles.container, { backgroundColor: currentColors.background }]}>
+    <View style={[styles.mainContainer, { backgroundColor: currentColors.background }]}>
+      <MainHeader />
       <ScrollView style={{ backgroundColor: currentColors.background }}>
         <View
           style={styles.container}>
-          <Link href={`/settings/login`} asChild style={[styles.itemBtn,
-          { backgroundColor: currentColors.mainColorWithOpacity },
-          { borderBottomColor: currentColors.background, }
-          ]}>
+          <Link
+            href={accessToken && refreshToken && accessToken.length > 0 && refreshToken.length > 0 ? '/settings/profile' : '/settings/login'}
+            asChild
+            style={[
+                styles.itemBtn,
+                { backgroundColor: currentColors.mainColorWithOpacity },
+                { borderBottomColor: currentColors.background },
+            ]}
+        >
             <TouchableOpacity>
-              <Text style={[styles.itemBtnText, { color: currentColors.mainColor }]}>
-                {i18n.t('profile')}
-              </Text>
-              <MaterialIcons name="arrow-forward-ios"
-                size={16}
-                color={currentColors.mainColor}
-              />
+                <Text style={[styles.itemBtnText, { color: currentColors.mainColor }]}>
+                    {i18n.t('profile')}
+                </Text>
+                <MaterialIcons name="arrow-forward-ios" size={16} color={currentColors.mainColor} />
             </TouchableOpacity>
-          </Link>
+        </Link>
+
           <Link href={`/settings/about`} asChild style={[styles.itemBtn,
           { backgroundColor: currentColors.mainColorWithOpacity },
           { borderBottomColor: currentColors.background, }

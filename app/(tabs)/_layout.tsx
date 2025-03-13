@@ -50,6 +50,7 @@ export default function TabLayout() {
       />
       <Tabs
         screenOptions={{
+          headerShown: false,
           tabBarActiveTintColor: currentColors.mainColor,
           headerStyle: {
             backgroundColor: currentColors.background,
@@ -66,7 +67,7 @@ export default function TabLayout() {
             elevation: 0,
             shadowOpacity: 0,
           },
-          headerTitle: () => <CustomHeader />,
+          
         }}
       >
         <Tabs.Screen
