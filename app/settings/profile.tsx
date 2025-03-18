@@ -8,7 +8,14 @@ import { MaterialIcons } from '@expo/vector-icons';
 import * as SecureStore from 'expo-secure-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useAuth } from '@/constants/userContext';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import apiClient from '@/constants/apiClient';
+
+type Auth = {
+    id: number;
+    name: string;
+    email: string;
+};
 
 export default function Profile() {
 
@@ -19,7 +26,30 @@ export default function Profile() {
 
     const { logout, accessToken } = useAuth();
 
-    const profileImage = null;
+    const [auth, setAuth] = useState<Auth | null>(null);
+    const [profileImage, setProfileImage] = useState<string | null>(null);
+
+    useEffect(() => {
+        fetchAuth();
+    }, []);
+
+    const fetchAuth = async () => {
+        try {
+            if (!accessToken) throw new Error('Authentication token not found.');
+
+            const response = await apiClient.get("/donor/me", {
+                headers: { Authorization: `Bearer ${accessToken}` },
+            });
+
+            const result = await response.data;
+            setAuth(result);
+            setProfileImage(result.profile_image);
+            console.log("Fetched data:", result);
+
+        } catch (err: any) {
+            console.log("Error:", err.message);
+        }
+    };
 
     return (
         <View style={[styles.container, { backgroundColor: currentColors.background }]}>
@@ -29,25 +59,51 @@ export default function Profile() {
 
             <View style={styles.content}>
                 {/* Profile Picture */}
-                <View style={[styles.profilePicContainer, { backgroundColor: profileImage ? 'transparent' : currentColors.mainColor }]}>
+                <View style={[styles.profilePicContainer, { backgroundColor: currentColors.mainColorWithOpacity , shadowColor: currentColors.black,}]}>
                     {profileImage ? (
-                        <Image source={{ uri: profileImage }} style={styles.profilePic} />
+                        <TouchableOpacity
+                            onPress={() => console.log('Change Profile Picture')}
+                            style={styles.profilePicWrapper} // Added a wrapper for better control
+                        >
+                            <Image source={{ uri: profileImage }} style={[styles.profilePic, {borderColor: currentColors.background}]} />
+                            <MaterialIcons
+                                name="camera"
+                                size={30}
+                                color={currentColors.mainColor}
+                                style={[styles.changePicIcon,{backgroundColor: currentColors.background,shadowColor: currentColors.black}]}
+                            />
+                        </TouchableOpacity>
                     ) : (
-                        <Text style={[styles.profilePicText, { color: currentColors.background }]}>Add Image</Text>
+                        <TouchableOpacity
+                            onPress={() => console.log('Change Profile Picture')}
+                            style={styles.profilePicWrapper} // Added a wrapper for better control
+                        >
+                            <Image
+                                source={require('@/assets/images/noProfile.jpg')}
+                                style={[styles.profilePic, {borderColor: currentColors.background}]}
+                            />
+                            <MaterialIcons
+                                name="camera"
+                                size={30}
+                                color={currentColors.mainColor}
+                                style={[styles.changePicIcon,{backgroundColor: currentColors.background,shadowColor: currentColors.black}]}
+                            />
+                        </TouchableOpacity>
                     )}
                 </View>
+
                 <View style={styles.form}>
                     <View style={styles.padb}>
                         <TextInput
                             style={[styles.input, { color: currentColors.mainColor, backgroundColor: currentColors.mainColorWithOpacity }]}
-                            placeholder={i18n.t('fullName')}
+                            placeholder={auth ? auth.name : ""}
                             placeholderTextColor={currentColors.mainColor}
                         />
                     </View>
                     <View style={styles.padb}>
                         <TextInput
                             style={[styles.input, { color: currentColors.mainColor, backgroundColor: currentColors.mainColorWithOpacity }]}
-                            placeholder={i18n.t('email')}
+                            placeholder={auth ? auth.email : ""}
                             placeholderTextColor={currentColors.mainColor}
                         />
                     </View>
@@ -69,7 +125,7 @@ export default function Profile() {
                         onPress={logout} // Attach function to button
                         style={[styles.itemBtn, { backgroundColor: currentColors.mainColorWithOpacity }]}
                     >
-                        <Text style={[styles.itemBtnText, { color: currentColors.tint }]}>Logout</Text>
+                        <Text style={[styles.itemBtnText, { color: currentColors.tint }]}>{i18n.t('logout')}</Text>
                         <MaterialIcons name="logout" size={16} color={currentColors.tint} />
                     </TouchableOpacity>
                 </View>
@@ -92,7 +148,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         padding: 16,
-        paddingTop: 80
+        paddingTop: 80,
     },
     profilePicContainer: {
         width: 150,
@@ -101,11 +157,19 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 50,
+        shadowOffset: { width: 0, height: 10 },
+        shadowOpacity: 0.1,
+        shadowRadius: 10,
+        elevation: 5, 
+    },
+    profilePicWrapper: {
+        position: 'relative', 
     },
     profilePic: {
         width: 150,
-        height: 150,
-        borderRadius: 75,
+    height: 150,
+    borderRadius: 75,
+    borderWidth: 3,
     },
     profilePicText: {
         fontWeight: 'bold',
@@ -150,4 +214,15 @@ const styles = StyleSheet.create({
         paddingVertical: 20,
         borderRadius: 10
     },
+    changePicIcon: {
+        position: 'absolute',
+        bottom: 10, 
+        right: 10, 
+        borderRadius: 20, 
+        padding: 5, 
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
+        elevation: 3, 
+    }
 });

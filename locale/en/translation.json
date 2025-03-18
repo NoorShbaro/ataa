@@ -24,6 +24,7 @@
     "phoneNumber": "Phone Number",
     "age": "Age",
     "pass" : "Password",
+    "logout": "Logout",
 
     "login":"Login",
     "signup" : "Sign up",

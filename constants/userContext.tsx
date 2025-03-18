@@ -57,7 +57,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
 
         refreshTimeoutRef.current = setTimeout(() => {
-            console.log(`Refreshing token in ${expiresIn} seconds...`);
+            //console.log(`Refreshing token in ${expiresIn} seconds...`);
             refreshAccessToken();
         }, (expiresIn - 10) * 1000); // Refresh 10 seconds before expiry
     };
@@ -179,7 +179,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     const refreshAccessToken = async () => {
         try {
-            console.log('Checking stored refresh token...');
+            //console.log('Checking stored refresh token...');
 
             if (isRefreshingRef.current) {
                 console.log('Refresh already in progress, skipping...');
@@ -196,7 +196,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
             const newRefreshToken = response.data.refresh_token;
             const expiresIn = response.data.access_token.expires_in;
 
-            console.log('Response status:', response.status);
+            //console.log('Response status:', response.status);
 
             if (typeof newAccessToken !== 'string' || typeof newRefreshToken !== 'string') {
                 throw new Error('Tokens are not valid strings');
@@ -209,7 +209,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setAccessToken(newAccessToken);
             setRefreshToken(newRefreshToken);
 
-            console.log('Token refreshed successfully! New access token:', newAccessToken);
+            console.log('Token refreshed successfully!');
 
             setRefreshTimeout(expiresIn);
 

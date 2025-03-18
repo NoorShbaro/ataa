@@ -18,9 +18,9 @@ export const Colors = {
     darkGrey: '#333',
     lightGrey: '#bbbb',
     tint: '#FF4C4C',
-
-    white: '#',
-    black: '#',
+    black: '#000',
+   white: '#fff',
+ 
     notification: '#',
     softText: '#',
     header: '#',
@@ -37,11 +37,11 @@ export const Colors = {
     darkGrey: '#bbbb',
     lightGrey: '#333',
     tint: '#FF4C4C',
+    black: '#fff',
+    white: '#000',
 
     tabIconDefault: '#',
     tabIconSelected: '#',
-    white: '#',
-    black: '#',
     notification: '#',
     softText: '#',
     header: '#',
