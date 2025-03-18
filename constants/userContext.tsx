@@ -4,6 +4,7 @@ import { Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import apiClient from './apiClient';
 
 type AuthContextType = {
     accessToken: string | null;
@@ -69,7 +70,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setError('');
 
         try {
-            const response = await axios.post('https://be.donation.matrixvert.com/api/donor/login', { email, password });
+            const response = await apiClient.post("/donor/login", { email, password });
             const data = response.data;
             const accessToken = data.access_token.access_token;
             const refreshToken = data.refresh_token;
@@ -105,7 +106,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setError('');
 
         try {
-            const response = await axios.post('https://be.donation.matrixvert.com/api/donor/register', { fullName, email, password });
+            const response = await apiClient.post('/donor/register', { fullName, email, password });
             const data = response.data;
             const accessToken = data.access_token;
             const refreshToken = data.refresh_token;
@@ -141,10 +142,8 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
                     onPress: async () => {
                         if (accessToken) {
                             try {
-                                await axios.post('http://be.donation.matrixvert.com/api/donor/logout', {}, {
-                                    headers: {
-                                        Authorization: `Bearer ${accessToken}`,
-                                    },
+                                await apiClient.post("/donor/logout", {}, {
+                                    headers: { Authorization: `Bearer ${accessToken}` },
                                 });
                             } catch (error) {
                                 console.error('Logout API call failed', error);
