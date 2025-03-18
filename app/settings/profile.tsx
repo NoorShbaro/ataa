@@ -17,7 +17,7 @@ export default function Profile() {
 
     const { i18n } = useLanguage();
 
-    const { logout } = useAuth();
+    const { logout, accessToken } = useAuth();
 
     const profileImage = null;
 

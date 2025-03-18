@@ -7,6 +7,7 @@ import { useLanguage } from '@/constants/LanguageContext';
 import * as SecureStore from 'expo-secure-store';
 import { useEffect, useState } from 'react';
 import MainHeader from '@/components/MainHeader';
+import { useAuth } from '@/constants/userContext';
 
 export default function Settings() {
 
@@ -14,6 +15,7 @@ export default function Settings() {
   const currentColors = isDarkMode ? DarkColors : LightColors;
 
   const { i18n } = useLanguage();
+  const { isAuthenticated } = useAuth();
   const [accessToken, setToken] = useState<string | null>(null);
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
 
@@ -34,7 +36,7 @@ export default function Settings() {
         <View
           style={styles.container}>
           <Link
-            href={accessToken && refreshToken && accessToken.length > 0 && refreshToken.length > 0 ? '/settings/profile' : '/settings/login'}
+            href={ isAuthenticated ? '/settings/profile' : '/settings/login'}
             asChild
             style={[
                 styles.itemBtn,
