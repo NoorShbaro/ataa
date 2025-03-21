@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import { View, StyleSheet, Dimensions, Image } from 'react-native';
 import { useTheme } from '@/constants/ThemeContext';
 import { DarkColors, LightColors } from '@/constants/Colors';
 import LottieView from 'lottie-react-native';
@@ -31,6 +31,13 @@ const CustomSplashScreen: React.FC<CustomSplashScreenProps> = ({ onFinish }) => 
                 loop
                 style={styles.animation}
             />
+            <View style={styles.imageContainer}>
+                <Image 
+                    source={require('@/assets/images/partial-react-logo.png')}
+                    style={styles.image}
+                    resizeMode="contain"
+                />
+            </View>
         </View>
     );
 };
@@ -46,6 +53,15 @@ const styles = StyleSheet.create({
         width: width,
         resizeMode: 'contain'
     },
+    imageContainer: {
+        position: 'absolute', 
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    image: {
+        width: width - 30, 
+        height: 200,
+    }
 });
 
 export default CustomSplashScreen;

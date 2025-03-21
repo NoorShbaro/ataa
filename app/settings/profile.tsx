@@ -44,7 +44,7 @@ export default function Profile() {
             const result = await response.data;
             setAuth(result);
             setProfileImage(result.profile_image);
-            console.log("Fetched data:", result);
+            //console.log("Fetched data:", result);
 
         } catch (err: any) {
             console.log("Error:", err.message);
@@ -107,7 +107,7 @@ export default function Profile() {
                             placeholderTextColor={currentColors.mainColor}
                         />
                     </View>
-                    <View style={styles.padb}>
+                    {/*<View style={styles.padb}>
                         <TextInput
                             style={[styles.input, { color: currentColors.mainColor, backgroundColor: currentColors.mainColorWithOpacity }]}
                             placeholder={i18n.t('phoneNumber')}
@@ -120,7 +120,7 @@ export default function Profile() {
                             placeholder={i18n.t('age')}
                             placeholderTextColor={currentColors.mainColor}
                         />
-                    </View>
+                    </View>*/}
                     <TouchableOpacity
                         onPress={logout} // Attach function to button
                         style={[styles.itemBtn, { backgroundColor: currentColors.mainColorWithOpacity }]}
