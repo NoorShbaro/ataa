@@ -14,6 +14,7 @@ type AuthContextType = {
     logout: () => Promise<void>;
     isAuthenticated: boolean;
     error: string;
+    resetError: () => void;
     isChecked: boolean; // Add this if needed
     toggleCheckbox: () => void; // Add this if needed
 };
@@ -25,6 +26,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [refreshToken, setRefreshToken] = useState<string | null>(null);
     const [error, setError] = useState<string>('');
     const router = useRouter();
+    const resetError = () => setError("");
     const [isChecked, setIsChecked] = useState(false);
     const refreshTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const isRefreshingRef = useRef(false);
@@ -92,21 +94,13 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     };
 
-    const signup = async (fullName: string, email: string, password: string) => {
-        if (!fullName || !email || !password) {
-            alert('Please Fill All Fields');
-            return;
-        }
-
-        if (!isChecked) {
-            alert('Please Agree To Terms');
-            return;
-        }
+    const signup = async (name: string, email: string, password: string) => {
+       
 
         setError('');
 
         try {
-            const response = await apiClient.post('/donor/register', { fullName, email, password });
+            const response = await apiClient.post('/donor/register', { name, email, password });
             const data = response.data;
             const accessToken = data.access_token;
             const refreshToken = data.refresh_token;
@@ -124,6 +118,8 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
             router.replace('/settings/profile');
         } catch (error) {
             console.error('Signup failed', error);
+            console.log(name, email, password);
+            
             setError('Invalid email.');
         }
     };
@@ -235,7 +231,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const isAuthenticated = !!accessToken;
 
     return (
-        <AuthContext.Provider value={{ accessToken, refreshToken, login, signup, logout, isAuthenticated, error, isChecked, toggleCheckbox }}>
+        <AuthContext.Provider value={{ accessToken, refreshToken, login, signup, logout, isAuthenticated, error, resetError, isChecked, toggleCheckbox }}>
             {children}
         </AuthContext.Provider>
     );

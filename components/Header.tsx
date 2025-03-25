@@ -5,14 +5,16 @@ import { useTheme } from '@/constants/ThemeContext';
 import { DarkColors, LightColors } from '@/constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
+import { useAuth } from '@/constants/userContext';
 
 type HeaderProps = {
-    title: string;
-  };
+  title: string;
+};
 
 const Header = ({ title }: HeaderProps) => {
   const { isDarkMode } = useTheme();
   const currentColors = isDarkMode ? DarkColors : LightColors;
+  const { resetError } = useAuth();
 
   return (
     <SafeAreaView
@@ -22,7 +24,11 @@ const Header = ({ title }: HeaderProps) => {
       <View style={[styles.container, { backgroundColor: currentColors.background }]}>
         {/* Back Icon */}
         <TouchableOpacity
-          onPress={() => router.replace('/(tabs)/settings')}
+          onPress={() => {
+            resetError();
+            router.replace('/(tabs)/settings');
+          }
+          }
           style={styles.backButton}
         >
           <MaterialIcons
@@ -49,7 +55,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 16,
-    height: 60, 
+    height: 60,
   },
   backButton: {
     position: 'absolute',

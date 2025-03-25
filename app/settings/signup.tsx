@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, Image, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Text, View, StyleSheet, Image, TextInput, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import { Link, router, Stack } from 'expo-router';
 import { DarkColors, LightColors } from '@/constants/Colors';
 import { useTheme } from '@/constants/ThemeContext';
@@ -17,20 +17,31 @@ export default function Signup() {
     const { i18n } = useLanguage();
 
     const [passwordVisible, setPasswordVisible] = useState(false);
-    const [isChecked, setIsChecked] = useState(false);
     const [fullName, setFullName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const { signup, error } = useAuth();
+    const { signup, error, isChecked, toggleCheckbox } = useAuth();
 
     const handleSignup = () => {
         setIsLoading(true);
 
+        if (!fullName || !email || !password) {
+            Alert.alert('Error', 'Please fill all fields');
+            setIsLoading(false);
+            return;
+        }
+
+        if (!isChecked) {
+            Alert.alert('Error', 'You must agree to the terms and conditions');
+            setIsLoading(false);
+            return;
+        }
+
         try {
             signup(fullName, email, password);
         } catch (err) {
-            console.error('Login failed:', err);
+            console.error('Signup failed:', err);
         } finally {
             setIsLoading(false);
         }
@@ -95,7 +106,7 @@ export default function Signup() {
                 <View style={[styles.padt, styles.noAccount]}>
                     <Checkbox
                         status={isChecked ? 'checked' : 'unchecked'}
-                        onPress={() => setIsChecked(!isChecked)}
+                        onPress={toggleCheckbox}
                         color={currentColors.mainColor}
                     />
                     <Text style={[styles.text2, { color: currentColors.darkGrey }]}>{i18n.t('agree')} </Text>
@@ -110,7 +121,7 @@ export default function Signup() {
 
                 <View style={styles.padt}>
                     <TouchableOpacity
-                        onPress={ handleSignup } 
+                        onPress={handleSignup}
                         style={[styles.btn, { backgroundColor: currentColors.button }]}
                     >
                         {isLoading ? (
