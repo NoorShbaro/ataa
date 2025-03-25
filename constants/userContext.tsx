@@ -174,47 +174,54 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     const refreshAccessToken = async () => {
-        try {
-            //console.log('Checking stored refresh token...');
-
-            if (isRefreshingRef.current) {
-                console.log('Refresh already in progress, skipping...');
-                return;
+        if (accessToken){
+            try {
+                //console.log('Checking stored refresh token...');
+    
+                if (isRefreshingRef.current) {
+                    console.log('Refresh already in progress, skipping...');
+                    return;
+                }
+                isRefreshingRef.current = true;
+    
+                const response = await axios.post('http://be.donation.matrixvert.com/api/donor/refresh', {}, {
+                    headers: {
+                        Authorization: `Bearer ${refreshToken}`,
+                    },
+                });
+                const newAccessToken = response.data.access_token.access_token;
+                const newRefreshToken = response.data.refresh_token;
+                const expiresIn = response.data.access_token.expires_in;
+    
+                //console.log('Response status:', response.status);
+    
+                if (typeof newAccessToken !== 'string' || typeof newRefreshToken !== 'string') {
+                    throw new Error('Tokens are not valid strings');
+                }
+    
+                await SecureStore.setItemAsync('accessToken', newAccessToken);
+                await SecureStore.setItemAsync('refreshToken', newRefreshToken);
+                await AsyncStorage.setItem('expires_in', JSON.stringify(expiresIn)); // Store as a string
+    
+                setAccessToken(newAccessToken);
+                setRefreshToken(newRefreshToken);
+    
+                console.log('Token refreshed successfully!');
+    
+                setRefreshTimeout(expiresIn);
+    
+            } catch (error) {
+                console.error('Failed to refresh token', error);
+                refreshLogout();
+            } finally {
+                isRefreshingRef.current = false;
             }
-            isRefreshingRef.current = true;
-
-            const response = await axios.post('http://be.donation.matrixvert.com/api/donor/refresh', {}, {
-                headers: {
-                    Authorization: `Bearer ${refreshToken}`,
-                },
-            });
-            const newAccessToken = response.data.access_token.access_token;
-            const newRefreshToken = response.data.refresh_token;
-            const expiresIn = response.data.access_token.expires_in;
-
-            //console.log('Response status:', response.status);
-
-            if (typeof newAccessToken !== 'string' || typeof newRefreshToken !== 'string') {
-                throw new Error('Tokens are not valid strings');
-            }
-
-            await SecureStore.setItemAsync('accessToken', newAccessToken);
-            await SecureStore.setItemAsync('refreshToken', newRefreshToken);
-            await AsyncStorage.setItem('expires_in', JSON.stringify(expiresIn)); // Store as a string
-
-            setAccessToken(newAccessToken);
-            setRefreshToken(newRefreshToken);
-
-            console.log('Token refreshed successfully!');
-
-            setRefreshTimeout(expiresIn);
-
-        } catch (error) {
-            console.error('Failed to refresh token', error);
-            refreshLogout();
-        } finally {
-            isRefreshingRef.current = false;
+        } else {
+            console.log('not logged in');
+            
         }
+        
+
     };
 
     useEffect(() => {

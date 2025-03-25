@@ -1,5 +1,5 @@
 import { Text, View, StyleSheet, Modal, ScrollView, TouchableOpacity, Switch } from 'react-native';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import { DarkColors, LightColors } from '@/constants/Colors';
 import { useTheme } from '@/constants/ThemeContext';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -35,22 +35,23 @@ export default function Settings() {
       <ScrollView style={{ backgroundColor: currentColors.background }}>
         <View
           style={styles.container}>
-          <Link
-            href={ isAuthenticated ? '/settings/profile' : '/settings/login'}
-            asChild
+
+          <TouchableOpacity
+            onPress={() => (
+              router.push(
+                isAuthenticated ? '/settings/profile'
+                  : '/settings/login'
+              ))}
             style={[
-                styles.itemBtn,
-                { backgroundColor: currentColors.mainColorWithOpacity },
-                { borderBottomColor: currentColors.background },
-            ]}
-        >
-            <TouchableOpacity>
-                <Text style={[styles.itemBtnText, { color: currentColors.mainColor }]}>
-                    {i18n.t('profile')}
-                </Text>
-                <MaterialIcons name="arrow-forward-ios" size={16} color={currentColors.mainColor} />
-            </TouchableOpacity>
-        </Link>
+              styles.itemBtn,
+              { backgroundColor: currentColors.mainColorWithOpacity },
+              { borderBottomColor: currentColors.background },
+            ]}>
+            <Text style={[styles.itemBtnText, { color: currentColors.mainColor }]}>
+              {i18n.t('profile')}
+            </Text>
+            <MaterialIcons name="arrow-forward-ios" size={16} color={currentColors.mainColor} />
+          </TouchableOpacity>
 
           <Link href={`/settings/about`} asChild style={[styles.itemBtn,
           { backgroundColor: currentColors.mainColorWithOpacity },
