@@ -2,8 +2,10 @@ import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'rea
 import React from 'react'
 import Animated, { Extrapolation, interpolate, SharedValue, useAnimatedStyle } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient'
-import { Colors } from '@/constants/Colors';
+import { Colors, DarkColors, LightColors } from '@/constants/Colors';
 import { Link } from 'expo-router';
+import { useLanguage } from '@/hook/LanguageContext';
+import { useTheme } from '@/constants/ThemeContext';
 
 
 type Props = {
@@ -16,20 +18,31 @@ const { width } = Dimensions.get('screen');
 
 type Campaigns = {
     id: number;
+    ngo_id: number;
     title: string;
-    body: string;
     description: string;
     goal_amount: string;
-
+    status: string;
+    start_date: string;
+    end_date: string;
     created_at: string;
-
+    featured_image: string;
+    category_id: number;
     ngo: {
-        id: number,
-        name: string,
+        id: number;
+        name: string;
+    }
+    category: {
+        id: number;
+        name: string;
     }
 };
 
 const SliderItem = ({ slideItem, index, scrollX }: Props) => {
+    const { i18n } = useLanguage();
+    const { isDarkMode } = useTheme();
+      const currentColors = isDarkMode ? DarkColors : LightColors;
+
     const rnStyle = useAnimatedStyle(() => {
         return {
             transform: [
@@ -57,22 +70,20 @@ const SliderItem = ({ slideItem, index, scrollX }: Props) => {
     //console.log("Image URL:", imageUrl);
     //console.log("Title:", slideItem.title);
     return (
-        <Link href={`/campaign/${String(slideItem.id)}`} asChild>
-            <TouchableOpacity>
-                <Animated.View style={[styles.itemWrapper, rnStyle]} key={slideItem.id}>
-                    <Image source={imageUrl} style={styles.image} />
-                    <LinearGradient colors={["transparent", 'rgba(0,0,0,0.8)']} style={styles.background}>
-                        <View style={styles.sourceInfo}>
-                            {/*slideItem.featured_image &&*/ (
-                                <Image source={require('@/assets/images/noProfile.jpg')} style={styles.sourceIcon} />
-                            )}
-                            <Text style={styles.sourceName}>{slideItem.ngo.name}</Text>
-                        </View>
-                        <Text style={styles.title} numberOfLines={2}>{slideItem.title}</Text>
-                    </LinearGradient>
-                </Animated.View>
-            </TouchableOpacity>
-        </Link>
+        <Animated.View style={[styles.itemWrapper, rnStyle]} key={slideItem.id}>
+            <Image source={imageUrl} style={styles.image} />
+            <LinearGradient colors={["transparent", 'rgba(190, 190, 190, 0.8)']} style={styles.background}>
+                <View style={styles.contentWrapper}>
+                    <View>
+                        <Text style={[styles.title, {color: currentColors.mainColor}]} numberOfLines={2}>{slideItem.title}</Text>
+                        <Text style={[styles.description, {color: currentColors.mainColor}]} numberOfLines={2}>{slideItem.description}</Text>
+                    </View>
+                    <TouchableOpacity>
+                        <Text style={[styles.button, {backgroundColor: currentColors.mainColorWithOpacity , color: currentColors.mainColor}]}>{i18n.t('donateNow')}</Text>
+                    </TouchableOpacity>
+                </View>
+            </LinearGradient>
+        </Animated.View>
     )
 }
 
@@ -87,7 +98,7 @@ const styles = StyleSheet.create({
     },
     image: {
         width: width - 60,
-        height: 200,
+        height: 150,
         borderRadius: 15,
         overflow: 'hidden',
         resizeMode: 'cover',
@@ -98,35 +109,32 @@ const styles = StyleSheet.create({
         right: 0,
         top: 0,
         width: width - 60,
-        height: 200,
+        height: 150,
         borderRadius: 15,
         padding: 20,
         overflow: 'hidden',
     },
-    sourceInfo: {
-        flexDirection: 'row',
-        position: 'absolute',
-        top: 85,
-        paddingHorizontal: 20,
-        alignItems: 'center',
-        gap: 10
-    },
-    sourceName: {
-        color: Colors.white,
-        fontSize: 12,
-        fontWeight: '600',
-    },
-    sourceIcon: {
-        width: 25,
-        height: 25,
-        borderRadius: 20,
+    contentWrapper: {
+        justifyContent: 'space-between',
+        flexDirection: 'row'
     },
     title: {
         fontSize: 14,
-        color: Colors.white,
-        position: 'absolute',
-        top: 120,
+        position: 'relative',
+        top: 50,
         paddingHorizontal: 20,
         fontWeight: '600',
+    },
+    description : {
+        fontSize: 10,
+        position: 'relative',
+        top: 55,
+        paddingHorizontal: 20,
+        fontWeight: '400',
+    },
+    button: {
+        padding : 10,
+        borderRadius: 15,
+        top: 50,
     }
 })

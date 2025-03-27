@@ -12,18 +12,25 @@ type Props = {
 
 type Campaigns = {
     id: number;
+    ngo_id: number;
     title: string;
-    body: string;
     description: string;
     goal_amount: string;
-    
+    status: string;
+    start_date: string;
+    end_date: string;
     created_at: string;
-    
+    featured_image: string;
+    category_id: number;
     ngo: {
-      id: number,
-      name: string,
+        id: number;
+        name: string;
     }
-  };
+    category: {
+        id: number;
+        name: string;
+    }
+};
 
 const Pagination = ({items, PaginationIndex, scrollX}: Props) => {
  const { isDarkMode } = useTheme();
@@ -33,7 +40,7 @@ const Pagination = ({items, PaginationIndex, scrollX}: Props) => {
         <View style={styles.container}>
             {items.map((_, index) => {
                 return (
-                    <Animated.View  style={[styles.dot, {backgroundColor: PaginationIndex === index ? currentColors.tint: currentColors.darkGrey}]} key={index}/>
+                    <Animated.View  style={[styles.dot, {backgroundColor: PaginationIndex === index ? currentColors.mainColor: currentColors.mainColorWithOpacity}]} key={index}/>
                 );
             })}
         </View>

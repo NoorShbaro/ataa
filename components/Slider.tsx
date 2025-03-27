@@ -13,22 +13,28 @@ type Props = {
 
 type Campaigns = {
   id: number;
+  ngo_id: number;
   title: string;
-  body: string;
   description: string;
   goal_amount: string;
-
+  status: string;
+  start_date: string;
+  end_date: string;
   created_at: string;
-
+  featured_image: string;
+  category_id: number;
   ngo: {
-    id: number,
-    name: string,
+      id: number;
+      name: string;
+  }
+  category: {
+      id: number;
+      name: string;
   }
 };
 
 
-
-const Campaign = ({ campaigns }: Props) => {
+const CampaignSlider = ({ campaigns }: Props) => {
   const [data, setData] = useState(campaigns);
   const [paginationIndex, setPaginationIndex] = useState(0);
   const scrollX = useSharedValue(0);
@@ -125,7 +131,7 @@ const Campaign = ({ campaigns }: Props) => {
   );
 }
 
-export default Campaign
+export default CampaignSlider
 
 const styles = StyleSheet.create({
   container: {
@@ -141,6 +147,6 @@ const styles = StyleSheet.create({
   },
   slideWrapper: {
     justifyContent: 'center',
-    paddingTop: 30
+    //paddingTop: 30
   }
 })
