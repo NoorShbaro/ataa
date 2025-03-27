@@ -40,5 +40,11 @@
     "pleaseAgreeToTerms": "الرجاء الموافقة على الشروط",
 
     "pleaseFillAllFields" : "يرجى ملء جميع الخانات",
-    "donateNow" : "تبرع الآن!"
+    "donateNow" : "تبرع الآن!",
+    "enterAmount": "أدخل المبلغ",
+    "amountPlaceholder": "المبلغ",
+    "continue" : "إكمال",
+    "cancel" : "إلغاء",
+
+    "goal" : "هدف"
 }

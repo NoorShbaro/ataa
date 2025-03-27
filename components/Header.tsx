@@ -26,7 +26,7 @@ const Header = ({ title }: HeaderProps) => {
         <TouchableOpacity
           onPress={() => {
             resetError();
-            router.replace('/(tabs)/settings');
+            router.back();
           }
           }
           style={styles.backButton}

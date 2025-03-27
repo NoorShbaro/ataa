@@ -58,7 +58,7 @@ export default function Index() {
       const result = await response.data.campaigns;
       setCampaign(result);
       setLoading(false);
-      console.log(campaign);
+      //console.log(campaign);
 
     } catch (err: any) {
       console.log("Error:", err.message);

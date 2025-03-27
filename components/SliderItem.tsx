@@ -1,17 +1,19 @@
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import Animated, { Extrapolation, interpolate, SharedValue, useAnimatedStyle } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient'
 import { Colors, DarkColors, LightColors } from '@/constants/Colors';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import { useLanguage } from '@/hook/LanguageContext';
 import { useTheme } from '@/constants/ThemeContext';
+import { useAuth } from '@/constants/userContext';
+import apiClient from '@/constants/apiClient';
 
 
 type Props = {
     slideItem: Campaigns,
     index: number,
-    scrollX: SharedValue<number>
+    scrollX: SharedValue<number>,
 }
 
 const { width } = Dimensions.get('screen');
@@ -41,7 +43,16 @@ type Campaigns = {
 const SliderItem = ({ slideItem, index, scrollX }: Props) => {
     const { i18n } = useLanguage();
     const { isDarkMode } = useTheme();
-      const currentColors = isDarkMode ? DarkColors : LightColors;
+    const currentColors = isDarkMode ? DarkColors : LightColors;
+    const { accessToken } = useAuth();
+
+    const handleDonatePress = () => {
+        if (!accessToken) {
+            router.push('/settings/login');
+        } else {
+            router.push(`/campaign/${slideItem.id}`)
+        }
+    };
 
     const rnStyle = useAnimatedStyle(() => {
         return {
@@ -65,25 +76,29 @@ const SliderItem = ({ slideItem, index, scrollX }: Props) => {
             ]
         };
     });
-    const imageUrl = require('@/assets/images/empty.jpg');
+    const imageUrl = slideItem.featured_image
+        ? { uri: `https://be.donation.matrixvert.com/storage/${slideItem.featured_image}` }
+        : require('@/assets/images/empty.jpg');
     //const imageUrl = `https://be.apis.dstar.news/storage/${slideItem.featured_image}`;
     //console.log("Image URL:", imageUrl);
     //console.log("Title:", slideItem.title);
     return (
-        <Animated.View style={[styles.itemWrapper, rnStyle]} key={slideItem.id}>
-            <Image source={imageUrl} style={styles.image} />
-            <LinearGradient colors={["transparent", 'rgba(190, 190, 190, 0.8)']} style={styles.background}>
-                <View style={styles.contentWrapper}>
-                    <View>
-                        <Text style={[styles.title, {color: currentColors.mainColor}]} numberOfLines={2}>{slideItem.title}</Text>
-                        <Text style={[styles.description, {color: currentColors.mainColor}]} numberOfLines={2}>{slideItem.description}</Text>
+        <Link href={`/campaign/${String(slideItem.id)}`} asChild>
+            <Animated.View style={[styles.itemWrapper, rnStyle]} key={slideItem.id}>
+                <Image source={imageUrl} style={styles.image} />
+                <LinearGradient colors={["transparent", currentColors.lightGrey]} style={styles.background}>
+                    <View style={styles.contentWrapper}>
+
+                        <Text style={[styles.title, { color: currentColors.black }]} numberOfLines={2}>{slideItem.title}</Text>
+
+
+                        <TouchableOpacity onPress={handleDonatePress}>
+                            <Text style={[styles.button, { backgroundColor: currentColors.mainColorWithOpacity, color: currentColors.black }]}>{i18n.t('donateNow')}</Text>
+                        </TouchableOpacity>
                     </View>
-                    <TouchableOpacity>
-                        <Text style={[styles.button, {backgroundColor: currentColors.mainColorWithOpacity , color: currentColors.mainColor}]}>{i18n.t('donateNow')}</Text>
-                    </TouchableOpacity>
-                </View>
-            </LinearGradient>
-        </Animated.View>
+                </LinearGradient>
+            </Animated.View>
+        </Link>
     )
 }
 
@@ -93,26 +108,25 @@ const styles = StyleSheet.create({
     itemWrapper: {
         position: 'relative',
         width: width,
-        justifyContent: 'center',
+        //justifyContent: 'center',
         alignItems: 'center',
     },
     image: {
-        width: width - 60,
+        width: width - 30,
         height: 150,
         borderRadius: 15,
         overflow: 'hidden',
         resizeMode: 'cover',
+        marginLeft: 5,
     },
     background: {
         position: 'absolute',
-        left: 30,
-        right: 0,
-        top: 0,
-        width: width - 60,
+        width: width - 30,
         height: 150,
         borderRadius: 15,
         padding: 20,
         overflow: 'hidden',
+        marginLeft: 5
     },
     contentWrapper: {
         justifyContent: 'space-between',
@@ -121,19 +135,12 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 14,
         position: 'relative',
-        top: 50,
+        top: 55,
         paddingHorizontal: 20,
         fontWeight: '600',
     },
-    description : {
-        fontSize: 10,
-        position: 'relative',
-        top: 55,
-        paddingHorizontal: 20,
-        fontWeight: '400',
-    },
     button: {
-        padding : 10,
+        padding: 10,
         borderRadius: 15,
         top: 50,
     }

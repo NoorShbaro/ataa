@@ -1,10 +1,13 @@
-import { FlatList, StyleSheet, Text, useWindowDimensions, View, ViewToken } from 'react-native'
+import { FlatList, Modal, StyleSheet, Text, TextInput, TouchableOpacity, useWindowDimensions, View, ViewToken } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { useTheme } from '@/constants/ThemeContext';
 import { DarkColors, LightColors } from "@/constants/Colors";
 import SliderItem from '@/components/SliderItem'
 import Animated, { scrollTo, useAnimatedRef, useAnimatedScrollHandler, useDerivedValue, useSharedValue } from 'react-native-reanimated'
 import Pagination from '@/components/Pagination'
+import { useAuth } from '@/constants/userContext';
+import apiClient from '@/constants/apiClient';
+import { useLanguage } from '@/hook/LanguageContext';
 
 
 type Props = {
@@ -24,12 +27,12 @@ type Campaigns = {
   featured_image: string;
   category_id: number;
   ngo: {
-      id: number;
-      name: string;
+    id: number;
+    name: string;
   }
   category: {
-      id: number;
-      name: string;
+    id: number;
+    name: string;
   }
 };
 
@@ -46,6 +49,12 @@ const CampaignSlider = ({ campaigns }: Props) => {
 
   const { isDarkMode } = useTheme();
   const currentColors = isDarkMode ? DarkColors : LightColors;
+  const { i18n } = useLanguage();
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const { accessToken } = useAuth();
+  const [amount, setAmount] = useState('');
+  const [selectedCampaign, setSelectedCampaign] = useState(0);
 
   const onScrollHandler = useAnimatedScrollHandler({
     onScroll: (e) => {
@@ -94,7 +103,26 @@ const CampaignSlider = ({ campaigns }: Props) => {
     {
       viewabilityConfig, onViewableItemsChanged
     }
-  ])
+  ]);
+
+  const fetchDonate = async () => {
+    try {
+      if (!accessToken) throw new Error('Authentication token not found.');
+      if (!selectedCampaign) return;
+
+      const response = await apiClient.post("/donor/donate", {
+        campaign_id: selectedCampaign,
+        amount: amount,
+      }, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+
+      console.log("Donation Successful:", response.data);
+      setModalVisible(false);
+    } catch (err: any) {
+      console.log("Error:", err.message);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -148,5 +176,5 @@ const styles = StyleSheet.create({
   slideWrapper: {
     justifyContent: 'center',
     //paddingTop: 30
-  }
+  },
 })

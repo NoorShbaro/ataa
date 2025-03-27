@@ -1,85 +1,158 @@
-import React, { useEffect, useState, useCallback, } from 'react';
-import { Dimensions, ScrollView, StyleSheet, Text, View, Image, InteractionManager } from 'react-native';
-import { useLocalSearchParams, useFocusEffect, Stack } from 'expo-router';
-import axios from 'axios';
+import { Text, View, StyleSheet, TouchableOpacity, Image, ActivityIndicator, Dimensions } from 'react-native';
+import { router, Stack, useLocalSearchParams } from 'expo-router';
+import { DarkColors, LightColors } from '@/constants/Colors';
 import { useTheme } from '@/constants/ThemeContext';
-import { DarkColors, LightColors } from "@/constants/Colors";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useLanguage } from '@/constants/LanguageContext';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { MaterialIcons } from '@expo/vector-icons';
+import { useAuth } from '@/constants/userContext';
+import { useEffect, useState } from 'react';
+import apiClient from '@/constants/apiClient';
 
-const { width } = Dimensions.get('screen');
-
-type Post = {
+type Campaigns = {
   id: number;
+  ngo_id: number;
   title: string;
-  body: string;
-  featured_image: string;
+  description: string;
+  goal_amount: string;
+  status: string;
+  start_date: string;
+  end_date: string;
   created_at: string;
-  categories: [{
+  featured_image: string;
+  category_id: number;
+  ngo: {
     id: number;
     name: string;
-  }];
-  author: {
-    id: number,
-    name: string,
-    email: string,
+  }
+  category: {
+    id: number;
+    name: string;
   }
 };
 
-const NewsDetails = () => {
-  const { id } = useLocalSearchParams<{ id: string }>();
-  
+const { width } = Dimensions.get('screen');
+
+export default function Donate() {
   const { isDarkMode } = useTheme();
   const currentColors = isDarkMode ? DarkColors : LightColors;
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const [campaign, setCampaign] = useState<Campaigns | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const { i18n } = useLanguage();
+  const { accessToken } = useAuth();
+
+  useEffect(() => {
+    fetchCampaign();
+  }, []);
+
+  const fetchCampaign = async () => {
+    try {
+      const response = await apiClient.get(`/campaign/${id}`);
+      setCampaign(response.data.campaign);
+    } catch (err: any) {
+      console.error("Error fetching campaign:", err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const imageUrl = campaign?.featured_image
+    ? { uri: `https://be.donation.matrixvert.com/storage/${campaign?.featured_image}` }
+    : require('@/assets/images/empty.jpg');
 
   return (
-    <>
+    <SafeAreaView style={[styles.container, { backgroundColor: currentColors.background }]}>
       <Stack.Screen options={{ headerShown: false }} />
-      
-    </>
-  );
-};
 
-export default NewsDetails;
+      {/* Full Width Image */}
+      <Image source={imageUrl} style={styles.image} />
+
+      {/* Back Button Overlay */}
+      <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+        <MaterialIcons name="arrow-back-ios" size={24} color="white" />
+      </TouchableOpacity>
+
+      {/* Content Below Image */}
+      {isLoading ? (
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator size="large" color={currentColors.mainColor} />
+        </View>
+      ) : (
+        <View style={styles.content}>
+          <Text style={[styles.title, { color: currentColors.mainColor }]}>{campaign?.title}</Text>
+          <View style={[styles.contentWrapper,{backgroundColor: currentColors.mainColorWithOpacity}]}>
+            <Text style={[styles.goalLabel, { color: currentColors.darkGrey }]}>
+              {i18n.t('goal')}:  
+            </Text>
+            <Text style={[styles.goalAmount, { color: currentColors.mainColor }]}>
+              {campaign?.goal_amount}$
+            </Text>
+          </View>
+        </View>
+      )}
+    </SafeAreaView>
+  );
+}
 
 const styles = StyleSheet.create({
-  headerImage: {
-    width: 150,
-    height: 40,
-    alignSelf: 'center',
-  },
-  screen: {
+  container: {
     flex: 1,
   },
-  contentContainer: {
+  image: {
+    width: width,
+    height: width, // Keep aspect ratio for a header-like appearance
+    position: 'absolute',
+    top: 0,
+    left: 0,
+  },
+  backButton: {
+    position: 'absolute',
+    width: 35,
+    height: 40,
+    top: 50, // Adjusted for safe area
+    left: 16,
+    zIndex: 10,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    padding: 8,
+    borderRadius: 20,
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: width, // Push below image
+  },
+  content: {
+    flex: 1,
+    marginTop: width, // Push content below the image
     paddingHorizontal: 20,
-    paddingTop: 0,
+    //alignItems: 'center',
   },
   title: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginVertical: 10,
-    letterSpacing: 0.6,
+    fontSize: 25,
+    fontWeight: 'bold',
+    //textAlign: 'center',
+    marginBottom: 100,
+    //marginTop: 25,
+    margin: 25,
   },
-  newsImg: {
-    width: '100%',
-    height: 300,
-    marginBottom: 20,
-    borderRadius: 10,
-    resizeMode: 'cover',
-  },
-  newsInfoWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 20,
-  },
-  newsInfo: {
-    fontSize: 12,
-  },
-  noPosts: {
+  goalLabel: {
     fontSize: 16,
-    textAlign: 'center',
-    marginTop: 50,
-    padding: 20,
-    borderRadius: 10,
+    fontWeight: '500',
+    margin: 10,
+    //marginTop: 100
   },
+  goalAmount: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
+    marginTop: 10
+  },
+  contentWrapper: {
+    flexDirection: 'row',
+    borderRadius: 15,
+    width: 135
+  }
 });
