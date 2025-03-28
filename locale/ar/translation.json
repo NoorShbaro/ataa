@@ -51,5 +51,8 @@
     "collected" : "تم جمع",
     "remaining" : "متبقي",
 
-    "processing" : "...جاري التحميل"
+    "processing" : "...جاري التحميل",
+
+    "donationReceived": "تم استلام التبرع",
+    "notificationUponApproval": "سوف تتلقى إشعارًا بمجرد موافقتنا على تبرعك."
 }

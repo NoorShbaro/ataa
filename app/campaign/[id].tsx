@@ -12,6 +12,7 @@ import ProgressBar from '@/components/ProgressBar';
 import { MotiView } from 'moti';
 import LoadingSingle from '@/components/SingleLoading';
 import AmountModal from '@/components/Modal';
+import { Card } from 'react-native-paper';
 
 type Campaigns = {
   id: number;
@@ -73,75 +74,57 @@ export default function Donate() {
     ? { uri: `https://be.donation.matrixvert.com/storage/${campaign?.featured_image}` }
     : require('@/assets/images/empty.jpg');
 
-  return (
-    <SafeAreaView style={[styles.container, { backgroundColor: currentColors.background }]}>
-      <Stack.Screen options={{ headerShown: false }} />
-
-      {/* Full Width Image */}
-      <Image source={imageUrl} style={styles.image} />
-
-      {/* Back Button Overlay */}
-      <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-        <MaterialIcons name="arrow-back-ios" size={24} color="white" />
-      </TouchableOpacity>
-
-      {/* Content Below Image */}
-      {isLoading ? (
-        <LoadingSingle />
-      ) : (
-        <View style={styles.content}>
-          <View style={{ flexDirection: 'row', marginBottom: 20, }}>
-            <View style={{ margin: 25, }}>
-              <Text style={[styles.title, { color: currentColors.mainColor }]}>{campaign?.title}</Text>
-              <Text style={[styles.description, { color: currentColors.mainColor }]}>{campaign?.description}</Text>
-            </View>
-            <Text style={{ color: currentColors.mainColor, marginTop: 50, marginLeft: 10 }}>{i18n.t('availableTill')}: {campaign?.end_date}</Text>
-          </View>
-          <View style={[styles.contentWrapper, { backgroundColor: currentColors.mainColorWithOpacity }]}>
-            <Text style={[styles.goalLabel, { color: currentColors.darkGrey }]}>
-              {i18n.t('goal')}:
-            </Text>
-            <Text style={[styles.goalAmount, { color: currentColors.mainColor }]}>
-              {parseFloat(campaign?.goal_amount ?? "0")}$
-            </Text>
-          </View>
-          <ProgressBar
-            percentage={campaign?.progress.percentage ?? 0}
-            raised={parseFloat(campaign?.progress.raised ?? "0")}
-            remaining={campaign?.progress.remaining ?? 0}
-            goal={parseFloat(campaign?.goal_amount ?? "0")}
-          />
-
-          <View style={{ paddingTop: 20 }}>
-            <TouchableOpacity onPress={() => handleDonatePress(campaign?.id || 0)}
-              style={{
-                alignSelf: 'center',
-                padding: 20,
-                backgroundColor: currentColors.button,
-                borderRadius: 15,
-                width: '50%',
-              }}>
-              <Text
-                style={{
-                  alignSelf: 'center',
-                  color: currentColors.white,
-                  fontSize: 18
-                }}>{i18n.t('donateNow')}</Text>
-            </TouchableOpacity>
-          </View>
-          {selectedCampaignId !== null && (
-            <AmountModal
-              isVisible={isModalVisible}
-              onClose={() => setModalVisible(false)}
-              accessToken={accessToken}
-              campaignId={selectedCampaignId}
-            />
-          )}
-
-        </View>
-      )}
-    </SafeAreaView>
-  );
+    return (
+      <SafeAreaView style={[styles.container, { backgroundColor: currentColors.background }]}> 
+        <Stack.Screen options={{ headerShown: false }} />
+  
+        {/* Back Button */}
+        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+          <MaterialIcons name="arrow-back-ios" size={24} color="white" />
+        </TouchableOpacity>
+  
+        {/* Content */}
+        {isLoading ? (
+          <LoadingSingle />
+        ) : (
+          <>
+            <Image source={imageUrl} style={styles.image} />
+            <Card style={[styles.card, {backgroundColor: currentColors.mainColorWithOpacity}]}>
+              <Card.Content>
+                <Text style={[styles.title, { color: currentColors.mainColor }]}>{campaign?.title}</Text>
+                <Text style={[styles.description, { color: currentColors.mainColor }]}>{campaign?.description}</Text>
+                <Text style={[styles.date, { color: currentColors.mainColor }]}>
+                  {i18n.t('availableTill')}: {campaign?.end_date}
+                </Text>
+                <View style={[styles.goalContainer, { backgroundColor: currentColors.mainColorWithOpacity }]}>
+                  <Text style={[styles.goalLabel, { color: currentColors.darkGrey }]}>{i18n.t('goal')}:</Text>
+                  <Text style={[styles.goalAmount, { color: currentColors.mainColor }]}>
+                    {parseFloat(campaign?.goal_amount ?? '0')}$
+                  </Text>
+                </View>
+                <ProgressBar
+                  percentage={campaign?.progress.percentage ?? 0}
+                  raised={parseFloat(campaign?.progress.raised ?? '0')}
+                  remaining={campaign?.progress.remaining ?? 0}
+                  goal={parseFloat(campaign?.goal_amount ?? '0')}
+                />
+                <TouchableOpacity onPress={() => handleDonatePress(campaign?.id || 0)} style={[styles.donateButton, {backgroundColor: currentColors.button}]}>
+                  <Text style={[styles.donateText,{color: currentColors.background}]}>{i18n.t('donateNow')}</Text>
+                </TouchableOpacity>
+              </Card.Content>
+            </Card>
+            {selectedCampaignId !== null && (
+              <AmountModal
+                isVisible={isModalVisible}
+                onClose={() => setModalVisible(false)}
+                accessToken={accessToken}
+                campaignId={selectedCampaignId}
+              />
+            )}
+          </>
+        )}
+      </SafeAreaView>
+    );
 }
 
 const styles = StyleSheet.create({
@@ -150,59 +133,63 @@ const styles = StyleSheet.create({
   },
   image: {
     width: width,
-    height: width, // Keep aspect ratio for a header-like appearance
-    position: 'absolute',
-    top: 0,
-    left: 0,
+    height: width * 0.6,
+    resizeMode: 'cover',
   },
   backButton: {
     position: 'absolute',
-    width: 35,
-    height: 40,
-    top: 50, // Adjusted for safe area
+    top: 50,
     left: 16,
     zIndex: 10,
     backgroundColor: 'rgba(0, 0, 0, 0.4)',
     padding: 8,
     borderRadius: 20,
   },
-  content: {
-    flex: 1,
-    marginTop: width,
-    paddingHorizontal: 20,
-    //alignItems: 'center',
+  card: {
+    margin: 10,
+    borderRadius: 15,
+    padding: 15,
+    elevation: 3,
   },
   title: {
-    fontSize: 25,
+    fontSize: 22,
     fontWeight: 'bold',
-    //textAlign: 'center',
-    //marginBottom: 100,
-    //marginTop: 25,
-
+    marginBottom: 10,
   },
   description: {
-    fontSize: 15,
-    //fontWeight: 'bold',
-    //textAlign: 'center',
-    //marginBottom: 100,
-    //marginTop: 25,
-    margin: 25,
+    fontSize: 16,
+    marginBottom: 10,
+  },
+  date: {
+    fontSize: 14,
+    fontWeight: '500',
+    marginBottom: 15,
+  },
+  goalContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 10,
+    borderRadius: 10,
+    marginBottom: 15,
   },
   goalLabel: {
     fontSize: 16,
     fontWeight: '500',
-    margin: 10,
-    //marginTop: 100
   },
   goalAmount: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 5,
-    marginTop: 10
   },
-  contentWrapper: {
-    flexDirection: 'row',
-    borderRadius: 15,
-    width: 120
-  }
+  donateButton: {
+    alignSelf: 'center',
+    padding: 15,
+    //backgroundColor: '#4A5568',
+    borderRadius: 10,
+    width: '60%',
+    alignItems: 'center',
+  },
+  donateText: {
+    color: 'white',
+    fontSize: 18,
+  },
 });

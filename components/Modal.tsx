@@ -2,8 +2,9 @@ import apiClient from "@/constants/apiClient";
 import { DarkColors, LightColors } from "@/constants/Colors";
 import { useTheme } from "@/constants/ThemeContext";
 import { useLanguage } from "@/hook/LanguageContext";
+import LottieView from "lottie-react-native";
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import Modal from "react-native-modal";
 
 interface AmountModalProps {
@@ -19,6 +20,7 @@ const AmountModal: React.FC<AmountModalProps> = ({ isVisible, accessToken, campa
     const { i18n } = useLanguage();
     const { isDarkMode } = useTheme();
     const currentColors = isDarkMode ? DarkColors : LightColors;
+    const [showSuccess, setShowSuccess] = useState(false);
 
     const handleDonation = async () => {
         if (!amount) return;
@@ -38,6 +40,12 @@ const AmountModal: React.FC<AmountModalProps> = ({ isVisible, accessToken, campa
             console.log("Donation Successful:", response.data);
             setAmount(""); // Reset amount after donation
             onClose(); // Close the modal after donation
+
+            setShowSuccess(true);
+            setTimeout(() => {
+                setShowSuccess(false);
+                onClose(); // Close modal after animation
+            }, 10000);
         } catch (err: any) {
             console.error("Error:", err.message);
         } finally {
@@ -47,33 +55,52 @@ const AmountModal: React.FC<AmountModalProps> = ({ isVisible, accessToken, campa
 
     return (
         <Modal isVisible={isVisible} onBackdropPress={onClose}>
-            <View style={[styles.modalContainer, { backgroundColor: currentColors.background, shadowColor: currentColors.mainColor }]}>
-                <Text style={[styles.title, { color: currentColors.mainColor }]}>
-                    {i18n.t("enterAmount")}
-                </Text>
-                <TextInput
-                    style={[
-                        styles.input,
-                        { borderColor: currentColors.button, color: currentColors.mainColor },
-                    ]}
-                    placeholder={i18n.t("enterAmount")}
-                    placeholderTextColor={currentColors.darkGrey}
-                    keyboardType="numeric"
-                    value={amount}
-                    onChangeText={setAmount}
-                />
-                <TouchableOpacity
-                    style={[
-                        styles.button,
-                        { backgroundColor: currentColors.button, opacity: loading ? 0.5 : 1 },
-                    ]}
-                    onPress={handleDonation}
-                    disabled={loading}
-                >
-                    <Text style={{ color: currentColors.white, textAlign: "center", fontWeight: "600" }}>
-                        {loading ? i18n.t("processing") : i18n.t("donateNow")}
-                    </Text>
-                </TouchableOpacity>
+            <View style={[styles.modalContainer, { backgroundColor: currentColors.background }]}>
+                {showSuccess ? (
+                    <View style={styles.successContainer}>
+                        <LottieView
+                            source={require("@/assets/Lottie/Animation - 1743166826870.json")}
+                            autoPlay
+                            loop={false}
+                            style={{ width: 100, height: 100 }}
+                        />
+                        <Text style={[styles.successText, { color: currentColors.mainColor }]}>
+                            {i18n.t("donationReceived")}
+                        </Text>
+                        <Text style={{ color: currentColors.darkGrey, textAlign: "center" }}>
+                            {i18n.t("notificationUponApproval")}
+                        </Text>
+                    </View>
+                ) : (
+                    <>
+                        <Text style={[styles.title, { color: currentColors.mainColor }]}>
+                            {i18n.t("enterAmount")}
+                        </Text>
+                        <TextInput
+                            style={[
+                                styles.input,
+                                { borderColor: currentColors.button, color: currentColors.mainColor },
+                            ]}
+                            placeholder={i18n.t("enterAmount")}
+                            placeholderTextColor={currentColors.darkGrey}
+                            keyboardType="numeric"
+                            value={amount}
+                            onChangeText={setAmount}
+                        />
+                        <TouchableOpacity
+                            style={[
+                                styles.button,
+                                { backgroundColor: currentColors.button, opacity: loading ? 0.5 : 1 },
+                            ]}
+                            onPress={handleDonation}
+                            disabled={loading}
+                        >
+                            <Text style={{ color: currentColors.white, textAlign: "center", fontWeight: "600" }}>
+                                {loading ? i18n.t("processing") : i18n.t("donateNow")}
+                            </Text>
+                        </TouchableOpacity>
+                    </>
+                )}
             </View>
         </Modal>
     );
@@ -103,6 +130,16 @@ const styles = StyleSheet.create({
     button: {
         paddingVertical: 12,
         borderRadius: 8,
+    },
+    successContainer: {
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 20,
+    },
+    successText: {
+        fontSize: 20,
+        fontWeight: "bold",
+        marginTop: 10,
     },
 });
 
