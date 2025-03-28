@@ -11,6 +11,7 @@ import apiClient from '@/constants/apiClient';
 import ProgressBar from '@/components/ProgressBar';
 import { MotiView } from 'moti';
 import LoadingSingle from '@/components/SingleLoading';
+import AmountModal from '@/components/Modal';
 
 type Campaigns = {
   id: number;
@@ -40,14 +41,18 @@ export default function Donate() {
 
   const { i18n } = useLanguage();
   const { accessToken } = useAuth();
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [selectedCampaignId, setSelectedCampaignId] = useState<number | null>(null);
 
-  const handleDonatePress = () => {
-          if (!accessToken) {
-              router.push('/settings/login');
-          } else {
-              
-          }
-      };
+
+  const handleDonatePress = (campaignId: number) => {
+    if (!accessToken) {
+      router.push('/settings/login'); // Redirect if not logged in
+    } else {
+      setSelectedCampaignId(campaignId);
+      setModalVisible(true);
+    }
+  };
 
   useEffect(() => {
     fetchCampaign();
@@ -106,8 +111,9 @@ export default function Donate() {
             remaining={campaign?.progress.remaining ?? 0}
             goal={parseFloat(campaign?.goal_amount ?? "0")}
           />
+
           <View style={{ paddingTop: 20 }}>
-            <TouchableOpacity onPress={()=>{}}
+            <TouchableOpacity onPress={() => handleDonatePress(campaign?.id || 0)}
               style={{
                 alignSelf: 'center',
                 padding: 20,
@@ -123,6 +129,15 @@ export default function Donate() {
                 }}>{i18n.t('donateNow')}</Text>
             </TouchableOpacity>
           </View>
+          {selectedCampaignId !== null && (
+            <AmountModal
+              isVisible={isModalVisible}
+              onClose={() => setModalVisible(false)}
+              accessToken={accessToken}
+              campaignId={selectedCampaignId}
+            />
+          )}
+
         </View>
       )}
     </SafeAreaView>

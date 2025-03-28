@@ -49,5 +49,7 @@
     "goal" : "Goal",
     "availableTill" : "Available Till",
     "collected" : "Collected",
-    "remaining" : "Remaining"
+    "remaining" : "Remaining",
+
+    "processing" : "Processing..."
 }

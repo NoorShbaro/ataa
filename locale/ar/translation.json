@@ -49,5 +49,7 @@
     "goal" : "هدف",
     "availableTill" : "متاح حتى",
     "collected" : "تم جمع",
-    "remaining" : "متبقي"
+    "remaining" : "متبقي",
+
+    "processing" : "...جاري التحميل"
 }

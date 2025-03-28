@@ -77,7 +77,6 @@ const SliderItem = ({ slideItem, index, scrollX }: Props) => {
     //console.log("Image URL:", imageUrl);
     //console.log("Title:", slideItem.title);
     return (
-        <Link href={`/campaign/${String(slideItem.id)}`} asChild>
             <Animated.View style={[styles.itemWrapper, rnStyle]} key={slideItem.id}>
                 <Image source={imageUrl} style={styles.image} />
                 <LinearGradient colors={["transparent", currentColors.lightGrey]} style={styles.background}>
@@ -92,7 +91,6 @@ const SliderItem = ({ slideItem, index, scrollX }: Props) => {
                     </View>
                 </LinearGradient>
             </Animated.View>
-        </Link>
     )
 }
 
@@ -102,7 +100,7 @@ const styles = StyleSheet.create({
     itemWrapper: {
         position: 'relative',
         width: width,
-        //justifyContent: 'center',
+        justifyContent: 'center',
         alignItems: 'center',
     },
     image: {
@@ -111,7 +109,7 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         overflow: 'hidden',
         resizeMode: 'cover',
-        marginLeft: 5,
+        //marginLeft: 5,
     },
     background: {
         position: 'absolute',
@@ -120,7 +118,7 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         padding: 20,
         overflow: 'hidden',
-        marginLeft: 5
+        //marginLeft: 5
     },
     contentWrapper: {
         justifyContent: 'space-between',

@@ -217,8 +217,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 isRefreshingRef.current = false;
             }
         } else {
-            console.log('not logged in');
-            
+            console.log('not logged in');         
         }
         
 
