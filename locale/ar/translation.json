@@ -46,5 +46,8 @@
     "continue" : "إكمال",
     "cancel" : "إلغاء",
 
-    "goal" : "هدف"
+    "goal" : "هدف",
+    "availableTill" : "متاح حتى",
+    "collected" : "تم جمع",
+    "remaining" : "متبقي"
 }

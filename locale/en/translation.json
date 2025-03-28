@@ -46,5 +46,8 @@
     "continue" : "Continue",
     "cancel" : "Cancel",
 
-    "goal" : "Goal"
+    "goal" : "Goal",
+    "availableTill" : "Available Till",
+    "collected" : "Collected",
+    "remaining" : "Remaining"
 }

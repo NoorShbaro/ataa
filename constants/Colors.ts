@@ -21,6 +21,8 @@ export const LightColors = {
   black: '#000',
   white: '#fff',
   skeletonBase: '#E0E3E7',
+  progressBarBackground : '#e0e0e0',
+  progressBarFill: '#4A5568',
 
   notification: '#',
   softText: '#',
@@ -41,6 +43,8 @@ export const DarkColors = {
   black: '#fff',
   white: '#000',
   skeletonBase: '#2C344C',
+  progressBarBackground : '#1A1A2E',
+  progressBarFill: '#A5B4FC',
 
   tabIconDefault: '#',
   tabIconSelected: '#',
