@@ -41,6 +41,14 @@ export default function Donate() {
   const { i18n } = useLanguage();
   const { accessToken } = useAuth();
 
+  const handleDonatePress = () => {
+          if (!accessToken) {
+              router.push('/settings/login');
+          } else {
+              
+          }
+      };
+
   useEffect(() => {
     fetchCampaign();
   }, []);
@@ -77,9 +85,12 @@ export default function Donate() {
         <LoadingSingle />
       ) : (
         <View style={styles.content}>
-          <View style={{ flexDirection: 'row' }}>
-            <Text style={[styles.title, { color: currentColors.mainColor }]}>{campaign?.title}</Text>
-            <Text style={{ color: currentColors.mainColor, marginTop: 50, marginLeft: 25 }}>{i18n.t('availableTill')}: {campaign?.end_date}</Text>
+          <View style={{ flexDirection: 'row', marginBottom: 20, }}>
+            <View style={{ margin: 25, }}>
+              <Text style={[styles.title, { color: currentColors.mainColor }]}>{campaign?.title}</Text>
+              <Text style={[styles.description, { color: currentColors.mainColor }]}>{campaign?.description}</Text>
+            </View>
+            <Text style={{ color: currentColors.mainColor, marginTop: 50, marginLeft: 10 }}>{i18n.t('availableTill')}: {campaign?.end_date}</Text>
           </View>
           <View style={[styles.contentWrapper, { backgroundColor: currentColors.mainColorWithOpacity }]}>
             <Text style={[styles.goalLabel, { color: currentColors.darkGrey }]}>
@@ -95,6 +106,23 @@ export default function Donate() {
             remaining={campaign?.progress.remaining ?? 0}
             goal={parseFloat(campaign?.goal_amount ?? "0")}
           />
+          <View style={{ paddingTop: 20 }}>
+            <TouchableOpacity onPress={()=>{}}
+              style={{
+                alignSelf: 'center',
+                padding: 20,
+                backgroundColor: currentColors.button,
+                borderRadius: 15,
+                width: '50%',
+              }}>
+              <Text
+                style={{
+                  alignSelf: 'center',
+                  color: currentColors.white,
+                  fontSize: 18
+                }}>{i18n.t('donateNow')}</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       )}
     </SafeAreaView>
@@ -125,7 +153,7 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    marginTop: width, 
+    marginTop: width,
     paddingHorizontal: 20,
     //alignItems: 'center',
   },
@@ -133,7 +161,15 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontWeight: 'bold',
     //textAlign: 'center',
-    marginBottom: 100,
+    //marginBottom: 100,
+    //marginTop: 25,
+
+  },
+  description: {
+    fontSize: 15,
+    //fontWeight: 'bold',
+    //textAlign: 'center',
+    //marginBottom: 100,
     //marginTop: 25,
     margin: 25,
   },

@@ -46,13 +46,7 @@ const SliderItem = ({ slideItem, index, scrollX }: Props) => {
     const currentColors = isDarkMode ? DarkColors : LightColors;
     const { accessToken } = useAuth();
 
-    const handleDonatePress = () => {
-        if (!accessToken) {
-            router.push('/settings/login');
-        } else {
-            router.push(`/campaign/${slideItem.id}`)
-        }
-    };
+    
 
     const rnStyle = useAnimatedStyle(() => {
         return {
@@ -92,7 +86,7 @@ const SliderItem = ({ slideItem, index, scrollX }: Props) => {
                         <Text style={[styles.title, { color: currentColors.black }]} numberOfLines={2}>{slideItem.title}</Text>
 
 
-                        <TouchableOpacity onPress={handleDonatePress}>
+                        <TouchableOpacity onPress={()=> router.push(`/campaign/${slideItem.id}`)}>
                             <Text style={[styles.button, { backgroundColor: currentColors.mainColorWithOpacity, color: currentColors.black }]}>{i18n.t('donateNow')}</Text>
                         </TouchableOpacity>
                     </View>
