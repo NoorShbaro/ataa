@@ -6,7 +6,7 @@
     "settings": "Settings",
     "and": "and",
     "darkMode": "Dark Mode",
-    "notification": "Notification",
+    "history": "History",
     "termsOfUse": "Terms of Use",
     "privacy": "Privacy Policy",
     "about": "About",
@@ -42,5 +42,8 @@
     "remaining": "Remaining",
     "processing": "Processing...",
     "donationReceived": "Donation Received",
-    "notificationUponApproval": "You will receive a notification once we approve your donation."
+    "notificationUponApproval": "You will receive a notification once we approve your donation.",
+    "pending": "Pending",
+    "completed": "Completed",
+    "noDonationsYet": "You haven't made any donations yet 😊"
 }

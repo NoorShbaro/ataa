@@ -99,13 +99,13 @@ export default function Settings() {
               />
             </TouchableOpacity>
           </Link>
-          <Link href={`/settings/notifications`} asChild style={[styles.itemBtn,
+          <Link href={`/settings/history`} asChild style={[styles.itemBtn,
           { backgroundColor: currentColors.mainColorWithOpacity },
           { borderBottomColor: currentColors.background, }
           ]}>
             <TouchableOpacity>
               <Text style={[styles.itemBtnText, { color: currentColors.mainColor }]}>
-                {i18n.t('notification')}
+                {i18n.t('history')}
               </Text>
               <MaterialIcons name="arrow-forward-ios"
                 size={16}
