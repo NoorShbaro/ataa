@@ -10,6 +10,7 @@ import axios from 'axios';
 import { useAuth } from '@/constants/userContext';
 import apiClient from '@/constants/apiClient';
 import LatestCampaign from '@/components/LatestCampaign';
+import Categories from '@/components/Category';
 
 const { width } = Dimensions.get('screen');
 
@@ -109,6 +110,8 @@ export default function Index() {
         ) : (
           <Campaign campaigns={campaign} />
         )}
+
+        <Categories/>
 
         <LatestCampaign />
 

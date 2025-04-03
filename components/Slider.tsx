@@ -105,25 +105,6 @@ const CampaignSlider = ({ campaigns }: Props) => {
     }
   ]);
 
-  const fetchDonate = async () => {
-    try {
-      if (!accessToken) throw new Error('Authentication token not found.');
-      if (!selectedCampaign) return;
-
-      const response = await apiClient.post("/donor/donate", {
-        campaign_id: selectedCampaign,
-        amount: amount,
-      }, {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
-
-      console.log("Donation Successful:", response.data);
-      setModalVisible(false);
-    } catch (err: any) {
-      console.log("Error:", err.message);
-    }
-  };
-
   return (
     <View style={styles.container}>
       <View style={styles.container}>
