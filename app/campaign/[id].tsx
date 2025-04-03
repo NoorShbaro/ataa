@@ -13,6 +13,7 @@ import { MotiView } from 'moti';
 import LoadingSingle from '@/components/SingleLoading';
 import AmountModal from '@/components/Modal';
 import { Card } from 'react-native-paper';
+import Header from '@/components/Header';
 
 type Campaigns = {
   id: number;
@@ -78,19 +79,17 @@ export default function Donate() {
       <SafeAreaView style={[styles.container, { backgroundColor: currentColors.background }]}> 
         <Stack.Screen options={{ headerShown: false }} />
   
-        {/* Back Button */}
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <MaterialIcons name="arrow-back-ios" size={24} color="white" />
-        </TouchableOpacity>
+        <Header title={''} />
   
         {/* Content */}
         {isLoading ? (
           <LoadingSingle />
         ) : (
           <>
-            <Image source={imageUrl} style={styles.image} />
+            
             <Card style={[styles.card, {backgroundColor: currentColors.mainColorWithOpacity}]}>
               <Card.Content>
+              <Image source={imageUrl} style={styles.image} />
                 <Text style={[styles.title, { color: currentColors.mainColor }]}>{campaign?.title}</Text>
                 <Text style={[styles.description, { color: currentColors.mainColor }]}>{campaign?.description}</Text>
                 <Text style={[styles.date, { color: currentColors.mainColor }]}>
@@ -132,14 +131,17 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   image: {
-    width: width,
+    width: width - 50,
     height: width * 0.6,
     resizeMode: 'cover',
+    alignSelf:  'center',
+    marginBottom: 20,
+    borderRadius: 15
   },
   backButton: {
     position: 'absolute',
     top: 50,
-    left: 16,
+    left: 30,
     zIndex: 10,
     backgroundColor: 'rgba(0, 0, 0, 0.4)',
     padding: 8,

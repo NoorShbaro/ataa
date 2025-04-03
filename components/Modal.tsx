@@ -37,15 +37,10 @@ const AmountModal: React.FC<AmountModalProps> = ({ isVisible, accessToken, campa
             }, {
                 headers: { Authorization: `Bearer ${accessToken}` },
             });
-            console.log("Donation Successful:", response.data);
-            setAmount(""); // Reset amount after donation
-            onClose(); // Close the modal after donation
 
-            setShowSuccess(true);
-            setTimeout(() => {
-                setShowSuccess(false);
-                onClose(); // Close modal after animation
-            }, 10000);
+            console.log("Donation Successful:", response.data);
+            setAmount(""); 
+            setShowSuccess(true); 
         } catch (err: any) {
             console.error("Error:", err.message);
         } finally {
@@ -63,12 +58,10 @@ const AmountModal: React.FC<AmountModalProps> = ({ isVisible, accessToken, campa
                             autoPlay
                             loop={false}
                             style={{ width: 100, height: 100 }}
+                            onAnimationFinish={onClose} 
                         />
                         <Text style={[styles.successText, { color: currentColors.mainColor }]}>
                             {i18n.t("donationReceived")}
-                        </Text>
-                        <Text style={{ color: currentColors.darkGrey, textAlign: "center" }}>
-                            {i18n.t("notificationUponApproval")}
                         </Text>
                     </View>
                 ) : (

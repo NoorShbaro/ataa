@@ -1,58 +1,46 @@
 {
-    "home" : "الرئيسية",
-    "camp" : "البرامج",
-    "mainDonation" : "تبرع",
-    "search" : "البحث",
-    "settings" : "الاعدادات",
-
-    "and":"و",
-
+    "home": "الرئيسية",
+    "camp": "البرامج",
+    "mainDonation": "تبرع",
+    "search": "البحث",
+    "settings": "الاعدادات",
+    "and": "و",
     "darkMode": "الوضع المظلم",
-    "notification" : "إشعار",
-    "termsOfUse" : "شروط الاستخدام",
-    "privacy" : "سياسة الخصوصية",
-    "about" : "معلومات ",
-    "languages" : "اللغات",
-    "profile" : "حساب تعريفي",
-
+    "notification": "إشعار",
+    "termsOfUse": "شروط الاستخدام",
+    "privacy": "سياسة الخصوصية",
+    "about": "معلومات ",
+    "languages": "اللغات",
+    "profile": "حساب تعريفي",
     "selectLanguage": "اختر اللغة",
     "en": "إنجليزي",
     "ar": "عربي",
-
     "fullName": "الاسم الكامل",
     "email": "بريد إلكتروني",
     "phoneNumber": "رقم التليفون",
     "age": "العمر",
-    "pass" : "كلمة المرور",
+    "pass": "كلمة المرور",
     "logout": "تسجيل الخروج",
-
-    "login":"تسجيل الدخول",
-    "signup" : "اشتراك",
+    "login": "تسجيل الدخول",
+    "signup": "اشتراك",
     "noAccount": "ليس لديك حساب؟",
-    "signing":"من خلال تسجيل الدخول فإنك تقبل",
-
+    "signing": "من خلال تسجيل الدخول فإنك تقبل",
     "allowingNotification": "السماح بالإشعار",
-
     "save": "احفظ",
-
     "agree": "انا أوافق على",
     "account": "هل لديك حساب بالفعل؟",
     "pleaseAgreeToTerms": "الرجاء الموافقة على الشروط",
-
-    "pleaseFillAllFields" : "يرجى ملء جميع الخانات",
-    "donateNow" : "تبرع الآن!",
+    "pleaseFillAllFields": "يرجى ملء جميع الخانات",
+    "donateNow": "تبرع الآن!",
     "enterAmount": "أدخل المبلغ",
     "amountPlaceholder": "المبلغ",
-    "continue" : "إكمال",
-    "cancel" : "إلغاء",
-
-    "goal" : "هدف",
-    "availableTill" : "متاح حتى",
-    "collected" : "تم جمع",
-    "remaining" : "متبقي",
-
-    "processing" : "...جاري التحميل",
-
+    "continue": "إكمال",
+    "cancel": "إلغاء",
+    "goal": "هدف",
+    "availableTill": "متاح حتى",
+    "collected": "تم جمع",
+    "remaining": "متبقي",
+    "processing": "...جاري التحميل",
     "donationReceived": "تم استلام التبرع",
     "notificationUponApproval": "سوف تتلقى إشعارًا بمجرد موافقتنا على تبرعك."
 }

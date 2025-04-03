@@ -17,118 +17,18 @@ export default function LoadingSingle() {
                     animate={{ opacity: 1 }}
                     transition={{ loop: true, type: 'timing', duration: 1000 }}
                     style={{
-                        width: '100%',
+                        width: '95%',
                         backgroundColor: currentColors.skeletonBase,
-                        position: 'absolute',
-                        alignSelf: 'flex-start',
+                        //position: 'absolute',
+                        alignSelf: 'center',
                         marginBottom: 10,
                         paddingHorizontal: 16,
                         paddingVertical: 20,
                         borderRadius: 10,
-                        height: width,
+                        height: '85%',
                     }}
                 />
-            <View style={{
-                flex: 1,
-                //justifyContent: 'center',
-                //alignItems: 'center',
-                marginTop: width + 25,
-                margin: 25
-            }}>
-                <MotiView
-                    from={{ opacity: 0.5 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ loop: true, type: 'timing', duration: 1000 }}
-                    style={{
-                        width: '70%',
-                        backgroundColor: currentColors.skeletonBase,
-                        alignSelf: 'flex-start',
-                        marginBottom: 10,
-                        paddingHorizontal: 16,
-                        paddingVertical: 20,
-                        borderRadius: 10,
-                        height: 70,
-                    }}
-                />
-                <MotiView
-                    from={{ opacity: 0.5 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ loop: true, type: 'timing', duration: 1000 }}
-                    style={{
-                        width: '50%',
-                        backgroundColor: currentColors.skeletonBase,
-                        alignSelf: 'flex-end',
-                        marginBottom: 10,
-                        paddingHorizontal: 16,
-                        paddingVertical: 20,
-                        borderRadius: 10,
-                        height: 40,
-                    }}
-                />
-                <MotiView
-                    from={{ opacity: 0.5 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ loop: true, type: 'timing', duration: 1000 }}
-                    style={{
-                        width: 120,
-                        backgroundColor: currentColors.skeletonBase,
-                        alignSelf: 'flex-start',
-                        marginTop: 25,
-                        marginBottom: 10,
-                        paddingHorizontal: 16,
-                        paddingVertical: 20,
-                        borderRadius: 10,
-                        height: 30,
-                    }}
-                />
-                <MotiView
-                    from={{ opacity: 0.5 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ loop: true, type: 'timing', duration: 1000 }}
-                    style={{
-                        width: '100%',
-                        backgroundColor: currentColors.skeletonBase,
-                        alignSelf: 'flex-start',
-                        marginBottom: 10,
-                        paddingHorizontal: 16,
-                        //paddingVertical: 20,
-                        borderRadius: 10,
-                        height: 15,
-                    }}
-                />
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <MotiView
-                        from={{ opacity: 0.5 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ loop: true, type: 'timing', duration: 1000 }}
-                        style={{
-                            width: '30%',
-                            backgroundColor: currentColors.skeletonBase,
-                            alignSelf: 'flex-start',
-                            marginBottom: 10,
-                            paddingHorizontal: 16,
-                            //paddingVertical: 20,
-                            borderRadius: 10,
-                            height: 25,
-                        }}
-                    />
-                    <MotiView
-                        from={{ opacity: 0.5 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ loop: true, type: 'timing', duration: 1000 }}
-                        style={{
-                            width: '30%',
-                            backgroundColor: currentColors.skeletonBase,
-                            alignSelf: 'flex-start',
-                            marginBottom: 10,
-                            paddingHorizontal: 16,
-                            //paddingVertical: 20,
-                            borderRadius: 10,
-                            height: 25,
-                        }}
-                    />
-                </View>
-            </View>
+            
         </View>
     );
 }
