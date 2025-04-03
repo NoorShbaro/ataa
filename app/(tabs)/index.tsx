@@ -9,6 +9,7 @@ import { MotiView } from 'moti';
 import axios from 'axios';
 import { useAuth } from '@/constants/userContext';
 import apiClient from '@/constants/apiClient';
+import LatestCampaign from '@/components/LatestCampaign';
 
 const { width } = Dimensions.get('screen');
 
@@ -70,12 +71,7 @@ export default function Index() {
     <View style={[styles.container, { backgroundColor: currentColors.background }]}>
       <MainHeader />
       <View style={[{
-        backgroundColor: currentColors.background, 
-        position: 'relative',
-        width: width,
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingTop: 30
+        backgroundColor: currentColors.background,
       }]}>
         {loading ? (
           <View style={styles.view}>
@@ -114,6 +110,8 @@ export default function Index() {
           <Campaign campaigns={campaign} />
         )}
 
+        <LatestCampaign />
+
       </View>
     </View>
   );
@@ -127,8 +125,13 @@ const styles = StyleSheet.create({
     //alignItems: 'center',
     //justifyContent: 'center',
     width: width - 60,
-    height: 150,
+    height: 200,
     borderRadius: 15,
-
+    //top: 100,
+    position: 'relative',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    paddingTop: 30
   }
 });

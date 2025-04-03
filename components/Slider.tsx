@@ -128,31 +128,38 @@ const CampaignSlider = ({ campaigns }: Props) => {
     <View style={styles.container}>
       <View style={styles.container}>
         <View style={styles.slideWrapper}>
-          <Animated.FlatList
-            ref={ref}
-            data={data}
-            renderItem={({ item, index }) => (
-              <SliderItem slideItem={item} index={index} scrollX={scrollX} />
-            )}
-            keyExtractor={(item, index) => `list_item_${index}`}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            pagingEnabled
-            onScroll={onScrollHandler}
-            scrollEventThrottle={16}
-            onEndReachedThreshold={0.5}
-            onEndReached={() => setData([...data, ...campaigns])}
-            viewabilityConfigCallbackPairs={
-              viewabilityConfigCallbackPairs.current
-            }
-            onScrollBeginDrag={() => {
-              setIsAutoPlay(false);
-            }}
-            onScrollEndDrag={() => {
-              setIsAutoPlay(true);
-            }}
-          />
-          <Pagination items={campaigns} PaginationIndex={paginationIndex} scrollX={scrollX} />
+          {data.length === 0 ? (
+            <Text style={{ color: currentColors.darkGrey, textAlign: 'center', padding: 20 }}>
+              No campaigns available at the moment.
+            </Text>
+          ) : (
+            <>
+              <Animated.FlatList
+                ref={ref}
+                data={data}
+                renderItem={({ item, index }) => (
+                  <SliderItem slideItem={item} index={index} scrollX={scrollX} />
+                )}
+                keyExtractor={(item, index) => `list_item_${index}`}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                pagingEnabled
+                onScroll={onScrollHandler}
+                scrollEventThrottle={16}
+                onEndReachedThreshold={0.5}
+                onEndReached={() => setData([...data, ...campaigns])}
+                viewabilityConfigCallbackPairs={
+                  viewabilityConfigCallbackPairs.current
+                }
+                onScrollBeginDrag={() => {
+                  setIsAutoPlay(false);
+                }}
+                onScrollEndDrag={() => {
+                  setIsAutoPlay(true);
+                }}
+              />
+              <Pagination items={campaigns} PaginationIndex={paginationIndex} scrollX={scrollX} />
+            </>)}
         </View>
       </View>
     </View>
@@ -163,6 +170,7 @@ export default CampaignSlider
 
 const styles = StyleSheet.create({
   container: {
+    marginVertical: 10,
     marginBottom: 10,
   },
   title: {
@@ -174,6 +182,7 @@ const styles = StyleSheet.create({
     paddingLeft: 20
   },
   slideWrapper: {
+    //flex: 1,
     justifyContent: 'center',
     //paddingTop: 30
   },

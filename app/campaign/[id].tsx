@@ -131,27 +131,18 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   image: {
-    width: width - 50,
-    height: width * 0.6,
+    width: width - 100,
+    height: width * 0.5,
     resizeMode: 'cover',
     alignSelf:  'center',
     marginBottom: 20,
-    borderRadius: 15
-  },
-  backButton: {
-    position: 'absolute',
-    top: 50,
-    left: 30,
-    zIndex: 10,
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
-    padding: 8,
-    borderRadius: 20,
+    borderRadius: 15,
   },
   card: {
     margin: 10,
     borderRadius: 15,
     padding: 15,
-    elevation: 3,
+    //elevation: 3,
   },
   title: {
     fontSize: 22,
