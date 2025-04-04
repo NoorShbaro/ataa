@@ -71,7 +71,7 @@ const SliderItem = ({ slideItem, index, scrollX }: Props) => {
         };
     });
     const imageUrl = slideItem.featured_image
-        ? { uri: `https://be.donation.matrixvert.com/storage/${slideItem.featured_image}` }
+        ? { uri: `${slideItem.featured_image}` }
         : require('@/assets/images/empty.jpg');
     //const imageUrl = `https://be.apis.dstar.news/storage/${slideItem.featured_image}`;
     //console.log("Image URL:", imageUrl);
@@ -104,21 +104,19 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     image: {
-        width: width - 30,
+        width: width - 50,
         height: 150,
         borderRadius: 15,
         overflow: 'hidden',
         resizeMode: 'cover',
-        //marginLeft: 5,
     },
     background: {
         position: 'absolute',
-        width: width - 30,
+        width: width - 50,
         height: 150,
         borderRadius: 15,
         padding: 20,
         overflow: 'hidden',
-        //marginLeft: 5
     },
     contentWrapper: {
         justifyContent: 'space-between',

@@ -1,15 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View, TouchableOpacity, RefreshControl, Alert } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, TouchableOpacity, RefreshControl, Alert, Image } from 'react-native';
 import axios from 'axios';
 import { useTheme } from '@/constants/ThemeContext';
 import { Colors, DarkColors, LightColors } from "@/constants/Colors";
 import { Link, router } from 'expo-router';
 import apiClient from '@/constants/apiClient';
 import { MotiView } from 'moti';
+import { FontAwesome } from '@expo/vector-icons';
 
 type Category = {
     id: number;
     name: string;
+    icon: string
 };
 
 const Categories = () => {
@@ -41,24 +43,16 @@ const Categories = () => {
 
     return (
         <View style={styles.container}>
-            <ScrollView
-                ref={scrollRef}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.itemsWrapper}
-
-            >
-                {loading ? (
-                    <>
+            {loading ? (
+                <>
                     <View style={styles.loading}>
                         <MotiView
                             from={{ opacity: 0.5 }}
                             animate={{ opacity: 1 }}
-                            transition={{ loop: true, type: 'timing', duration: 1000 }}
+                            transition={{ loop: true, type: "timing", duration: 1000 }}
                             style={{
                                 width: 70,
                                 backgroundColor: currentColors.skeletonBase,
-                                //alignSelf: 'flex-start',
                                 marginBottom: 10,
                                 paddingHorizontal: 16,
                                 paddingVertical: 20,
@@ -69,105 +63,59 @@ const Categories = () => {
                         <MotiView
                             from={{ opacity: 0.5 }}
                             animate={{ opacity: 1 }}
-                            transition={{ loop: true, type: 'timing', duration: 1000 }}
+                            transition={{ loop: true, type: "timing", duration: 1000 }}
                             style={{
                                 width: 80,
                                 backgroundColor: currentColors.skeletonBase,
-                                //alignSelf: 'flex-start',
                                 marginBottom: 10,
                                 paddingHorizontal: 16,
-                                //paddingVertical: 20,
                                 borderRadius: 35,
                                 height: 15,
                             }}
                         />
-                        </View>
-                        <View style={styles.loading}>
-                        <MotiView
-                            from={{ opacity: 0.5 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ loop: true, type: 'timing', duration: 1000 }}
-                            style={{
-                                width: 70,
-                                backgroundColor: currentColors.skeletonBase,
-                                //alignSelf: 'flex-start',
-                                marginBottom: 10,
-                                paddingHorizontal: 16,
-                                paddingVertical: 20,
-                                borderRadius: 35,
-                                height: 70,
-                            }}
-                        />
-                        <MotiView
-                            from={{ opacity: 0.5 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ loop: true, type: 'timing', duration: 1000 }}
-                            style={{
-                                width: 80,
-                                backgroundColor: currentColors.skeletonBase,
-                                //alignSelf: 'flex-start',
-                                marginBottom: 10,
-                                paddingHorizontal: 16,
-                                //paddingVertical: 20,
-                                borderRadius: 35,
-                                height: 15,
-                            }}
-                        />
-                        </View>
-                        <View style={styles.loading}>
-                        <MotiView
-                            from={{ opacity: 0.5 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ loop: true, type: 'timing', duration: 1000 }}
-                            style={{
-                                width: 70,
-                                backgroundColor: currentColors.skeletonBase,
-                                //alignSelf: 'flex-start',
-                                marginBottom: 10,
-                                paddingHorizontal: 16,
-                                paddingVertical: 20,
-                                borderRadius: 35,
-                                height: 70,
-                            }}
-                        />
-                        <MotiView
-                            from={{ opacity: 0.5 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ loop: true, type: 'timing', duration: 1000 }}
-                            style={{
-                                width: 80,
-                                backgroundColor: currentColors.skeletonBase,
-                                //alignSelf: 'flex-start',
-                                marginBottom: 10,
-                                paddingHorizontal: 16,
-                                //paddingVertical: 20,
-                                borderRadius: 35,
-                                height: 15,
-                            }}
-                        />
-                        </View>
-                    </>
-                ) :
-                    categories.length > 0 ? (
-                        categories.map((category, index) => (
+                    </View>
+                </>
+            ) : categories.length > 0 ? (
+                <ScrollView
+                    ref={scrollRef}
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={styles.itemsWrapper}
+                >
+                    {categories.map((category, index) => {
+                        const imageUrl = category?.icon
+                            ? { uri: `https://be.donation.matrixvert.com/storage/${category.icon}` }
+                            : null;
+
+                        return (
                             <TouchableOpacity
-                                ref={(el) => (itemRef.current[index] = el)}
                                 key={category.id}
-                                style={[styles.item, { borderColor: currentColors.mainColor },
-                                ]}
+                                ref={(el) => (itemRef.current[index] = el)}
+                                style={[styles.item,{backgroundColor: currentColors.cardBackground}]}
+                                onPress={() => router.push(`/category/${category.id}`)}
                             >
-                                <Text
-                                    style={[[styles.itemText, { color: currentColors.darkGrey, }],]}
-                                >
-                                    {category.name}
-                                </Text>
+                                <View style={styles.categoryContainer}>
+                                    {imageUrl ? (
+                                        <Image source={imageUrl} style={styles.icon} />
+                                    ) : (
+                                        <FontAwesome name="folder" size={24} color={currentColors.darkGrey} />
+                                    )}
+                                    <Text style={[styles.itemText, { color: currentColors.darkGrey }]}>
+                                        {category.name}
+                                    </Text>
+                                </View>
                             </TouchableOpacity>
-                        ))
-                    ) : (
-                        <Text style={[styles.noCategoryText, { color: currentColors.mainColor }]}>No categories available.</Text>
-                    )}
-            </ScrollView>
+
+                        );
+                    })}
+                </ScrollView>
+            ) : (
+                <Text style={[styles.noCategoryText, { color: currentColors.mainColor }]}>
+                    No categories available.
+                </Text>
+            )}
         </View>
+
     );
 };
 
@@ -175,39 +123,26 @@ export default Categories;
 
 const styles = StyleSheet.create({
     container: {
-       // marginBottom: 20,
-    },
-    text: {
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingLeft: 20,
-        paddingRight: 20
-    },
-    title: {
-        fontSize: 18,
-        fontWeight: '600',
-        //color: Colors.black,
-        paddingTop: 20,
-        marginBottom: 10,
-    },
-    viewAll: {
-        fontSize: 14,
-        //color: Colors.darkGrey,
-        textTransform: 'capitalize',
+        // marginBottom: 20,
     },
     itemsWrapper: {
-        gap: 20,
-        paddingVertical: 10,
-        paddingHorizontal: 20,
+        //gap: 1,
+        paddingBottom: 10,
+        paddingHorizontal: 10,
     },
     item: {
-        //borderWidth: 1,
-        //borderColor: Colors.darkGrey,
-        paddingVertical: 10,
-        paddingHorizontal: 16,
-        borderRadius: 10,
-    },
+        marginHorizontal: 8,
+        padding: 12,
+        borderRadius: 8,
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+      categoryContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 80,
+        height: 50
+      },
     itemText: {
         fontSize: 14,
         //color: Colors.darkGrey,
@@ -234,5 +169,10 @@ const styles = StyleSheet.create({
     },
     loading: {
         alignItems: 'center'
-    }
+    },
+    icon: {
+        width: 40,
+        height: 40,
+        marginBottom: 10,
+      },
 });

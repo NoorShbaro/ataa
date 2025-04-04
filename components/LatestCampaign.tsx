@@ -28,6 +28,11 @@ type Campaigns = {
         id: number;
         name: string;
     }
+    progress: {
+        raised: string;
+        percentage: number;
+        remaining: number;
+    }
 };
 
 export default function LatestCampaign() {
@@ -58,23 +63,29 @@ export default function LatestCampaign() {
 
     const renderItem = ({ item }: { item: Campaigns }) => {
         const imageUrl = item.featured_image
-            ? { uri: `https://be.donation.matrixvert.com/storage/${item.featured_image}` }
+            ? { uri: `${item.featured_image}` }
             : require('@/assets/images/empty.jpg');
 
         //const percentage = Math.min(100, Math.round((item.amount_raised / item.goal_amount) * 100));
         //const remaining = item.goal_amount - item.amount_raised;
 
         return (
-            <TouchableOpacity onPress={() => router.push(`/campaign/${item.id}`)}>
-                <View style={[styles.card, { backgroundColor: currentColors.mainColorWithOpacity, borderColor: currentColors.button }]}>
+            <TouchableOpacity onPress={() => router.push(`/campaign/${item.id}`)} style={{marginBottom: 50}}>
+                <View style={[styles.card, { backgroundColor: currentColors.cardBackground, borderColor: currentColors.button }]}>
                     <Image source={imageUrl} style={styles.image} />
                     <Text style={[styles.campaignTitle, { color: currentColors.mainColor }]}>{item.title}</Text>
-                    <Text style={[styles.description, { color: currentColors.mainColor }]}>{item.description}</Text>
+                    
                     <Text style={[styles.date, { color: currentColors.mainColorWithOpacity }]}>
                         {item.end_date}
                     </Text>
                     {/* Progress Bar */}
-
+                    <View style={{marginHorizontal: 10}}>
+                    <ProgressBar
+                            percentage={item.progress.percentage}
+                            raised={parseFloat(item.progress.raised)}
+                            remaining={item.progress.remaining}
+                            goal={parseFloat(item.goal_amount)} />
+                </View>
                 </View>
             </TouchableOpacity>
         );
@@ -128,6 +139,7 @@ export default function LatestCampaign() {
                         renderItem={renderItem}
                         contentContainerStyle={styles.listContainer}
                         horizontal
+                        showsHorizontalScrollIndicator={false}
                     />
                 </>
             )}
@@ -137,7 +149,7 @@ export default function LatestCampaign() {
 
 const styles = StyleSheet.create({
     container: {
-        padding: 20,
+        padding: 10,
     },
     listContainer: {
         paddingBottom: 20,
@@ -146,6 +158,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 10,
+        marginLeft: 10,
     },
     loadingText: {
         fontSize: 16,
@@ -154,6 +167,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         //padding: 15,
         marginBottom: 15,
+        marginRight: 10,
         width: 200,
         //borderWidth: 1
         //shadowColor: '#000',

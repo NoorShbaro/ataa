@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, TouchableOpacity, Image, ActivityIndicator, Dimensions } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, Image, ActivityIndicator, Dimensions, ScrollView } from 'react-native';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { DarkColors, LightColors } from '@/constants/Colors';
 import { useTheme } from '@/constants/ThemeContext';
@@ -72,27 +72,27 @@ export default function Donate() {
   };
 
   const imageUrl = campaign?.featured_image
-    ? { uri: `https://be.donation.matrixvert.com/storage/${campaign?.featured_image}` }
+    ? { uri: `${campaign?.featured_image}` }
     : require('@/assets/images/empty.jpg');
 
-    return (
-      <SafeAreaView style={[styles.container, { backgroundColor: currentColors.background }]}> 
-        <Stack.Screen options={{ headerShown: false }} />
-  
-        <Header title={''} />
-  
-        {/* Content */}
-        {isLoading ? (
-          <LoadingSingle />
-        ) : (
-          <>
-            
-            <Card style={[styles.card, {backgroundColor: currentColors.mainColorWithOpacity}]}>
+  return (
+    <SafeAreaView style={[styles.container, { backgroundColor: currentColors.background }]}>
+      <Stack.Screen options={{ headerShown: false }} />
+
+      <Header title={''} />
+
+      {/* Content */}
+      {isLoading ? (
+        <LoadingSingle />
+      ) : (
+        <>
+          <ScrollView>
+            <Card style={[styles.card, { backgroundColor: currentColors.cardBackground }]}>
               <Card.Content>
-              <Image source={imageUrl} style={styles.image} />
+                <Image source={imageUrl} style={styles.image} />
                 <Text style={[styles.title, { color: currentColors.mainColor }]}>{campaign?.title}</Text>
                 <Text style={[styles.description, { color: currentColors.mainColor }]}>{campaign?.description}</Text>
-                <Text style={[styles.date, { color: currentColors.mainColor }]}>
+                <Text style={[styles.date, { color: currentColors.mainColorWithOpacity }]}>
                   {i18n.t('availableTill')}: {campaign?.end_date}
                 </Text>
                 <View style={[styles.goalContainer, { backgroundColor: currentColors.mainColorWithOpacity }]}>
@@ -107,23 +107,28 @@ export default function Donate() {
                   remaining={campaign?.progress.remaining ?? 0}
                   goal={parseFloat(campaign?.goal_amount ?? '0')}
                 />
-                <TouchableOpacity onPress={() => handleDonatePress(campaign?.id || 0)} style={[styles.donateButton, {backgroundColor: currentColors.button}]}>
-                  <Text style={[styles.donateText,{color: currentColors.background}]}>{i18n.t('donateNow')}</Text>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                  <Text style={[styles.percentage, { color: currentColors.mainColor }]}>{i18n.t('collected')}: {campaign?.progress.raised}$</Text>
+                  <Text style={[styles.percentage, { color: currentColors.mainColor }]}>{i18n.t('remaining')}: {campaign?.progress.remaining}$</Text>
+                </View>
+                <TouchableOpacity onPress={() => handleDonatePress(campaign?.id || 0)} style={[styles.donateButton, { backgroundColor: currentColors.button }]}>
+                  <Text style={[styles.donateText, { color: currentColors.background }]}>{i18n.t('donateNow')}</Text>
                 </TouchableOpacity>
               </Card.Content>
             </Card>
-            {selectedCampaignId !== null && (
-              <AmountModal
-                isVisible={isModalVisible}
-                onClose={() => setModalVisible(false)}
-                accessToken={accessToken}
-                campaignId={selectedCampaignId}
-              />
-            )}
-          </>
-        )}
-      </SafeAreaView>
-    );
+          </ScrollView>
+          {selectedCampaignId !== null && (
+            <AmountModal
+              isVisible={isModalVisible}
+              onClose={() => setModalVisible(false)}
+              accessToken={accessToken}
+              campaignId={selectedCampaignId}
+            />
+          )}
+        </>
+      )}
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -131,18 +136,22 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   image: {
-    width: width - 100,
+    width: '100%',
     height: width * 0.5,
     resizeMode: 'cover',
-    alignSelf:  'center',
+    alignSelf: 'center',
     marginBottom: 20,
     borderRadius: 15,
   },
   card: {
     margin: 10,
     borderRadius: 15,
-    padding: 15,
-    //elevation: 3,
+    padding: 5,
+    elevation: 0,
+    shadowOpacity: 0,
+    shadowOffset: { width: 0, height: 0 },
+    shadowRadius: 0,
+    shadowColor: 'transparent',
   },
   title: {
     fontSize: 22,
@@ -152,11 +161,13 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 16,
     marginBottom: 10,
+    marginLeft: 10
   },
   date: {
     fontSize: 14,
     fontWeight: '500',
     marginBottom: 15,
+    alignSelf: 'flex-end'
   },
   goalContainer: {
     flexDirection: 'row',
@@ -184,5 +195,13 @@ const styles = StyleSheet.create({
   donateText: {
     color: 'white',
     fontSize: 18,
+  },
+  percentage: {
+    fontSize: 12,
+    //marginTop: 5,
+    margin: 5,
+    fontWeight: "500",
+    //color: "#A5B4FC",
+    //marginHorizontal: 5
   },
 });

@@ -26,7 +26,7 @@ export const LightColors = {
 
   green: '#00674F',
   mustard: '#BA8E23',
-  cardBackground: '#',
+  cardBackground: '#bbbb',
   loading: '#',
   loadingHighlight: '#',
   placeholderBackground: '#',
@@ -50,7 +50,7 @@ export const DarkColors = {
   tabIconSelected: '#',
   green: '#20C09A',
   mustard: '#F6CF4C',
-  cardBackground: '#',
+  cardBackground: '#D9D9D926',
   loading: '#',
   loadingHighlight: '#',
   placeholderBackground: '#',

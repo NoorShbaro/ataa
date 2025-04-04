@@ -21,10 +21,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ percentage, raised, remaining
             <View style={[styles.progressBarBackground, { backgroundColor: currentColors.progressBarBackground }]}>
                 <View style={[styles.progressBarFill, { width: `${percentage}%`, backgroundColor: currentColors.mainColor }]} />
             </View>
-            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <Text style={[styles.percentage, { color: currentColors.mainColor }]}>{i18n.t('collected')}: {raised}$</Text>
-                <Text style={[styles.percentage, { color: currentColors.mainColor }]}>{i18n.t('remaining')}: {remaining}$</Text>
-            </View>
+            
         </View>
     );
 };

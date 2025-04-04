@@ -98,15 +98,6 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
-          name="search"
-          options={{
-            title: `${i18n.t('search')}`,
-            tabBarIcon: ({ color, focused }) => (
-              <Ionicons name={focused ? 'filter' : 'filter-outline'} color={color} size={24} />
-            ),
-          }}
-        />
-        <Tabs.Screen
           name="settings"
           options={{
             title: `${i18n.t('settings')}`,
