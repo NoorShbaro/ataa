@@ -3,6 +3,7 @@ import { DarkColors, LightColors } from '@/constants/Colors';
 import { useTheme } from '@/constants/ThemeContext';
 import { useLanguage } from '@/constants/LanguageContext';
 import MainHeader from '@/components/MainHeader';
+import CampaignList from '@/components/CampaignList';
 
 export default function Campaigns() {
 
@@ -14,11 +15,7 @@ export default function Campaigns() {
   return (
     <View style={[styles.container, { backgroundColor: currentColors.background }]}>
       <MainHeader />
-      <View style={[styles.view, { backgroundColor: currentColors.background }]}>
-        <Text style={{ color: currentColors.mainColor }}>
-          {i18n.t('camp')}
-        </Text>
-      </View>
+      <CampaignList/>
     </View>
   );
 }

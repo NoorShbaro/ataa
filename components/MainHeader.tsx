@@ -5,14 +5,17 @@ import { useTheme } from '@/constants/ThemeContext';
 import { DarkColors, LightColors } from '@/constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
+import { useAuth } from '@/constants/userContext';
 
 type MainHeaderProps = {
-    //title: string;
-  };
+  //title: string;
+};
 
 const MainHeader = (/*{ title }: MainHeaderProps*/) => {
   const { isDarkMode } = useTheme();
   const currentColors = isDarkMode ? DarkColors : LightColors;
+
+  const { isAuthenticated } = useAuth();
 
   return (
     <SafeAreaView
@@ -20,32 +23,36 @@ const MainHeader = (/*{ title }: MainHeaderProps*/) => {
       style={[{ backgroundColor: currentColors.background }]}
     >
       <View
-      style={{
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        width: '100%',
-        paddingHorizontal: 20,
-        paddingTop: 10
-      }}
-    >
-      <Image
-        source={require('@/assets/images/icon.png')}
-        style={{ width: 50, height: 50, resizeMode: 'contain', borderRadius: 30 }}
-      />
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          width: '100%',
+          paddingHorizontal: 20,
+          paddingTop: 10
+        }}
+      >
+        <Image
+          source={require('@/assets/images/icon.png')}
+          style={{ width: 50, height: 50, resizeMode: 'contain', borderRadius: 30 }}
+        />
 
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 15 }}>
-        {/* Notification Icon */}
-        <TouchableOpacity>
-          <Ionicons name="notifications" size={30} color={currentColors.mainColor} />
-        </TouchableOpacity>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 15 }}>
+          {/* Notification Icon */}
+          <TouchableOpacity>
+            <Ionicons name="notifications" size={30} color={currentColors.mainColor} />
+          </TouchableOpacity>
 
-        {/* Profile Icon */}
-        <TouchableOpacity>
-          <Ionicons name="person-circle" size={35} color={currentColors.mainColor} />
-        </TouchableOpacity>
+          {/* Profile Icon */}
+          <TouchableOpacity onPress={() => (
+            router.push(
+              isAuthenticated ? '/settings/profile'
+                : '/settings/login'
+            ))}>
+            <Ionicons name="person-circle" size={35} color={currentColors.mainColor} />
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
     </SafeAreaView>
   );
 };
@@ -58,7 +65,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 16,
-    height: 60, 
+    height: 60,
   },
   backButton: {
     position: 'absolute',
