@@ -50,6 +50,7 @@ const Categories = () => {
             >
                 {loading ? (
                     <>
+                    <View style={styles.loading}>
                         <MotiView
                             from={{ opacity: 0.5 }}
                             animate={{ opacity: 1 }}
@@ -57,7 +58,7 @@ const Categories = () => {
                             style={{
                                 width: 70,
                                 backgroundColor: currentColors.skeletonBase,
-                                alignSelf: 'flex-start',
+                                //alignSelf: 'flex-start',
                                 marginBottom: 10,
                                 paddingHorizontal: 16,
                                 paddingVertical: 20,
@@ -70,9 +71,26 @@ const Categories = () => {
                             animate={{ opacity: 1 }}
                             transition={{ loop: true, type: 'timing', duration: 1000 }}
                             style={{
+                                width: 80,
+                                backgroundColor: currentColors.skeletonBase,
+                                //alignSelf: 'flex-start',
+                                marginBottom: 10,
+                                paddingHorizontal: 16,
+                                //paddingVertical: 20,
+                                borderRadius: 35,
+                                height: 15,
+                            }}
+                        />
+                        </View>
+                        <View style={styles.loading}>
+                        <MotiView
+                            from={{ opacity: 0.5 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ loop: true, type: 'timing', duration: 1000 }}
+                            style={{
                                 width: 70,
                                 backgroundColor: currentColors.skeletonBase,
-                                alignSelf: 'flex-start',
+                                //alignSelf: 'flex-start',
                                 marginBottom: 10,
                                 paddingHorizontal: 16,
                                 paddingVertical: 20,
@@ -85,9 +103,26 @@ const Categories = () => {
                             animate={{ opacity: 1 }}
                             transition={{ loop: true, type: 'timing', duration: 1000 }}
                             style={{
+                                width: 80,
+                                backgroundColor: currentColors.skeletonBase,
+                                //alignSelf: 'flex-start',
+                                marginBottom: 10,
+                                paddingHorizontal: 16,
+                                //paddingVertical: 20,
+                                borderRadius: 35,
+                                height: 15,
+                            }}
+                        />
+                        </View>
+                        <View style={styles.loading}>
+                        <MotiView
+                            from={{ opacity: 0.5 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ loop: true, type: 'timing', duration: 1000 }}
+                            style={{
                                 width: 70,
                                 backgroundColor: currentColors.skeletonBase,
-                                alignSelf: 'flex-start',
+                                //alignSelf: 'flex-start',
                                 marginBottom: 10,
                                 paddingHorizontal: 16,
                                 paddingVertical: 20,
@@ -100,17 +135,17 @@ const Categories = () => {
                             animate={{ opacity: 1 }}
                             transition={{ loop: true, type: 'timing', duration: 1000 }}
                             style={{
-                                width: 70,
+                                width: 80,
                                 backgroundColor: currentColors.skeletonBase,
-                                alignSelf: 'flex-start',
+                                //alignSelf: 'flex-start',
                                 marginBottom: 10,
                                 paddingHorizontal: 16,
-                                paddingVertical: 20,
+                                //paddingVertical: 20,
                                 borderRadius: 35,
-                                height: 70,
+                                height: 15,
                             }}
                         />
-
+                        </View>
                     </>
                 ) :
                     categories.length > 0 ? (
@@ -197,4 +232,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginTop: 10,
     },
+    loading: {
+        alignItems: 'center'
+    }
 });
