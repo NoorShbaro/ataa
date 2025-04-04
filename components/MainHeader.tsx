@@ -33,7 +33,7 @@ const MainHeader = (/*{ title }: MainHeaderProps*/) => {
         }}
       >
         <Image
-          source={require('@/assets/images/icon.png')}
+          source={isDarkMode? require('@/assets/images/ATAA.png'):require('@/assets/images/ATAAL.png') }
           style={{ width: 50, height: 50, resizeMode: 'contain', borderRadius: 30 }}
         />
 

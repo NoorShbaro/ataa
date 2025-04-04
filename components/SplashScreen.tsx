@@ -33,7 +33,7 @@ const CustomSplashScreen: React.FC<CustomSplashScreenProps> = ({ onFinish }) => 
             />
             <View style={styles.imageContainer}>
                 <Image 
-                    source={require('@/assets/images/partial-react-logo.png')}
+                    source={require('@/assets/images/Baner.png')}
                     style={styles.image}
                     resizeMode="contain"
                 />
