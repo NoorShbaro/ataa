@@ -135,6 +135,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
-    paddingTop: 30
+    paddingTop: 30,
+    marginBottom: 20
   }
 });

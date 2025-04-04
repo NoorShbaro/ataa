@@ -44,37 +44,56 @@ const Categories = () => {
     return (
         <View style={styles.container}>
             {loading ? (
-                <>
+                <View style={{ flexDirection: 'row', marginHorizontal: 10 }}>
                     <View style={styles.loading}>
                         <MotiView
                             from={{ opacity: 0.5 }}
                             animate={{ opacity: 1 }}
                             transition={{ loop: true, type: "timing", duration: 1000 }}
                             style={{
-                                width: 70,
+                                width: 100,
                                 backgroundColor: currentColors.skeletonBase,
                                 marginBottom: 10,
                                 paddingHorizontal: 16,
                                 paddingVertical: 20,
-                                borderRadius: 35,
+                                borderRadius: 8,
                                 height: 70,
                             }}
                         />
+                    </View>
+                    <View style={styles.loading}>
                         <MotiView
                             from={{ opacity: 0.5 }}
                             animate={{ opacity: 1 }}
                             transition={{ loop: true, type: "timing", duration: 1000 }}
                             style={{
-                                width: 80,
+                                width: 100,
                                 backgroundColor: currentColors.skeletonBase,
                                 marginBottom: 10,
                                 paddingHorizontal: 16,
-                                borderRadius: 35,
-                                height: 15,
+                                paddingVertical: 20,
+                                borderRadius: 8,
+                                height: 70,
                             }}
                         />
                     </View>
-                </>
+                    <View style={styles.loading}>
+                        <MotiView
+                            from={{ opacity: 0.5 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ loop: true, type: "timing", duration: 1000 }}
+                            style={{
+                                width: 100,
+                                backgroundColor: currentColors.skeletonBase,
+                                marginBottom: 10,
+                                paddingHorizontal: 16,
+                                paddingVertical: 20,
+                                borderRadius: 8,
+                                height: 70,
+                            }}
+                        />
+                    </View>
+                </View>
             ) : categories.length > 0 ? (
                 <ScrollView
                     ref={scrollRef}
@@ -91,7 +110,7 @@ const Categories = () => {
                             <TouchableOpacity
                                 key={category.id}
                                 ref={(el) => (itemRef.current[index] = el)}
-                                style={[styles.item,{backgroundColor: currentColors.cardBackground}]}
+                                style={[styles.item, { backgroundColor: currentColors.cardBackground }]}
                                 onPress={() => router.push(`/category/${category.id}`)}
                             >
                                 <View style={styles.categoryContainer}>
@@ -136,13 +155,13 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         alignItems: 'center',
         justifyContent: 'center',
-      },
-      categoryContainer: {
+    },
+    categoryContainer: {
         alignItems: 'center',
         justifyContent: 'center',
         width: 80,
         height: 50
-      },
+    },
     itemText: {
         fontSize: 14,
         //color: Colors.darkGrey,
@@ -168,11 +187,12 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     loading: {
-        alignItems: 'center'
+        alignItems: 'center',
+        marginRight: 10
     },
     icon: {
         width: 40,
         height: 40,
         marginBottom: 10,
-      },
+    },
 });
