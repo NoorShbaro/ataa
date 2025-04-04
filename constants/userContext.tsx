@@ -1,10 +1,11 @@
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import * as SecureStore from 'expo-secure-store';
-import { Alert } from 'react-native';
+import { Alert, AppState } from 'react-native';
 import { useRouter } from 'expo-router';
-import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import apiClient from './apiClient';
+
+const TOKEN_REFRESH_INTERVAL = 60 * 1000;
 
 type AuthContextType = {
     accessToken: string | null;
@@ -29,13 +30,81 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const resetError = () => setError("");
     const [isChecked, setIsChecked] = useState(false);
     const refreshTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-    const isRefreshingRef = useRef(false);
+    //const isRefreshingRef = useRef(false);
 
     const toggleCheckbox = () => {
         setIsChecked(!isChecked);
     };
 
     useEffect(() => {
+        loadTokens();
+        const appStateListener = AppState.addEventListener("change", handleAppStateChange);
+        const interval = setInterval(checkAuth, TOKEN_REFRESH_INTERVAL);
+
+        return () => {
+            appStateListener.remove();
+            clearInterval(interval); // Cleanup when component unmounts
+        };
+    }, []);
+
+    const loadTokens = async () => {
+        const storedAccessToken = await SecureStore.getItemAsync('accessToken');
+        const storedRefreshToken = await SecureStore.getItemAsync('refreshToken');
+        setAccessToken(storedAccessToken);
+        setRefreshToken(storedRefreshToken);
+        if (storedAccessToken) {
+            checkAuth();
+        }
+    };
+
+    const checkAuth = async () => {
+        const storedAccessToken = await SecureStore.getItemAsync('accessToken');
+        if (!storedAccessToken) return;
+    
+        try {
+            await apiClient.get("/donor/me", {
+                headers: { Authorization: `Bearer ${storedAccessToken}` },
+            });
+        } catch (error: any) {
+            if (error.response?.status === 401) {
+                refreshAccessToken();
+            }
+        }
+    };
+
+    const refreshAccessToken = async () => {
+        const storedRefreshToken = await SecureStore.getItemAsync("refreshToken");
+        if (!storedRefreshToken) {
+            refreshLogout();
+            return;
+        }
+        try {
+            const response = await apiClient.post(
+                "/donor/refresh",
+                {},
+                {
+                    headers: { Authorization: `Bearer ${storedRefreshToken}` },
+                }
+            );
+            const newAccessToken = response.data.access_token.access_token;
+            const newRefreshToken = response.data.refresh_token;
+            await SecureStore.setItemAsync('accessToken', newAccessToken);
+            await SecureStore.setItemAsync('refreshToken', newRefreshToken);
+            setAccessToken(newAccessToken);
+            setRefreshToken(newRefreshToken);
+            console.log('Token refreshed successfully!');
+        } catch (error: any) {
+            refreshLogout();
+        }
+    };
+
+    const handleAppStateChange = (nextAppState: string) => {
+        if (nextAppState === "active") {
+            checkAuth();
+        }
+    };
+
+    /*useEffect(() => {
         const loadTokens = async () => {
             const storedAccessToken = await SecureStore.getItemAsync('accessToken');
             const storedRefreshToken = await SecureStore.getItemAsync('refreshToken');
@@ -49,9 +118,9 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
             }
         };
         loadTokens();
-    }, []);
+    }, []);*/
 
-    const setRefreshTimeout = (expiresIn: number) => {
+    /*const setRefreshTimeout = (expiresIn: number) => {
         if (!expiresIn || expiresIn <= 0) return; // Prevent invalid timeouts
 
         if (refreshTimeoutRef.current) {
@@ -62,7 +131,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
             //console.log(`Refreshing token in ${expiresIn} seconds...`);
             refreshAccessToken();
         }, (expiresIn - 10) * 1000); // Refresh 10 seconds before expiry
-    };
+    };*/
 
     const login = async (email: string, password: string) => {
         if (!email || !password) {
@@ -85,7 +154,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setAccessToken(accessToken);
             setRefreshToken(refreshToken);
 
-            setRefreshTimeout(expiresIn);
+            //setRefreshTimeout(expiresIn);
 
             router.replace('/settings/profile');
         } catch (error) {
@@ -95,7 +164,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     const signup = async (name: string, email: string, password: string) => {
-       
+
 
         setError('');
 
@@ -113,13 +182,13 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
             setAccessToken(accessToken);
             setRefreshToken(refreshToken);
 
-            setRefreshTimeout(expiresIn);
+            //setRefreshTimeout(expiresIn);
 
             router.replace('/settings/profile');
         } catch (error) {
             console.error('Signup failed', error);
             console.log(name, email, password);
-            
+
             setError('Invalid email.');
         }
     };
@@ -173,7 +242,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setRefreshToken(null);
     };
 
-    const refreshAccessToken = async () => {
+    /*const refreshAccessToken = async () => {
         if (accessToken){
             try {
                 //console.log('Checking stored refresh token...');
@@ -184,7 +253,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 }
                 isRefreshingRef.current = true;
     
-                const response = await axios.post('http://be.donation.matrixvert.com/api/donor/refresh', {}, {
+                const response = await apiClient.post('/donor/refresh', {}, {
                     headers: {
                         Authorization: `Bearer ${refreshToken}`,
                     },
@@ -221,9 +290,9 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
         
 
-    };
+    };*/
 
-    useEffect(() => {
+    /*useEffect(() => {
         if (accessToken && refreshToken) {
             // Retrieve the expiry time stored when logging in or refreshing
             AsyncStorage.getItem('expires_in').then((expiresIn) => {
@@ -232,7 +301,9 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 }
             });
         }
-    }, [accessToken, refreshToken]);
+    }, [accessToken, refreshToken]);*/
+
+
 
     const isAuthenticated = !!accessToken;
 

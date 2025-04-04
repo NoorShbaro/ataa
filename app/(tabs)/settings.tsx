@@ -99,20 +99,25 @@ export default function Settings() {
               />
             </TouchableOpacity>
           </Link>
-          <Link href={`/settings/history`} asChild style={[styles.itemBtn,
-          { backgroundColor: currentColors.mainColorWithOpacity },
-          { borderBottomColor: currentColors.background, }
-          ]}>
-            <TouchableOpacity>
-              <Text style={[styles.itemBtnText, { color: currentColors.mainColor }]}>
-                {i18n.t('history')}
-              </Text>
-              <MaterialIcons name="arrow-forward-ios"
-                size={16}
-                color={currentColors.mainColor}
-              />
-            </TouchableOpacity>
-          </Link>
+
+          <TouchableOpacity onPress={() => (
+            router.push(
+              isAuthenticated ? '/settings/history'
+                : '/settings/login'
+            ))}
+            style={[styles.itemBtn,
+            { backgroundColor: currentColors.mainColorWithOpacity },
+            { borderBottomColor: currentColors.background, }
+            ]}
+          >
+            <Text style={[styles.itemBtnText, { color: currentColors.mainColor }]}>
+              {i18n.t('history')}
+            </Text>
+            <MaterialIcons name="arrow-forward-ios"
+              size={16}
+              color={currentColors.mainColor}
+            />
+          </TouchableOpacity>
 
           <Link href={`/settings/language`} asChild style={[styles.itemBtn,
           { backgroundColor: currentColors.mainColorWithOpacity },
