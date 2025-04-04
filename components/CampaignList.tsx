@@ -6,6 +6,7 @@ import { useLanguage } from '@/constants/LanguageContext';
 import apiClient from '@/constants/apiClient';
 import { router } from 'expo-router';
 import { MotiView } from 'moti';
+import ProgressBar from './ProgressBar';
 
 type Category = {
     id: number;
@@ -14,21 +15,19 @@ type Category = {
 
 type Campaign = {
     id: number;
-    ngo_id: number;
     title: string;
     description: string;
     goal_amount: string;
-    status: string;
     start_date: string;
     end_date: string;
-    created_at: string;
     featured_image: string;
-    category_id: number;
-    ngo: {
-        id: number;
-        name: string;
+    category: string;
+    ngo: string;
+    progress: {
+        raised: string;
+        percentage: number;
+        remaining: number;
     }
-    categories?: Category[];
 };
 
 export default function CampaignList() {
@@ -36,105 +35,96 @@ export default function CampaignList() {
     const currentColors = isDarkMode ? DarkColors : LightColors;
     const { i18n } = useLanguage();
 
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
     const [campaigns, setCampaigns] = useState<Campaign[]>([]);
     const [loading, setLoading] = useState(true);
-    const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
-    const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
 
     useEffect(() => {
-        fetchCampaigns();
+        fetchCategories();
     }, []);
 
-    const fetchCampaigns = async () => {
-        try {
-            const response = await apiClient.get('/campaigns/all');
-            const result: Campaign[] = response.data.campaigns;
-            setCampaigns(result);
+    useEffect(() => {
+        if (selectedCategory !== null) {
+            fetchCampaigns(selectedCategory);
+        }
+    }, [selectedCategory]);
 
-            // Auto-select the first campaign and its first category (if any)
-            if (result.length > 0) {
-                setSelectedCampaign(result[0]);
-                if (result[0].categories && result[0].categories.length > 0) {
-                    setSelectedCategory(result[0].categories[0]);
-                }
+    const fetchCategories = async () => {
+        try {
+            const response = await apiClient.get('/categories/all');
+            const categoryList = response.data.data; 
+            setCategories(categoryList);
+            //console.log(categories);
+
+            if (categoryList.length > 0) {
+                setSelectedCategory(categoryList[0].id); 
             }
         } catch (err: any) {
-            console.log('Error:', err.message);
+            console.log('Error fetching categories:', err.message);
+        }
+    };
+
+    const fetchCampaigns = async (categoryId: number) => {
+        try {
+            setLoading(true);
+            const response = await apiClient.get(`/campaigns/category/${categoryId}`);
+            setCampaigns(response.data.campaigns);
+        } catch (err: any) {
+            console.log('Error fetching campaigns:', err.message);
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
     };
 
-    const handleCampaignSelect = (campaign: Campaign) => {
-        setSelectedCampaign(campaign);
-        if (campaign.categories && campaign.categories.length > 0) {
-            setSelectedCategory(campaign.categories[0]); // Auto-select first category if available
-        } else {
-            setSelectedCategory(null);
-        }
+    const renderCampaignItem = ({ item }: { item: Campaign }) => {
+        const imageUrl = item.featured_image
+            ? { uri: `https://be.donation.matrixvert.com/storage/${item.featured_image}` }
+            : require('@/assets/images/empty.jpg');
+
+        return (
+            <View style={[styles.card, { backgroundColor: currentColors.mainColorWithOpacity }]}>
+                <View style={{margin: 10, marginVertical: 10}}>
+                <Image source={imageUrl} style={styles.image} />
+                <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <Text style={[styles.campaignTitle, { color: currentColors.mainColor }]}>{item.title}</Text>
+                <Text style={[styles.date, { color: currentColors.lightGrey }]}>{i18n.t('availableTill')}: {item.end_date}</Text>
+                </View>
+                
+                <Text style={[styles.description, { color: currentColors.mainColor }]}>{item.description}</Text>
+
+                
+
+                {/* Progress Bar */}
+                <ProgressBar 
+                percentage={item.progress.percentage} 
+                raised={parseFloat(item.progress.raised)} 
+                remaining={item.progress.remaining} 
+                goal={parseFloat(item.goal_amount)}/>
+                </View>
+                
+            </View>
+        );
     };
-
-    const filteredCategories = selectedCampaign?.categories
-        ? [selectedCampaign.categories] // If the campaign has a category, use it
-        : [];
-
-    const filteredCampaigns = campaigns.filter((campaign) =>
-        selectedCampaign ? campaign.id === selectedCampaign.id : true
-    );
-
 
     return (
         <View style={[styles.container, { backgroundColor: currentColors.background }]}>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.scrollView}>
-                {campaigns.map((campaign) => (
+                {categories.map((category) => (
                     <TouchableOpacity
-                        key={campaign.id}
+                        key={category.id}
                         style={[
-                            styles.campaignItem,
+                            styles.categoryButton,
                             {
-                                backgroundColor: selectedCampaign?.id === campaign.id ? currentColors.mainColor : currentColors.cardBackground,
+                                backgroundColor: selectedCategory === category.id ? currentColors.mainColor : currentColors.lightGrey,
                             },
                         ]}
-                        onPress={() => handleCampaignSelect(campaign)}
+                        onPress={() => setSelectedCategory(category.id)}
                     >
-                        <Text
-                            style={[
-                                styles.campaignText,
-                                { color: selectedCampaign?.id === campaign.id ? currentColors.white : currentColors.mainColor },
-                            ]}
-                        >
-                            {campaign.title}
-                        </Text>
+                        <Text style={[styles.categoryText, { color: currentColors.white }]}>{category.name}</Text>
                     </TouchableOpacity>
                 ))}
             </ScrollView>
-
-            {/* Categories (if available) */}
-            {selectedCampaign?.categories && selectedCampaign.categories.length > 0 && (
-                <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.scrollView}>
-                    {selectedCampaign.categories.map((category) => (
-                        <TouchableOpacity
-                            key={category.id}
-                            style={[
-                                styles.categoryItem,
-                                {
-                                    backgroundColor: selectedCategory?.id === category.id ? currentColors.mainColor : currentColors.cardBackground,
-                                },
-                            ]}
-                            onPress={() => setSelectedCategory(category)}
-                        >
-                            <Text
-                                style={[
-                                    styles.categoryText,
-                                    { color: selectedCategory?.id === category.id ? currentColors.white : currentColors.mainColor },
-                                ]}
-                            >
-                                {category.name}
-                            </Text>
-                        </TouchableOpacity>
-                    ))}
-                </ScrollView>
-            )}
 
             {/* Display Data Based on Selection */}
             {loading ? (
@@ -174,35 +164,10 @@ export default function CampaignList() {
                 <Text style={[styles.noCampaignText, { color: currentColors.mainColor }]}>No campaigns available.</Text>
             ) : (
                 <FlatList
-                    data={filteredCampaigns} // Show only the selected campaign
+                    data={campaigns}
                     keyExtractor={(item) => item.id.toString()}
-                    renderItem={({ item }) => {
-                        const imageUrl = item.featured_image
-                            ? { uri: `https://be.donation.matrixvert.com/storage/${item.featured_image}` }
-                            : require('@/assets/images/empty.jpg');
-
-                        return (
-                            <TouchableOpacity onPress={() => router.push(`/campaign/${item.id}`)}>
-                                <View style={[styles.card, { backgroundColor: currentColors.mainColorWithOpacity, borderColor: currentColors.button, flexDirection: 'row', padding: 10 }]}>
-                                    {/* Image */}
-                                    <Image source={imageUrl} style={styles.image} />
-
-                                    {/* Campaign Details */}
-                                    <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between', marginLeft: 10 }}>
-                                        <View>
-                                            <Text style={[styles.campaignTitle, { color: currentColors.mainColor }]}>{item.title}</Text>
-                                            <Text style={[styles.description, { color: currentColors.mainColor }]}>{item.description}</Text>
-                                        </View>
-
-                                        {/* Date at Bottom Right */}
-                                        <Text style={[styles.date, { color: currentColors.mainColorWithOpacity, alignSelf: 'flex-end' }]}>
-                                            {item.end_date}
-                                        </Text>
-                                    </View>
-                                </View>
-                            </TouchableOpacity>
-                        );
-                    }}
+                    renderItem={renderCampaignItem}
+                    contentContainerStyle={styles.listContainer}
                 />
             )}
         </View>
@@ -216,87 +181,54 @@ const styles = StyleSheet.create({
     scrollView: {
         marginBottom: 10,
     },
-    campaignItem: {
-        paddingVertical: 10,
-        paddingHorizontal: 15,
-        borderRadius: 20,
-        marginRight: 10,
-    },
-    campaignText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
-    categoryItem: {
-        paddingVertical: 8,
-        paddingHorizontal: 12,
-        borderRadius: 15,
-        marginRight: 8,
-    },
     categoryText: {
-        fontSize: 14,
-    },
-    selectedInfo: {
-        marginTop: 20,
-        padding: 15,
-        borderRadius: 10,
-    },
-    infoText: {
         fontSize: 16,
         fontWeight: 'bold',
     },
     card: {
         borderRadius: 10,
-        //padding: 15,
         marginBottom: 15,
         width: '100%',
-        //borderWidth: 1
-        //shadowColor: '#000',
-        //shadowOpacity: 0.1,
-        //shadowOffset: { width: 0, height: 2 },
-        //shadowRadius: 4,
-        //elevation: 3,
     },
     image: {
-        width: 150,
+        width: '100%',
         height: 150,
         borderRadius: 8,
         resizeMode: 'cover',
-        //marginBottom: 10,
         alignSelf: 'center'
     },
     campaignTitle: {
         fontSize: 18,
-        //paddingLeft: 15,
         fontWeight: 'bold',
         marginBottom: 5,
+        marginLeft: 10,
+        marginTop: 10
     },
     description: {
         fontSize: 16,
-        paddingLeft: 10,
+        paddingLeft: 20,
         marginBottom: 10,
     },
     date: {
         fontSize: 14,
         fontWeight: '500',
-        //marginBottom: 15,
         alignSelf: 'flex-end',
-        //marginHorizontal: 10,
-        //marginTop:  55,
-        //left: 30
-        bottom: 0
+        bottom: 0,
+        margin: 10,
     },
     noCampaignText: {
         fontSize: 16,
         textAlign: 'center',
         marginTop: 10,
     },
+    categoryButton: {
+        paddingVertical: 8,
+        paddingHorizontal: 15,
+        borderRadius: 20,
+        marginRight: 10,
+    },
     listContainer: {
         paddingBottom: 20,
-    },
-    title: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 10,
     },
 });
 
