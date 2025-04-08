@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, TouchableOpacity, Image, ActivityIndicator, Dimensions, ScrollView } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, Image, ActivityIndicator, Dimensions, ScrollView, RefreshControl } from 'react-native';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { DarkColors, LightColors } from '@/constants/Colors';
 import { useTheme } from '@/constants/ThemeContext';
@@ -46,6 +46,22 @@ export default function Donate() {
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedCampaignId, setSelectedCampaignId] = useState<number | null>(null);
 
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+
+  const onRefresh = async () => {
+    setIsRefreshing(true);
+    setIsLoading(true);
+    try {
+      setTimeout(() => {
+        setIsLoading(false);
+        setIsRefreshing(false);
+      }, 2000);
+    } catch (error) {
+      console.error("Error refreshing data:", error);
+      setIsLoading(false);
+      setIsRefreshing(false);
+    }
+  };
 
   const handleDonatePress = (campaignId: number) => {
     if (!accessToken) {
@@ -86,7 +102,15 @@ export default function Donate() {
         <LoadingSingle />
       ) : (
         <>
-          <ScrollView>
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                refreshing={isRefreshing}
+                onRefresh={onRefresh}
+                colors={[currentColors.mainColor]}
+              />
+            }
+          >
             <Card style={[styles.card, { backgroundColor: currentColors.cardBackground }]}>
               <Card.Content>
                 <Image source={imageUrl} style={styles.image} />

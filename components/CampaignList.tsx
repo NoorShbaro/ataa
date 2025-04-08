@@ -39,6 +39,15 @@ export default function CampaignList() {
     const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
     const [campaigns, setCampaigns] = useState<Campaign[]>([]);
     const [loading, setLoading] = useState(true);
+    const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+
+    const handleRefreshAll = async () => {
+        setIsRefreshing(true);
+        await fetchCategories();
+        await fetchCampaigns(selectedCategory || 0);
+        setIsRefreshing(false);
+    };
+
 
     useEffect(() => {
         fetchCategories();
@@ -94,7 +103,7 @@ export default function CampaignList() {
                             <Text style={[styles.date, { color: currentColors.mainColorWithOpacity }]}>{i18n.t('availableTill')}: {item.end_date}</Text>
                         </View>
 
-                        
+
 
                         {/* Progress Bar */}
                         <ProgressBar
@@ -115,91 +124,68 @@ export default function CampaignList() {
 
     return (
         <View style={[styles.container, { backgroundColor: currentColors.background, marginBottom: 70 }]}>
-            {loading ? (
-                <View style={{flexDirection: 'row'}}>
-                <MotiView
-                    from={{ opacity: 0.5 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ loop: true, type: 'timing', duration: 1000 }}
-                    style={{
-                        width: '25%',
-                        backgroundColor: currentColors.skeletonBase,
-                        alignSelf: 'flex-start',
-                        marginBottom: 10,
-                        paddingHorizontal: 16,
-                        paddingVertical: 20,
-                        borderRadius: 10,
-                        
-                        height: 20,
-                    }}
-                />
-                <MotiView
-                    from={{ opacity: 0.5 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ loop: true, type: 'timing', duration: 1000 }}
-                    style={{
-                        width: '25%',
-                        backgroundColor: currentColors.skeletonBase,
-                        alignSelf: 'flex-start',
-                        marginBottom: 10,
-                        paddingHorizontal: 16,
-                        paddingVertical: 20,
-                        borderRadius: 10,
-                        marginLeft: 10,
-                        height: 20,
-                    }}
-                />
-                </View>
-            ) : categories.length === 0 ? (
-                <Text style={[styles.noCampaignText, { color: currentColors.mainColor }]}>No category available.</Text>
-            ) : (
-                <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.scrollView}>
-                    {categories.map((category) => (
-                        <TouchableOpacity
-                            key={category.id}
-                            style={[
-                                styles.categoryButton,
-                                {
-                                    backgroundColor: selectedCategory === category.id ? currentColors.mainColor : currentColors.cardBackground,
-                                },
-                            ]}
-                            onPress={() => setSelectedCategory(category.id)}
-                        >
-                            <Text style={[styles.categoryText, { color: selectedCategory === category.id ? currentColors.white : currentColors.darkGrey }]}>{category.name}</Text>
-                        </TouchableOpacity>
-                    ))}
-                </ScrollView>
-            )}
+            <FlatList
+                data={campaigns}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={renderCampaignItem}
+                contentContainerStyle={styles.listContainer}
+                refreshing={isRefreshing}
+                onRefresh={handleRefreshAll}
+                ListHeaderComponent={() => (
+                    <>
+                        {loading ? (
+                            <>
+                            <View style={{ flexDirection: 'row' }}>
+                                <MotiView style={[styles.skeleton, {
+                                    backgroundColor: currentColors.skeletonBase,
+                                }]} />
+                                <MotiView style={[styles.skeleton, { marginLeft: 10, backgroundColor: currentColors.skeletonBase }]} />
+                            </View>
+                            <MotiView style={[styles.skeletonLarge, {
+                                    backgroundColor: currentColors.skeletonBase,
+                                }]} />
+                            </>
+                        ) : categories.length === 0 ? (
+                            <Text style={[styles.noCampaignText, { color: currentColors.mainColor }]}>
+                                {i18n.t('noCategory')}
+                            </Text>
+                        ) : (
+                            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.scrollView}>
+                                {categories.map((category) => (
+                                    <TouchableOpacity
+                                        key={category.id}
+                                        style={[
+                                            styles.categoryButton,
+                                            {
+                                                backgroundColor:
+                                                    selectedCategory === category.id ? currentColors.mainColor : currentColors.cardBackground,
+                                            },
+                                        ]}
+                                        onPress={() => setSelectedCategory(category.id)}
+                                    >
+                                        <Text
+                                            style={[
+                                                styles.categoryText,
+                                                { color: selectedCategory === category.id ? currentColors.white : currentColors.darkGrey },
+                                            ]}
+                                        >
+                                            {category.name}
+                                        </Text>
+                                    </TouchableOpacity>
+                                ))}
+                            </ScrollView>
+                        )}
+                    </>
+                )}
+                ListEmptyComponent={() =>
+                    !loading && (
+                        <Text style={[styles.noCampaignText, { color: currentColors.mainColor }]}>
+                            {i18n.t('noCampaign')}
+                        </Text>
+                    )
+                }
+            />
 
-            {/* Display Data Based on Selection */}
-            {loading ? (
-                <>
-                    <MotiView
-                        from={{ opacity: 0.5 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ loop: true, type: 'timing', duration: 1000 }}
-                        style={{
-                            width: '100%',
-                            backgroundColor: currentColors.skeletonBase,
-                            alignSelf: 'flex-start',
-                            marginBottom: 10,
-                            paddingHorizontal: 16,
-                            paddingVertical: 20,
-                            borderRadius: 10,
-                            height: 300,
-                        }}
-                    />
-                </>
-            ) : campaigns.length === 0 ? (
-                <Text style={[styles.noCampaignText, { color: currentColors.mainColor }]}>{i18n.t('noCampaign')}</Text>
-            ) : (
-                <FlatList
-                    data={campaigns}
-                    keyExtractor={(item) => item.id.toString()}
-                    renderItem={renderCampaignItem}
-                    contentContainerStyle={styles.listContainer}
-                />
-            )}
         </View>
     );
 }
@@ -226,6 +212,24 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         resizeMode: 'cover',
         alignSelf: 'center'
+    },
+    skeleton: {
+        width: '25%',
+        alignSelf: 'flex-start',
+        marginBottom: 10,
+        paddingHorizontal: 16,
+        paddingVertical: 20,
+        borderRadius: 10,
+        height: 20,
+    },
+    skeletonLarge: {
+        width: '100%',
+        alignSelf: 'flex-start',
+        marginBottom: 10,
+        paddingHorizontal: 16,
+        paddingVertical: 20,
+        borderRadius: 10,
+        height: 300,
     },
     campaignTitle: {
         fontSize: 18,

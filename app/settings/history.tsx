@@ -25,6 +25,22 @@ export default function Notification() {
   const [history, setHistory] = useState<History[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { accessToken } = useAuth();
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+
+  const onRefresh = async () => {
+    setIsRefreshing(true);
+    setIsLoading(true);
+    try {
+      setTimeout(() => {
+        setIsLoading(false);
+        setIsRefreshing(false);
+      }, 2000);
+    } catch (error) {
+      console.error("Error refreshing data:", error);
+      setIsLoading(false);
+      setIsRefreshing(false);
+    }
+  };
 
   useEffect(() => {
     fetchHistory();
@@ -45,7 +61,7 @@ export default function Notification() {
 
   const renderItem = ({ item }: { item: History }) => (
     <View style={[styles.card, { backgroundColor: currentColors.mainColorWithOpacity }]}>
-      <View style={{flexDirection: 'row', justifyContent: 'space-between', }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
         <Text style={[styles.campaignText, { color: currentColors.mainColor }]}>{item.campaign_name}</Text>
         <Text style={[styles.date, { color: currentColors.darkGrey }]}>{item.donated_at}</Text>
       </View>
@@ -56,10 +72,10 @@ export default function Notification() {
       </Text>
 
       {item.status === 'pending' && (
-      <Text style={[styles.note, { color: currentColors.darkGrey, marginTop: 5 }]}>
-        {i18n.t('contact')}
-      </Text>
-    )}
+        <Text style={[styles.note, { color: currentColors.darkGrey, marginTop: 5 }]}>
+          {i18n.t('contact')}
+        </Text>
+      )}
 
     </View>
   );
@@ -81,6 +97,8 @@ export default function Notification() {
           keyExtractor={(item) => item.id.toString()}
           renderItem={renderItem}
           contentContainerStyle={styles.listContainer}
+          refreshing={isRefreshing}
+          onRefresh={onRefresh}
         />
       )}
     </View>
@@ -142,5 +160,5 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontStyle: 'italic',
   },
-  
+
 });

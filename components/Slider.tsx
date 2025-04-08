@@ -139,7 +139,7 @@ const CampaignSlider = ({ campaigns }: Props) => {
                   setIsAutoPlay(true);
                 }}
               />
-              <Pagination items={campaigns} PaginationIndex={paginationIndex} scrollX={scrollX} />
+              
             </>)}
         </View>
       </View>

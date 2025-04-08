@@ -39,21 +39,7 @@ export default function LoadingIndex() {
                         height: 150,
                     }}
                 />
-                <MotiView
-                    from={{ opacity: 0.5 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ loop: true, type: 'timing', duration: 1000 }}
-                    style={{
-                        width: 30,
-                        backgroundColor: currentColors.skeletonBase,
-                        alignSelf: 'center',
-                        marginBottom: 10,
-                        paddingHorizontal: 16,
-                        //paddingVertical: 20,
-                        borderRadius: 8,
-                        height: 8,
-                    }}
-                />
+                
             </View>
 
             <View style={{

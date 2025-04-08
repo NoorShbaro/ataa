@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, Dimensions } from 'react-native';
+import { Text, View, StyleSheet, Dimensions, ScrollView, RefreshControl } from 'react-native';
 import { DarkColors, LightColors } from '@/constants/Colors';
 import { useTheme } from '@/constants/ThemeContext';
 import { useLanguage } from '@/constants/LanguageContext';
@@ -11,6 +11,7 @@ import { useAuth } from '@/constants/userContext';
 import apiClient from '@/constants/apiClient';
 import LatestCampaign from '@/components/LatestCampaign';
 import Categories from '@/components/Category';
+import LoadingIndex from '@/components/IndexLoading';
 
 const { width } = Dimensions.get('screen');
 
@@ -46,9 +47,27 @@ export default function Index() {
 
   const { i18n } = useLanguage();
 
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+
   useEffect(() => {
     fetchCampaign();
   }, []);
+
+  const onRefresh = async () => {
+    setIsRefreshing(true);
+    setIsLoading(true); 
+    try {
+      setTimeout(() => {
+        setIsLoading(false);
+        setIsRefreshing(false);
+      }, 2000);
+    } catch (error) {
+      console.error("Error refreshing data:", error);
+      setIsLoading(false);
+      setIsRefreshing(false);
+    }
+  };
 
 
   const fetchCampaign = async () => {
@@ -71,51 +90,50 @@ export default function Index() {
   return (
     <View style={[styles.container, { backgroundColor: currentColors.background }]}>
       <MainHeader />
-      <View style={[{
-        backgroundColor: currentColors.background,
-      }]}>
-        {loading ? (
-          <View style={styles.view}>
-            <MotiView
-              from={{ opacity: 0.5 }}
-              animate={{ opacity: 1 }}
-              transition={{ loop: true, type: 'timing', duration: 1000 }}
-              style={{
-                width: '100%',
-                backgroundColor: currentColors.skeletonBase,
-                alignSelf: 'center',
-                marginBottom: 10,
-                paddingHorizontal: 16,
-                paddingVertical: 20,
-                borderRadius: 10,
-                height: 150,
-              }}
-            />
-            <MotiView
-              from={{ opacity: 0.5 }}
-              animate={{ opacity: 1 }}
-              transition={{ loop: true, type: 'timing', duration: 1000 }}
-              style={{
-                width: 30,
-                backgroundColor: currentColors.skeletonBase,
-                alignSelf: 'center',
-                marginBottom: 10,
-                paddingHorizontal: 16,
-                //paddingVertical: 20,
-                borderRadius: 8,
-                height: 8,
-              }}
-            />
-          </View>
+      {
+        isLoading ? (
+          <LoadingIndex />
         ) : (
-          <Campaign campaigns={campaign} />
-        )}
+          <ScrollView style={[{
+            backgroundColor: currentColors.background,
+          }]} 
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefreshing}
+              onRefresh={onRefresh}
+              colors={[currentColors.mainColor]}
+            />
+          } >
+            {loading ? (
+              <View style={styles.view}>
+                <MotiView
+                  from={{ opacity: 0.5 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ loop: true, type: 'timing', duration: 1000 }}
+                  style={{
+                    width: '100%',
+                    backgroundColor: currentColors.skeletonBase,
+                    alignSelf: 'center',
+                    marginBottom: 10,
+                    paddingHorizontal: 16,
+                    paddingVertical: 20,
+                    borderRadius: 10,
+                    height: 150,
+                  }}
+                />
+              </View>
+            ) : (
+              <Campaign campaigns={campaign} />
+            )}
 
-        <Categories/>
+            <Categories />
 
-        <LatestCampaign />
+            <LatestCampaign />
 
-      </View>
+          </ScrollView>
+        )
+      }
+
     </View>
   );
 }

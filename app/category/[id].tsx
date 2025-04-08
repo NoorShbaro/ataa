@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Image, FlatList, SafeAreaView } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Image, FlatList, SafeAreaView, RefreshControl } from 'react-native';
 import { DarkColors, LightColors } from '@/constants/Colors';
 import { useTheme } from '@/constants/ThemeContext';
 import { useLanguage } from '@/constants/LanguageContext';
@@ -35,10 +35,27 @@ export default function CampaignList() {
     const [campaigns, setCampaigns] = useState<Campaign[]>([]);
     const [loading, setLoading] = useState(true);
 
+    const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+
+    const onRefresh = async () => {
+        setIsRefreshing(true);
+        setLoading(true);
+        try {
+            setTimeout(() => {
+                setLoading(false);
+                setIsRefreshing(false);
+            }, 2000);
+        } catch (error) {
+            console.error("Error refreshing data:", error);
+            setLoading(false);
+            setIsRefreshing(false);
+        }
+    };
+
     useEffect(() => {
-            fetchCampaigns();
+        fetchCampaigns();
     }, []);
-    
+
 
     const fetchCampaigns = async () => {
         try {
@@ -67,7 +84,7 @@ export default function CampaignList() {
                             <Text style={[styles.date, { color: currentColors.mainColorWithOpacity }]}>{i18n.t('availableTill')}: {item.end_date}</Text>
                         </View>
 
-                        
+
 
                         {/* Progress Bar */}
                         <ProgressBar
@@ -88,14 +105,14 @@ export default function CampaignList() {
 
     return (
         <SafeAreaView style={[styles.container, { backgroundColor: currentColors.background }]}>
-              <Stack.Screen options={{ headerShown: false }} />
-        
-              <Header title={''} />
-        
+            <Stack.Screen options={{ headerShown: false }} />
+
+            <Header title={''} />
+
 
             {/* Display Data Based on Selection */}
             {loading ? (
-                <View style={{marginHorizontal: 10}}>
+                <View style={{ marginHorizontal: 10 }}>
                     <MotiView
                         from={{ opacity: 0.5 }}
                         animate={{ opacity: 1 }}
@@ -113,13 +130,25 @@ export default function CampaignList() {
                     />
                 </View>
             ) : campaigns.length === 0 ? (
-                <Text style={[styles.noCampaignText, { color: currentColors.mainColor }]}>{i18n.t('noCategory')}</Text>
+                <ScrollView
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={isRefreshing}
+                            onRefresh={onRefresh}
+                            colors={[currentColors.mainColor]}
+                        />
+                    }
+                >
+                    <Text style={[styles.noCampaignText, { color: currentColors.mainColor }]}>{i18n.t('noCampaign')}</Text>
+                </ScrollView>
             ) : (
                 <FlatList
                     data={campaigns}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={renderCampaignItem}
                     contentContainerStyle={styles.listContainer}
+                    refreshing={isRefreshing}
+                    onRefresh={onRefresh}
                 />
             )}
         </SafeAreaView>
