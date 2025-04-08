@@ -15,7 +15,13 @@
     },
     "newArchEnabled": true,
     "extra": {
-      "supportsRTL": true
+      "supportsRTL": true,
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "40b8a4b6-6d27-4adb-b65c-3803ca023169"
+      }
     },
     "ios": {
       "supportsTablet": true,
