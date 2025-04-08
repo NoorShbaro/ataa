@@ -4,9 +4,15 @@
     "slug": "Ataa",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/logo.png",
+    "backgroundColor": "#070420",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/images/baner.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#070420"
+    },
     "newArchEnabled": true,
     "extra": {
       "supportsRTL": true
@@ -20,8 +26,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "foregroundImage": "./assets/images/logo.png",
+        "backgroundColor": "#070420"
       },
       "package": "com.noorshbaro.Ataa"
     },
@@ -35,10 +41,10 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/baner1.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "backgroundColor": "#070420"
         }
       ],
       "expo-localization",

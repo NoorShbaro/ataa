@@ -19,7 +19,7 @@ export default function About() {
       <Header title={i18n.t('about')} />
 
       <View style={styles.content}>
-        <Text style={{ color: currentColors.mainColor }}>About screen</Text>
+        <Text style={{ color: currentColors.mainColor }}>About us</Text>
       </View>
     </View>
   );

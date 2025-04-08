@@ -129,10 +129,10 @@ export default function LatestCampaign() {
                     />
                 </>
             ) : campaigns.length === 0 ? (
-                <Text style={[styles.noCampaignText, { color: currentColors.mainColor }]}>No campaigns available.</Text>
+                <Text style={[styles.noCampaignText, { color: currentColors.mainColor }]}>{i18n.t('noCampaign')}</Text>
             ) : (
                 <>
-                    <Text style={[styles.title, { color: currentColors.mainColor }]}>Latest Campaigns</Text>
+                    <Text style={[styles.title, { color: currentColors.mainColor }]}>{i18n.t('latestCampaign')}</Text>
                     <FlatList
                         data={campaigns}
                         keyExtractor={(item) => item.id.toString()}

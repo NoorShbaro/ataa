@@ -18,7 +18,7 @@ export default function Privacy() {
       <Header title={i18n.t('privacy')} />
 
       <View style={styles.content}>
-        <Text style={{ color: currentColors.mainColor }}>Privacy screen</Text>
+        <Text style={{ color: currentColors.mainColor }}>Privacy Policy</Text>
       </View>
     </View>
   );

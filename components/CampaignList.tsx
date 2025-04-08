@@ -191,7 +191,7 @@ export default function CampaignList() {
                     />
                 </>
             ) : campaigns.length === 0 ? (
-                <Text style={[styles.noCampaignText, { color: currentColors.mainColor }]}>No campaigns available.</Text>
+                <Text style={[styles.noCampaignText, { color: currentColors.mainColor }]}>{i18n.t('noCampaign')}</Text>
             ) : (
                 <FlatList
                     data={campaigns}

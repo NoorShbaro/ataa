@@ -19,7 +19,7 @@ export default function TermOfUse() {
       <Header title={i18n.t('termsOfUse')} />
 
       <View style={styles.content}>
-        <Text style={{ color: currentColors.mainColor }}>TermOfUse screen</Text>
+        <Text style={{ color: currentColors.mainColor }}>Term Of Use</Text>
       </View>
     </View>
   );

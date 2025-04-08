@@ -111,7 +111,7 @@ const CampaignSlider = ({ campaigns }: Props) => {
         <View style={styles.slideWrapper}>
           {data.length === 0 ? (
             <Text style={{ color: currentColors.darkGrey, textAlign: 'center', padding: 20 }}>
-              No campaigns available at the moment.
+              {i18n.t('noCampaign')}
             </Text>
           ) : (
             <>

@@ -7,6 +7,7 @@ import { Link, router } from 'expo-router';
 import apiClient from '@/constants/apiClient';
 import { MotiView } from 'moti';
 import { FontAwesome } from '@expo/vector-icons';
+import { useLanguage } from '@/constants/LanguageContext';
 
 type Category = {
     id: number;
@@ -21,6 +22,7 @@ const Categories = () => {
 
     const { isDarkMode } = useTheme();
     const currentColors = isDarkMode ? DarkColors : LightColors;
+    const { i18n } = useLanguage();
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -130,7 +132,7 @@ const Categories = () => {
                 </ScrollView>
             ) : (
                 <Text style={[styles.noCategoryText, { color: currentColors.mainColor }]}>
-                    No categories available.
+                    {i18n.t('noCategory')}
                 </Text>
             )}
         </View>

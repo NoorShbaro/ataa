@@ -55,6 +55,12 @@ export default function Notification() {
         {item.status}
       </Text>
 
+      {item.status === 'pending' && (
+      <Text style={[styles.note, { color: currentColors.darkGrey, marginTop: 5 }]}>
+        {i18n.t('contact')}
+      </Text>
+    )}
+
     </View>
   );
 
@@ -132,4 +138,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
+  note: {
+    fontSize: 12,
+    fontStyle: 'italic',
+  },
+  
 });
