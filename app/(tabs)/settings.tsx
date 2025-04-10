@@ -138,7 +138,7 @@ export default function Settings() {
 
           <TouchableOpacity
             style={[styles.itemBtn,
-            { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue },
+            { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue, flex: 1 },
             { borderBottomColor: currentColors.background, }
             ]}
             onPress={toggleTheme}>
@@ -150,7 +150,7 @@ export default function Settings() {
               thumbColor={currentColors.calmBlue}
               onValueChange={toggleTheme}
               value={isDarkMode}
-              style={{ transform: [{ scale: 0.8 }], marginBottom: -15, marginRight: -8 }}
+              style={{ transform: [{ scale: 0.8 }], marginVertical: -12, marginRight: -8 }}
             />
 
           </TouchableOpacity>
@@ -173,6 +173,7 @@ const styles = StyleSheet.create({
   itemBtn: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 20,
     borderBottomWidth: 1,
