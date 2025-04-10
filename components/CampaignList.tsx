@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Image, FlatList } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Image, FlatList, RefreshControl } from 'react-native';
 import { DarkColors, LightColors } from '@/constants/Colors';
 import { useTheme } from '@/constants/ThemeContext';
 import { useLanguage } from '@/constants/LanguageContext';
@@ -95,12 +95,12 @@ export default function CampaignList() {
 
         return (
             <TouchableOpacity onPress={() => router.push(`/campaign/${item.id}`)}>
-                <View style={[styles.card, { backgroundColor: currentColors.cardBackground }]}>
+                <View style={[styles.card, { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue }]}>
                     <View style={{ margin: 10, marginVertical: 10 }}>
                         <Image source={imageUrl} style={styles.image} />
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                             <Text style={[styles.campaignTitle, { color: currentColors.mainColor }]}>{item.title}</Text>
-                            <Text style={[styles.date, { color: currentColors.mainColorWithOpacity }]}>{i18n.t('availableTill')}: {item.end_date}</Text>
+                            <Text style={[styles.date, { color: currentColors.darkGrey }]}>{i18n.t('availableTill')}: {item.end_date}</Text>
                         </View>
 
 
@@ -131,17 +131,25 @@ export default function CampaignList() {
                 contentContainerStyle={styles.listContainer}
                 refreshing={isRefreshing}
                 onRefresh={handleRefreshAll}
+                refreshControl={
+                    <RefreshControl
+                        refreshing={isRefreshing}
+                        onRefresh={handleRefreshAll}
+                        colors={[currentColors.calmBlue]} // Android
+                        tintColor={currentColors.calmBlue} // iOS
+                    />
+                }
                 ListHeaderComponent={() => (
                     <>
                         {loading ? (
                             <>
-                            <View style={{ flexDirection: 'row' }}>
-                                <MotiView style={[styles.skeleton, {
-                                    backgroundColor: currentColors.skeletonBase,
-                                }]} />
-                                <MotiView style={[styles.skeleton, { marginLeft: 10, backgroundColor: currentColors.skeletonBase }]} />
-                            </View>
-                            <MotiView style={[styles.skeletonLarge, {
+                                <View style={{ flexDirection: 'row' }}>
+                                    <MotiView style={[styles.skeleton, {
+                                        backgroundColor: currentColors.skeletonBase,
+                                    }]} />
+                                    <MotiView style={[styles.skeleton, { marginLeft: 10, backgroundColor: currentColors.skeletonBase }]} />
+                                </View>
+                                <MotiView style={[styles.skeletonLarge, {
                                     backgroundColor: currentColors.skeletonBase,
                                 }]} />
                             </>
@@ -158,7 +166,7 @@ export default function CampaignList() {
                                             styles.categoryButton,
                                             {
                                                 backgroundColor:
-                                                    selectedCategory === category.id ? currentColors.mainColor : currentColors.cardBackground,
+                                                    selectedCategory === category.id ? currentColors.button : currentColors.cardBackground,
                                             },
                                         ]}
                                         onPress={() => setSelectedCategory(category.id)}
@@ -205,6 +213,10 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginBottom: 15,
         width: '100%',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.2,
+        shadowRadius: 5,
+        elevation: 5,
     },
     image: {
         width: '100%',
@@ -258,7 +270,7 @@ const styles = StyleSheet.create({
     categoryButton: {
         paddingVertical: 8,
         paddingHorizontal: 15,
-        borderRadius: 20,
+        borderRadius: 8,
         marginRight: 10,
     },
     listContainer: {

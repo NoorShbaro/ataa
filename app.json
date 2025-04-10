@@ -47,7 +47,7 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/baner1.png",
+          "image": "./assets/images/ATAAD.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#070420"

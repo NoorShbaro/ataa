@@ -33,14 +33,14 @@ const MainHeader = (/*{ title }: MainHeaderProps*/) => {
         }}
       >
         <Image
-          source={isDarkMode? require('@/assets/images/ATAA.png'):require('@/assets/images/ATAA 1(1).png') }
+          source={isDarkMode? require('@/assets/images/ATAAD.png'):require('@/assets/images/ATAAL.png') }
           style={{ width: 50, height: 50, resizeMode: 'contain', borderRadius: 30 }}
         />
 
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 15 }}>
           {/* Notification Icon */}
           <TouchableOpacity>
-            <Ionicons name="notifications" size={30} color={currentColors.mainColor} />
+            <Ionicons name="notifications" size={30} color={currentColors.calmBlue} />
           </TouchableOpacity>
 
           {/* Profile Icon */}
@@ -49,7 +49,7 @@ const MainHeader = (/*{ title }: MainHeaderProps*/) => {
               isAuthenticated ? '/settings/profile'
                 : '/settings/login'
             ))}>
-            <Ionicons name="person-circle" size={35} color={currentColors.mainColor} />
+            <Ionicons name="person-circle" size={35} color={currentColors.calmBlue} />
           </TouchableOpacity>
         </View>
       </View>

@@ -101,7 +101,8 @@ export default function Index() {
             <RefreshControl
               refreshing={isRefreshing}
               onRefresh={onRefresh}
-              colors={[currentColors.mainColor]}
+              colors={[currentColors.calmBlue]}
+              tintColor={currentColors.calmBlue}
             />
           } >
             {loading ? (
@@ -118,16 +119,16 @@ export default function Index() {
                     paddingHorizontal: 16,
                     paddingVertical: 20,
                     borderRadius: 10,
-                    height: 150,
+                    height: 200,
                   }}
                 />
               </View>
             ) : (
               <Campaign campaigns={campaign} />
             )}
-
+<View style={{marginVertical: 10}}>
             <Categories />
-
+</View>
             <LatestCampaign />
 
           </ScrollView>
@@ -154,6 +155,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
     paddingTop: 30,
-    marginBottom: 20
+    marginBottom: 30
   }
 });

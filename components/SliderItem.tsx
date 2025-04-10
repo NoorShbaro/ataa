@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import Animated, { Extrapolation, interpolate, SharedValue, useAnimatedStyle } from 'react-native-reanimated';
 import { LinearGradient } from 'expo-linear-gradient'
 import { Colors, DarkColors, LightColors } from '@/constants/Colors';
-import { Link, router } from 'expo-router';
+import { router } from 'expo-router';
 import { useLanguage } from '@/hook/LanguageContext';
 import { useTheme } from '@/constants/ThemeContext';
 import { useAuth } from '@/constants/userContext';
@@ -46,7 +46,7 @@ const SliderItem = ({ slideItem, index, scrollX }: Props) => {
     const currentColors = isDarkMode ? DarkColors : LightColors;
     const { accessToken } = useAuth();
 
-    
+
 
     const rnStyle = useAnimatedStyle(() => {
         return {
@@ -77,20 +77,30 @@ const SliderItem = ({ slideItem, index, scrollX }: Props) => {
     //console.log("Image URL:", imageUrl);
     //console.log("Title:", slideItem.title);
     return (
-            <Animated.View style={[styles.itemWrapper, rnStyle]} key={slideItem.id}>
-                <Image source={imageUrl} style={styles.image} />
-                <LinearGradient colors={["transparent", currentColors.lightGrey]} style={styles.background}>
-                    <View style={styles.contentWrapper}>
+        <Animated.View style={[styles.itemWrapper, rnStyle]} key={slideItem.id}>
+            <Image source={imageUrl} style={[styles.image, { shadowColor: currentColors.calmBlue }]} />
+            <LinearGradient colors={["transparent", currentColors.calmBlue]} style={[styles.background,]}>
+                <View style={styles.contentWrapper}>
 
-                        <Text style={[styles.title, { color: currentColors.black }]} numberOfLines={2}>{slideItem.title}</Text>
+                    <Text style={[styles.title, { color: currentColors.white }]} numberOfLines={2}>{slideItem.title}</Text>
 
 
-                        <TouchableOpacity onPress={()=> router.push(`/campaign/${slideItem.id}`)}>
-                            <Text style={[styles.button, { backgroundColor: currentColors.mainColorWithOpacity, color: currentColors.black }]}>{i18n.t('donateNow')}</Text>
+                    <View style={{ alignItems: 'center', justifyContent: 'center'}}>
+                        <TouchableOpacity
+                            onPress={() => router.push(`/campaign/${slideItem.id}`)}
+                            style={[
+                                styles.buttonContainer,
+                                { backgroundColor: currentColors.button }
+                            ]}
+                        >
+                            <Text style={[styles.buttonText, { color: currentColors.white }]}>
+                                {i18n.t('donateNow')}
+                            </Text>
                         </TouchableOpacity>
                     </View>
-                </LinearGradient>
-            </Animated.View>
+                </View>
+            </LinearGradient>
+        </Animated.View>
     )
 }
 
@@ -105,33 +115,50 @@ const styles = StyleSheet.create({
     },
     image: {
         width: width - 50,
-        height: 150,
+        height: 200,
         borderRadius: 15,
         overflow: 'hidden',
         resizeMode: 'cover',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.2,
+        shadowRadius: 5,
+        elevation: 5,
     },
     background: {
         position: 'absolute',
         width: width - 50,
-        height: 150,
+        height: 200,
         borderRadius: 15,
         padding: 20,
         overflow: 'hidden',
     },
     contentWrapper: {
+        flex: 1,
+        flexDirection: 'row',
         justifyContent: 'space-between',
-        flexDirection: 'row'
+        alignItems: 'center',
     },
     title: {
-        fontSize: 14,
+        fontSize: 16,
         position: 'relative',
-        top: 55,
         paddingHorizontal: 20,
         fontWeight: '600',
     },
     button: {
         padding: 10,
         borderRadius: 15,
-        top: 50,
-    }
+        alignSelf: 'center'
+    },
+    buttonContainer: {
+        alignSelf: 'center',
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        borderRadius: 10,
+        marginTop: 10,
+      },
+      buttonText: {
+        textAlign: 'center',
+        fontWeight: 'bold',
+        fontSize: 16,
+      },
 })

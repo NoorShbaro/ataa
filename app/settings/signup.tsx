@@ -1,5 +1,5 @@
 import { Text, View, StyleSheet, Image, TextInput, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
-import { Link, router, Stack } from 'expo-router';
+import { router, Stack } from 'expo-router';
 import { DarkColors, LightColors } from '@/constants/Colors';
 import { useTheme } from '@/constants/ThemeContext';
 import Header from '@/components/Header';
@@ -110,13 +110,15 @@ export default function Signup() {
                         color={currentColors.mainColor}
                     />
                     <Text style={[styles.text2, { color: currentColors.darkGrey }]}>{i18n.t('agree')} </Text>
-                    <Link href={`/settings/termofuse`} asChild>
-                        <TouchableOpacity><Text style={[styles.textBtnTo, { color: currentColors.mainColor }]}>{i18n.t('termsOfUse')} </Text></TouchableOpacity>
-                    </Link>
+                  
+                        <TouchableOpacity onPress={()=> router.push('/settings/termofuse')}><Text style={[styles.textBtnTo, { color: currentColors.mainColor }]}>{i18n.t('termsOfUse')} </Text></TouchableOpacity>
+              
                     <Text style={[styles.text2, { color: currentColors.darkGrey }]}>{i18n.t('and')} </Text>
-                    <Link href={`/settings/privacy`} asChild>
-                        <TouchableOpacity ><Text style={[styles.textBtnTo, { color: currentColors.mainColor }]}>{i18n.t('privacy')}</Text></TouchableOpacity>
-                    </Link>
+                    
+                        <TouchableOpacity onPress={()=> router.push('/settings/privacy')}>
+                            <Text style={[styles.textBtnTo, { color: currentColors.mainColor }]}>
+                                {i18n.t('privacy')}</Text></TouchableOpacity>
+                
                 </View>
 
                 <View style={styles.padt}>
@@ -186,7 +188,7 @@ const styles = StyleSheet.create({
     btn: {
         width: 250,
         height: 50,
-        borderRadius: 30,
+        borderRadius: 15,
         justifyContent: 'center',
         alignItems: 'center',
     },

@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
+import { Text, View, StyleSheet, FlatList, ActivityIndicator, RefreshControl } from 'react-native';
 import { Stack } from 'expo-router';
 import { DarkColors, LightColors } from '@/constants/Colors';
 import { useTheme } from '@/constants/ThemeContext';
@@ -60,7 +60,7 @@ export default function Notification() {
   };
 
   const renderItem = ({ item }: { item: History }) => (
-    <View style={[styles.card, { backgroundColor: currentColors.mainColorWithOpacity }]}>
+    <View style={[styles.card, { backgroundColor: currentColors.cardBackground , shadowColor: currentColors.calmBlue}]}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
         <Text style={[styles.campaignText, { color: currentColors.mainColor }]}>{item.campaign_name}</Text>
         <Text style={[styles.date, { color: currentColors.darkGrey }]}>{item.donated_at}</Text>
@@ -99,6 +99,14 @@ export default function Notification() {
           contentContainerStyle={styles.listContainer}
           refreshing={isRefreshing}
           onRefresh={onRefresh}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefreshing}
+              onRefresh={onRefresh}
+              colors={[currentColors.calmBlue]} // Android
+              tintColor={currentColors.calmBlue} // iOS
+            />
+          }
         />
       )}
     </View>
@@ -116,6 +124,10 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 12,
     marginBottom: 12,
+    shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.2,
+        shadowRadius: 5,
+        elevation: 5,
     //shadowOffset: { width: 0, height: 1 },
     //shadowOpacity: 0.1,
     //shadowRadius: 6,

@@ -49,5 +49,6 @@
     "latestCampaign": "Latest Campaigns:",
     "noCampaign": "No campaigns available.",
     "noCategory": "No categories available.",
-    "contact": "Our team will contact you as soon as possible."
+    "contact": "Our team will contact you as soon as possible.",
+    "retry": "Retry"
 }

@@ -40,6 +40,7 @@ export default function Donate() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const [campaign, setCampaign] = useState<Campaigns | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const { i18n } = useLanguage();
   const { accessToken } = useAuth();
@@ -52,13 +53,10 @@ export default function Donate() {
     setIsRefreshing(true);
     setIsLoading(true);
     try {
-      setTimeout(() => {
-        setIsLoading(false);
-        setIsRefreshing(false);
-      }, 2000);
+      await fetchCampaign(); // re-fetch the campaign data
     } catch (error) {
       console.error("Error refreshing data:", error);
-      setIsLoading(false);
+    } finally {
       setIsRefreshing(false);
     }
   };
@@ -79,9 +77,11 @@ export default function Donate() {
   const fetchCampaign = async () => {
     try {
       const response = await apiClient.get(`/campaign/${id}`);
+      setError(null);
       setCampaign(response.data.campaign);
     } catch (err: any) {
       console.error("Error fetching campaign:", err.message);
+      setError(err.message)
     } finally {
       setIsLoading(false);
     }
@@ -101,56 +101,64 @@ export default function Donate() {
       {isLoading ? (
         <LoadingSingle />
       ) : (
-        <>
-          <ScrollView
-            refreshControl={
-              <RefreshControl
-                refreshing={isRefreshing}
-                onRefresh={onRefresh}
-                colors={[currentColors.mainColor]}
-              />
-            }
-          >
-            <Card style={[styles.card, { backgroundColor: currentColors.cardBackground }]}>
-              <Card.Content>
-                <Image source={imageUrl} style={styles.image} />
-                <Text style={[styles.title, { color: currentColors.mainColor }]}>{campaign?.title}</Text>
-                <Text style={[styles.description, { color: currentColors.mainColor }]}>{campaign?.description}</Text>
-                <Text style={[styles.date, { color: currentColors.mainColorWithOpacity }]}>
-                  {i18n.t('availableTill')}: {campaign?.end_date}
-                </Text>
-                <View style={[styles.goalContainer, { backgroundColor: currentColors.mainColorWithOpacity }]}>
-                  <Text style={[styles.goalLabel, { color: currentColors.darkGrey }]}>{i18n.t('goal')}:</Text>
-                  <Text style={[styles.goalAmount, { color: currentColors.mainColor }]}>
-                    {parseFloat(campaign?.goal_amount ?? '0')}$
-                  </Text>
-                </View>
-                <ProgressBar
-                  percentage={campaign?.progress.percentage ?? 0}
-                  raised={parseFloat(campaign?.progress.raised ?? '0')}
-                  remaining={campaign?.progress.remaining ?? 0}
-                  goal={parseFloat(campaign?.goal_amount ?? '0')}
-                />
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                  <Text style={[styles.percentage, { color: currentColors.mainColor }]}>{i18n.t('collected')}: {campaign?.progress.raised}$</Text>
-                  <Text style={[styles.percentage, { color: currentColors.mainColor }]}>{i18n.t('remaining')}: {campaign?.progress.remaining}$</Text>
-                </View>
-                <TouchableOpacity onPress={() => handleDonatePress(campaign?.id || 0)} style={[styles.donateButton, { backgroundColor: currentColors.button }]}>
-                  <Text style={[styles.donateText, { color: currentColors.background }]}>{i18n.t('donateNow')}</Text>
-                </TouchableOpacity>
-              </Card.Content>
-            </Card>
-          </ScrollView>
-          {selectedCampaignId !== null && (
-            <AmountModal
-              isVisible={isModalVisible}
-              onClose={() => setModalVisible(false)}
-              accessToken={accessToken}
-              campaignId={selectedCampaignId}
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefreshing}
+              onRefresh={onRefresh}
+              colors={[currentColors.calmBlue]}
+              tintColor={currentColors.calmBlue}
             />
-          )}
-        </>
+          }
+        >
+          {
+            error ? (
+              <Text style={styles.errorText}>{error}</Text>
+            ) : (
+              <Card style={[styles.card, { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue }]}>
+                <Card.Content>
+                  <Image source={imageUrl} style={styles.image} />
+                  <Text style={[styles.title, { color: currentColors.mainColor }]}>{campaign?.title}</Text>
+                  <Text style={[styles.description, { color: currentColors.mainColor }]}>{campaign?.description}</Text>
+                  <Text style={[styles.date, { color: currentColors.darkGrey }]}>
+                    {i18n.t('availableTill')}: {campaign?.end_date}
+                  </Text>
+                  <View style={[styles.goalContainer, { backgroundColor: currentColors.mainColorWithOpacity }]}>
+                    <Text style={[styles.goalLabel, { color: currentColors.darkGrey }]}>{i18n.t('goal')}:</Text>
+                    <Text style={[styles.goalAmount, { color: currentColors.mainColor }]}>
+                      {parseFloat(campaign?.goal_amount ?? '0')}$
+                    </Text>
+                  </View>
+                  <ProgressBar
+                    percentage={campaign?.progress.percentage ?? 0}
+                    raised={parseFloat(campaign?.progress.raised ?? '0')}
+                    remaining={campaign?.progress.remaining ?? 0}
+                    goal={parseFloat(campaign?.goal_amount ?? '0')}
+                  />
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
+                    <Text style={[styles.percentage, { color: currentColors.mainColor }]}>{i18n.t('collected')}: {campaign?.progress.raised}$</Text>
+                    <Text style={[styles.percentage, { color: currentColors.mainColor }]}>{i18n.t('remaining')}: {campaign?.progress.remaining}$</Text>
+                  </View>
+                  <TouchableOpacity onPress={() => handleDonatePress(campaign?.id || 0)} style={[styles.donateButton, { backgroundColor: currentColors.button }]}>
+                    <Text style={[styles.donateText, { color: currentColors.white }]}>{i18n.t('donateNow')}</Text>
+                  </TouchableOpacity>
+                </Card.Content>
+              </Card>
+            )
+          }
+
+        </ScrollView>
+
       )}
+      {selectedCampaignId !== null && (
+        <AmountModal
+          isVisible={isModalVisible}
+          onClose={() => setModalVisible(false)}
+          accessToken={accessToken}
+          campaignId={selectedCampaignId}
+        />
+      )}
+
     </SafeAreaView>
   );
 }
@@ -171,11 +179,10 @@ const styles = StyleSheet.create({
     margin: 10,
     borderRadius: 15,
     padding: 5,
-    elevation: 0,
-    shadowOpacity: 0,
-    shadowOffset: { width: 0, height: 0 },
-    shadowRadius: 0,
-    shadowColor: 'transparent',
+    shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.2,
+        shadowRadius: 5,
+        elevation: 5,
   },
   title: {
     fontSize: 22,
@@ -227,5 +234,11 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     //color: "#A5B4FC",
     //marginHorizontal: 5
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 14,
+    marginTop: 10,
+    alignSelf: 'center'
   },
 });

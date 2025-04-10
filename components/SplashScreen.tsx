@@ -31,7 +31,7 @@ const CustomSplashScreen: React.FC<CustomSplashScreenProps> = ({ onFinish }) => 
   }, []);
 
   return (
-    <Animated.View style={[styles.container, { backgroundColor: currentColors.button, opacity }]}>
+    <Animated.View style={[styles.container, { backgroundColor: currentColors.background, opacity }]}>
       <LottieView
         source={require('@/assets/Lottie/Animation - 1740739459878.json')}
         autoPlay
@@ -40,7 +40,7 @@ const CustomSplashScreen: React.FC<CustomSplashScreenProps> = ({ onFinish }) => 
       />
       <View style={styles.imageContainer}>
         <Image 
-          source={require('@/assets/images/Baner.png')}
+          source={require('@/assets/images/ATAAD.png')}
           style={styles.image}
           resizeMode="contain"
         />
@@ -58,9 +58,9 @@ const styles = StyleSheet.create({
     zIndex: 10, 
   },
   animation: {
-    height: height,
-    width: width,
-    resizeMode: 'cover'
+    height: height + 100,
+    width: width +100,
+    resizeMode: 'cover',
   },
   imageContainer: {
     position: 'absolute',

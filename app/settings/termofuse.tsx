@@ -1,5 +1,5 @@
 import { Text, View, StyleSheet } from 'react-native';
- import { Link, Stack } from 'expo-router'; 
+ import { Stack } from 'expo-router'; 
 import { DarkColors, LightColors } from '@/constants/Colors';
 import { useTheme } from '@/constants/ThemeContext';
 import { useLanguage } from '@/constants/LanguageContext';

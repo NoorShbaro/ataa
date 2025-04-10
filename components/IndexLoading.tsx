@@ -36,7 +36,7 @@ export default function LoadingIndex() {
                         paddingHorizontal: 16,
                         paddingVertical: 20,
                         borderRadius: 10,
-                        height: 150,
+                        height: 200,
                     }}
                 />
                 
@@ -44,7 +44,7 @@ export default function LoadingIndex() {
 
             <View style={{
                 marginHorizontal: 10, flexDirection: 'row',
-                marginTop: 10
+                marginTop: 30
             }}>
                 <View style={{alignItems: 'center', marginRight: 10}}>
                     <MotiView
@@ -97,7 +97,7 @@ export default function LoadingIndex() {
                 
             </View>
 
-            <View style={{ padding: 10, marginLeft: 15 }}>
+            <View style={{ padding: 10, marginLeft: 5 }}>
                 <MotiView
                     from={{ opacity: 0.5 }}
                     animate={{ opacity: 1 }}

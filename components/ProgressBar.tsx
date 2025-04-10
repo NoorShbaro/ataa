@@ -19,7 +19,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ percentage, raised, remaining
         <View style={styles.container}>
             <Text style={[styles.percentage, { color: currentColors.mainColor,alignSelf: 'flex-end', fontSize: 14 }]}>{percentage}%</Text>
             <View style={[styles.progressBarBackground, { backgroundColor: currentColors.progressBarBackground }]}>
-                <View style={[styles.progressBarFill, { width: `${percentage}%`, backgroundColor: currentColors.mainColor }]} />
+                <View style={[styles.progressBarFill, { width: `${percentage}%`, backgroundColor: currentColors.calmBlue }]} />
             </View>
             
         </View>
@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
         width: "100%",
         //padding: 10,
         //alignItems: "center",
-        paddingBottom: 20
     },
     progressBarBackground: {
         width: "100%",

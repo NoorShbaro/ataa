@@ -71,15 +71,15 @@ export default function LatestCampaign() {
 
         return (
             <TouchableOpacity onPress={() => router.push(`/campaign/${item.id}`)} style={{marginBottom: 50}}>
-                <View style={[styles.card, { backgroundColor: currentColors.cardBackground, borderColor: currentColors.button }]}>
+                <View style={[styles.card, { backgroundColor: currentColors.cardBackground, borderColor: currentColors.button, shadowColor: currentColors.calmBlue }]}>
                     <Image source={imageUrl} style={styles.image} />
                     <Text style={[styles.campaignTitle, { color: currentColors.mainColor }]}>{item.title}</Text>
                     
-                    <Text style={[styles.date, { color: currentColors.mainColorWithOpacity }]}>
+                    <Text style={[styles.date, { color: currentColors.darkGrey }]}>
                         {item.end_date}
                     </Text>
                     {/* Progress Bar */}
-                    <View style={{marginHorizontal: 10}}>
+                    <View style={{margin: 10}}>
                     <ProgressBar
                             percentage={item.progress.percentage}
                             raised={parseFloat(item.progress.raised)}
@@ -169,6 +169,10 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         marginRight: 10,
         width: 200,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.2,
+        shadowRadius: 5,
+        elevation: 5,
         //borderWidth: 1
         //shadowColor: '#000',
         //shadowOpacity: 0.1,
@@ -192,7 +196,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         paddingRight: 15,
         fontWeight: '500',
-        marginBottom: 15,
+        marginVertical: 5,
         alignSelf: 'flex-end'
     },
     campaignTitle: {

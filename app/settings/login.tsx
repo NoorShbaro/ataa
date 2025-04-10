@@ -1,5 +1,5 @@
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { Link, router, Stack } from 'expo-router';
+import { router, Stack } from 'expo-router';
 import { DarkColors, LightColors } from '@/constants/Colors';
 import { useTheme } from '@/constants/ThemeContext';
 import Header from '@/components/Header';
@@ -92,17 +92,17 @@ export default function Login() {
 
                 <View style={[styles.padt, styles.noAccount]}>
                     <Text style={[styles.text2, { color: currentColors.darkGrey }]}>{i18n.t('signing')} </Text>
-                    <Link href={`/settings/termofuse`} asChild>
-                        <TouchableOpacity>
+                    
+                        <TouchableOpacity onPress={()=> router.push('/settings/termofuse')}>
                             <Text style={[styles.textBtnTo, { color: currentColors.mainColor }]}>{i18n.t('termsOfUse')} </Text>
                         </TouchableOpacity>
-                    </Link>
+
                     <Text style={[styles.text2, { color: currentColors.darkGrey }]}>{i18n.t('and')} </Text>
-                    <Link href={`/settings/privacy`} asChild>
-                        <TouchableOpacity>
+             
+                        <TouchableOpacity onPress={()=> router.push('/settings/privacy')}>
                             <Text style={[styles.textBtnTo, { color: currentColors.mainColor }]}>{i18n.t('privacy')}</Text>
                         </TouchableOpacity>
-                    </Link>
+
                 </View>
             </View>
         </View>
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     btn: {
         width: 250,
         height: 50,
-        borderRadius: 30,
+        borderRadius: 15,
         justifyContent: 'center',
         alignItems: 'center',
     },

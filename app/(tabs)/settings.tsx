@@ -1,5 +1,5 @@
 import { Text, View, StyleSheet, Modal, ScrollView, TouchableOpacity, Switch } from 'react-native';
-import { Link, router } from 'expo-router';
+import { router } from 'expo-router';
 import { DarkColors, LightColors } from '@/constants/Colors';
 import { useTheme } from '@/constants/ThemeContext';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -44,7 +44,7 @@ export default function Settings() {
               ))}
             style={[
               styles.itemBtn,
-              { backgroundColor: currentColors.mainColorWithOpacity },
+              { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue },
               { borderBottomColor: currentColors.background },
             ]}>
             <Text style={[styles.itemBtnText, { color: currentColors.mainColor }]}>
@@ -53,52 +53,54 @@ export default function Settings() {
             <MaterialIcons name="arrow-forward-ios" size={16} color={currentColors.mainColor} />
           </TouchableOpacity>
 
-          <Link href={`/settings/about`} asChild style={[styles.itemBtn,
-          { backgroundColor: currentColors.mainColorWithOpacity },
+
+          <TouchableOpacity onPress={() => router.push('/settings/about')}
+            style={[styles.itemBtn,
+            { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue },
+            { borderBottomColor: currentColors.background, }
+            ]}>
+            <Text style={[styles.itemBtnText, { color: currentColors.mainColor }]}>
+              {i18n.t('about')}
+            </Text>
+            <MaterialIcons name="arrow-forward-ios"
+              size={16}
+              color={currentColors.mainColor}
+            />
+          </TouchableOpacity>
+
+
+          <TouchableOpacity onPress={() => router.push('/settings/privacy')} style={[styles.itemBtn,
+          { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue },
           { borderBottomColor: currentColors.background, }
           ]}>
-            <TouchableOpacity>
-              <Text style={[styles.itemBtnText, { color: currentColors.mainColor }]}>
-                {i18n.t('about')}
-              </Text>
-              <MaterialIcons name="arrow-forward-ios"
-                size={16}
-                color={currentColors.mainColor}
-              />
-            </TouchableOpacity>
-          </Link>
-          <Link href={`/settings/privacy`} asChild style={[styles.itemBtn,
-          { backgroundColor: currentColors.mainColorWithOpacity },
-          { borderBottomColor: currentColors.background, }
-          ]}>
-            <TouchableOpacity>
-              <Text style={[styles.itemBtnText,
-              { color: currentColors.mainColor }]}>
-                {i18n.t('privacy')}
-              </Text>
-              <MaterialIcons
-                name="arrow-forward-ios"
-                size={16}
-                color={currentColors.mainColor}
-              />
-            </TouchableOpacity>
-          </Link>
-          <Link href={`/settings/termofuse`} asChild style={[styles.itemBtn,
-          { backgroundColor: currentColors.mainColorWithOpacity },
-          { borderBottomColor: currentColors.background, }
-          ]}>
-            <TouchableOpacity>
-              <Text style={[styles.itemBtnText,
-              { color: currentColors.mainColor }]}>
-                {i18n.t('termsOfUse')}
-              </Text>
-              <MaterialIcons
-                name="arrow-forward-ios"
-                size={16}
-                color={currentColors.mainColor}
-              />
-            </TouchableOpacity>
-          </Link>
+            <Text style={[styles.itemBtnText,
+            { color: currentColors.mainColor }]}>
+              {i18n.t('privacy')}
+            </Text>
+            <MaterialIcons
+              name="arrow-forward-ios"
+              size={16}
+              color={currentColors.mainColor}
+            />
+          </TouchableOpacity>
+
+
+          <TouchableOpacity onPress={() => router.push('/settings/termofuse')}
+            style={[styles.itemBtn,
+            { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue },
+            { borderBottomColor: currentColors.background, }
+            ]}>
+            <Text style={[styles.itemBtnText,
+            { color: currentColors.mainColor }]}>
+              {i18n.t('termsOfUse')}
+            </Text>
+            <MaterialIcons
+              name="arrow-forward-ios"
+              size={16}
+              color={currentColors.mainColor}
+            />
+          </TouchableOpacity>
+
 
           <TouchableOpacity onPress={() => (
             router.push(
@@ -106,7 +108,7 @@ export default function Settings() {
                 : '/settings/login'
             ))}
             style={[styles.itemBtn,
-            { backgroundColor: currentColors.mainColorWithOpacity },
+            { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue },
             { borderBottomColor: currentColors.background, }
             ]}
           >
@@ -119,24 +121,24 @@ export default function Settings() {
             />
           </TouchableOpacity>
 
-          <Link href={`/settings/language`} asChild style={[styles.itemBtn,
-          { backgroundColor: currentColors.mainColorWithOpacity },
+
+          <TouchableOpacity style={[styles.itemBtn,
+          { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue },
           { borderBottomColor: currentColors.background, }
-          ]}>
-            <TouchableOpacity>
-              <Text style={[styles.itemBtnText, { color: currentColors.mainColor }]}>
-                {i18n.t('languages')}
-              </Text>
-              <MaterialIcons name="arrow-forward-ios"
-                size={16}
-                color={currentColors.mainColor}
-              />
-            </TouchableOpacity>
-          </Link>
+          ]} onPress={() => router.push('/settings/language')}>
+            <Text style={[styles.itemBtnText, { color: currentColors.mainColor }]}>
+              {i18n.t('languages')}
+            </Text>
+            <MaterialIcons name="arrow-forward-ios"
+              size={16}
+              color={currentColors.mainColor}
+            />
+          </TouchableOpacity>
+
 
           <TouchableOpacity
             style={[styles.itemBtn,
-            { backgroundColor: currentColors.mainColorWithOpacity },
+            { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue },
             { borderBottomColor: currentColors.background, }
             ]}
             onPress={toggleTheme}>
@@ -145,7 +147,7 @@ export default function Settings() {
               {i18n.t('darkMode')}
             </Text>
             <Switch
-              thumbColor={currentColors.mainColor}
+              thumbColor={currentColors.calmBlue}
               onValueChange={toggleTheme}
               value={isDarkMode}
               style={{ transform: [{ scale: 0.8 }], marginBottom: -15, marginRight: -8 }}
@@ -174,6 +176,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 20,
     borderBottomWidth: 1,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
+    marginBottom: 8,
+    borderRadius: 15
   },
   itemBtnText: {
     fontSize: 14,

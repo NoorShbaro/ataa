@@ -36,18 +36,16 @@ export default function CampaignList() {
     const [loading, setLoading] = useState(true);
 
     const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
 
     const onRefresh = async () => {
         setIsRefreshing(true);
         setLoading(true);
         try {
-            setTimeout(() => {
-                setLoading(false);
-                setIsRefreshing(false);
-            }, 2000);
+            await fetchCampaigns(); // re-fetch the campaign data
         } catch (error) {
             console.error("Error refreshing data:", error);
-            setLoading(false);
+        } finally {
             setIsRefreshing(false);
         }
     };
@@ -61,9 +59,11 @@ export default function CampaignList() {
         try {
             setLoading(true);
             const response = await apiClient.get(`/campaigns/category/${id}`);
+            setError(null);
             setCampaigns(response.data.campaigns);
         } catch (err: any) {
             console.log('Error fetching campaigns:', err.message);
+            setError(err.message)
         } finally {
             setLoading(false);
         }
@@ -76,15 +76,13 @@ export default function CampaignList() {
 
         return (
             <TouchableOpacity onPress={() => router.push(`/campaign/${item.id}`)} style={{ marginHorizontal: 10 }}>
-                <View style={[styles.card, { backgroundColor: currentColors.cardBackground }]}>
+                <View style={[styles.card, { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue }]}>
                     <View style={{ margin: 10, marginVertical: 10 }}>
                         <Image source={imageUrl} style={styles.image} />
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                             <Text style={[styles.campaignTitle, { color: currentColors.mainColor }]}>{item.title}</Text>
                             <Text style={[styles.date, { color: currentColors.mainColorWithOpacity }]}>{i18n.t('availableTill')}: {item.end_date}</Text>
                         </View>
-
-
 
                         {/* Progress Bar */}
                         <ProgressBar
@@ -109,8 +107,6 @@ export default function CampaignList() {
 
             <Header title={''} />
 
-
-            {/* Display Data Based on Selection */}
             {loading ? (
                 <View style={{ marginHorizontal: 10 }}>
                     <MotiView
@@ -129,29 +125,38 @@ export default function CampaignList() {
                         }}
                     />
                 </View>
-            ) : campaigns.length === 0 ? (
-                <ScrollView
-                    refreshControl={
-                        <RefreshControl
-                            refreshing={isRefreshing}
-                            onRefresh={onRefresh}
-                            colors={[currentColors.mainColor]}
-                        />
-                    }
-                >
-                    <Text style={[styles.noCampaignText, { color: currentColors.mainColor }]}>{i18n.t('noCampaign')}</Text>
-                </ScrollView>
             ) : (
                 <FlatList
                     data={campaigns}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={renderCampaignItem}
-                    contentContainerStyle={styles.listContainer}
+                    contentContainerStyle={[
+                        styles.listContainer,
+                        { flexGrow: 1 }
+                    ]}
                     refreshing={isRefreshing}
                     onRefresh={onRefresh}
+                    refreshControl={
+                        <RefreshControl
+                          refreshing={isRefreshing}
+                          onRefresh={onRefresh}
+                          colors={[currentColors.calmBlue]} // Android
+                          tintColor={currentColors.calmBlue} // iOS
+                        />
+                      }
+                    ListEmptyComponent={() => (
+                        error ? (
+                            <Text style={styles.errorText}>{error}</Text>
+                        ) : (
+                            <Text style={[styles.noCampaignText, { color: currentColors.mainColor }]}>
+                                {i18n.t('noCampaign')}
+                            </Text>
+                        )
+                    )}
                 />
             )}
         </SafeAreaView>
+
     );
 }
 
@@ -163,6 +168,10 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginBottom: 15,
         width: '100%',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.2,
+        shadowRadius: 5,
+        elevation: 5,
     },
     image: {
         width: '100%',
@@ -198,5 +207,17 @@ const styles = StyleSheet.create({
         margin: 5,
         fontWeight: "500",
     },
+    errorText: {
+        color: 'red',
+        fontSize: 14,
+        marginTop: 10,
+        alignSelf: 'center'
+    },
+    retryText: {
+
+    },
+    retryButton: {
+
+    }
 });
 

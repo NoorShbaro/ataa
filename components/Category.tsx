@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, Text, View, TouchableOpacity, RefreshControl, A
 import axios from 'axios';
 import { useTheme } from '@/constants/ThemeContext';
 import { Colors, DarkColors, LightColors } from "@/constants/Colors";
-import { Link, router } from 'expo-router';
+import { router } from 'expo-router';
 import apiClient from '@/constants/apiClient';
 import { MotiView } from 'moti';
 import { FontAwesome } from '@expo/vector-icons';
@@ -112,16 +112,16 @@ const Categories = () => {
                             <TouchableOpacity
                                 key={category.id}
                                 ref={(el) => (itemRef.current[index] = el)}
-                                style={[styles.item, { backgroundColor: currentColors.cardBackground }]}
+                                style={[styles.item, { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue }]}
                                 onPress={() => router.push(`/category/${category.id}`)}
                             >
                                 <View style={styles.categoryContainer}>
                                     {imageUrl ? (
                                         <Image source={imageUrl} style={styles.icon} />
                                     ) : (
-                                        <FontAwesome name="folder" size={24} color={currentColors.darkGrey} />
+                                        <FontAwesome name="folder" size={24} color={currentColors.mainColor} />
                                     )}
-                                    <Text style={[styles.itemText, { color: currentColors.darkGrey }]}>
+                                    <Text style={[styles.itemText, { color: currentColors.mainColor }]}>
                                         {category.name}
                                     </Text>
                                 </View>
@@ -130,9 +130,13 @@ const Categories = () => {
                         );
                     })}
                 </ScrollView>
-            ) : (
+            ) : categories.length === 0 ? (
                 <Text style={[styles.noCategoryText, { color: currentColors.mainColor }]}>
                     {i18n.t('noCategory')}
+                </Text>
+            ) : (
+                <Text style={[styles.noCategoryText, { color: currentColors.mainColor }]}>
+                  may the connection be lost please check your connection again
                 </Text>
             )}
         </View>
@@ -157,6 +161,10 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         alignItems: 'center',
         justifyContent: 'center',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.2,
+        shadowRadius: 5,
+        elevation: 5,
     },
     categoryContainer: {
         alignItems: 'center',
