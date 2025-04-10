@@ -27,15 +27,17 @@
       "supportsTablet": true,
       "infoPlist": {
         "ExpoLocalization_supportsRTL": true,
-        "ExpoLocalization_forcesRTL": true
-      }
+        "ExpoLocalization_forcesRTL": true,
+        "ITSAppUsesNonExemptEncryption": false
+      },
+      "bundleIdentifier": "com.ataafinance.app"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/logo.png",
         "backgroundColor": "#070420"
       },
-      "package": "com.noorshbaro.Ataa"
+      "package": "com.ataafinance.app"
     },
     "web": {
       "bundler": "metro",
