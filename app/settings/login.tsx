@@ -11,14 +11,14 @@ import { useAuth } from '@/constants/userContext';
 export default function Login() {
     const { isDarkMode } = useTheme();
     const currentColors = isDarkMode ? DarkColors : LightColors;
-    const { i18n } = useLanguage();
+    const { i18n, isRTL } = useLanguage();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const { login, error } = useAuth();
-    
+
     const handleLogin = () => {
         setIsLoading(true);
 
@@ -41,7 +41,13 @@ export default function Login() {
                 <View style={styles.form}>
                     <View style={styles.padb}>
                         <TextInput
-                            style={[styles.input, { color: currentColors.mainColor, backgroundColor: currentColors.mainColorWithOpacity }]}
+                            style={[styles.input, {
+                                color: currentColors.mainColor,
+                                backgroundColor: currentColors.cardBackground,
+                                shadowColor: currentColors.calmBlue,
+                                direction: isRTL ? 'rtl' : 'ltr',
+                                flexDirection: isRTL ? 'row-reverse' : 'row'
+                            }]}
                             placeholder={i18n.t('email')}
                             placeholderTextColor={currentColors.mainColor}
                             value={email}
@@ -51,16 +57,22 @@ export default function Login() {
                         />
                     </View>
                     <View style={styles.padb}>
-                        <View style={styles.inputContainer}>
+                        <View style={[styles.inputContainer, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                             <TextInput
-                                style={[styles.input, { color: currentColors.mainColor, backgroundColor: currentColors.mainColorWithOpacity }]}
+                                style={[styles.input, {
+                                    color: currentColors.mainColor,
+                                    backgroundColor: currentColors.cardBackground,
+                                    shadowColor: currentColors.calmBlue,
+                                    direction: isRTL ? 'rtl' : 'ltr',
+                                    flexDirection: isRTL ? 'row-reverse' : 'row'
+                                }]}
                                 placeholder={i18n.t('pass')}
                                 placeholderTextColor={currentColors.mainColor}
                                 secureTextEntry={!passwordVisible}
                                 value={password}
                                 onChangeText={setPassword}
                             />
-                            <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)} style={styles.eyeIcon}>
+                            <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)} style={[styles.eyeIcon, { right: isRTL ? 0 : 16, left: isRTL ? 16 : 0 }]}>
                                 <MaterialIcons
                                     name={passwordVisible ? 'visibility' : 'visibility-off'}
                                     size={24}
@@ -83,25 +95,25 @@ export default function Login() {
                     </TouchableOpacity>
                 </View>
 
-                <View style={[styles.padt, styles.noAccount]}>
+                <View style={[styles.padt, styles.noAccount, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                     <Text style={[styles.text, { color: currentColors.darkGrey }]}>{i18n.t('noAccount')} </Text>
                     <TouchableOpacity onPress={() => router.replace('/settings/signup')}>
-                        <Text style={[styles.textBtnT, { color: currentColors.mainColor }]}>{i18n.t('signup')}</Text>
+                        <Text style={[styles.textBtnT, { color: currentColors.calmBlue }]}>{i18n.t('signup')}</Text>
                     </TouchableOpacity>
                 </View>
 
-                <View style={[styles.padt, styles.noAccount]}>
+                <View style={[styles.padt, styles.noAccount, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
                     <Text style={[styles.text2, { color: currentColors.darkGrey }]}>{i18n.t('signing')} </Text>
-                    
-                        <TouchableOpacity onPress={()=> router.push('/settings/termofuse')}>
-                            <Text style={[styles.textBtnTo, { color: currentColors.mainColor }]}>{i18n.t('termsOfUse')} </Text>
-                        </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => router.push('/settings/termofuse')}>
+                        <Text style={[styles.textBtnTo, { color: currentColors.calmBlue }]}>{i18n.t('termsOfUse')} </Text>
+                    </TouchableOpacity>
 
                     <Text style={[styles.text2, { color: currentColors.darkGrey }]}>{i18n.t('and')} </Text>
-             
-                        <TouchableOpacity onPress={()=> router.push('/settings/privacy')}>
-                            <Text style={[styles.textBtnTo, { color: currentColors.mainColor }]}>{i18n.t('privacy')}</Text>
-                        </TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => router.push('/settings/privacy')}>
+                        <Text style={[styles.textBtnTo, { color: currentColors.calmBlue }]}>{i18n.t('privacy')}</Text>
+                    </TouchableOpacity>
 
                 </View>
             </View>
@@ -124,19 +136,20 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
     },
     input: {
-        flexDirection: 'row',
         justifyContent: 'space-between',
         paddingHorizontal: 16,
         paddingVertical: 20,
         borderRadius: 10,
         width: '100%',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.2,
+        shadowRadius: 5,
+        elevation: 5,
     },
     eyeIcon: {
         position: 'absolute',
-        right: 16,
     },
     inputContainer: {
-        flexDirection: 'row',
         alignItems: 'center',
     },
     padb: {
@@ -171,7 +184,6 @@ const styles = StyleSheet.create({
         fontSize: 12,
     },
     noAccount: {
-        flexDirection: 'row',
         paddingHorizontal: 16,
     },
     errorText: {

@@ -17,7 +17,7 @@ interface AmountModalProps {
 const AmountModal: React.FC<AmountModalProps> = ({ isVisible, accessToken, campaignId, onClose }) => {
     const [amount, setAmount] = useState("");
     const [loading, setLoading] = useState(false);
-    const { i18n } = useLanguage();
+    const { i18n, isRTL } = useLanguage();
     const { isDarkMode } = useTheme();
     const currentColors = isDarkMode ? DarkColors : LightColors;
     const [showSuccess, setShowSuccess] = useState(false);
@@ -66,7 +66,7 @@ const AmountModal: React.FC<AmountModalProps> = ({ isVisible, accessToken, campa
                     </View>
                 ) : (
                     <>
-                        <Text style={[styles.title, { color: currentColors.mainColor }]}>
+                        <Text style={[styles.title, { color: currentColors.mainColor, textAlign: isRTL? 'right': 'left' }]}>
                             {i18n.t("enterAmount")}
                         </Text>
                         <TextInput

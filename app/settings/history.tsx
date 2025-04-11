@@ -20,7 +20,7 @@ interface History {
 export default function Notification() {
   const { isDarkMode } = useTheme();
   const currentColors = isDarkMode ? DarkColors : LightColors;
-  const { i18n } = useLanguage();
+  const { i18n, isRTL } = useLanguage();
 
   const [history, setHistory] = useState<History[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -60,19 +60,19 @@ export default function Notification() {
   };
 
   const renderItem = ({ item }: { item: History }) => (
-    <View style={[styles.card, { backgroundColor: currentColors.cardBackground , shadowColor: currentColors.calmBlue}]}>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
+    <View style={[styles.card, { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue }]}>
+      <View style={{ flexDirection: isRTL? 'row-reverse':'row', justifyContent: 'space-between', }}>
         <Text style={[styles.campaignText, { color: currentColors.mainColor }]}>{item.campaign_name}</Text>
         <Text style={[styles.date, { color: currentColors.darkGrey }]}>{item.donated_at}</Text>
       </View>
 
-      <Text style={[styles.amountText, { color: currentColors.button }]}>${item.amount}</Text>
-      <Text style={[styles.status, { color: item.status === 'pending' ? currentColors.mustard : currentColors.green }]}>
+      <Text style={[styles.amountText, { color: currentColors.button, textAlign: isRTL? 'right': 'left' }]}>${item.amount}</Text>
+      <Text style={[styles.status, { color: item.status === 'pending' ? currentColors.mustard : currentColors.green, textAlign: isRTL? 'right': 'left' }]}>
         {item.status}
       </Text>
 
       {item.status === 'pending' && (
-        <Text style={[styles.note, { color: currentColors.darkGrey, marginTop: 5 }]}>
+        <Text style={[styles.note, { color: currentColors.darkGrey, marginTop: 5, textAlign: isRTL? 'right': 'left' }]}>
           {i18n.t('contact')}
         </Text>
       )}
@@ -125,9 +125,9 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginBottom: 12,
     shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.2,
-        shadowRadius: 5,
-        elevation: 5,
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
     //shadowOffset: { width: 0, height: 1 },
     //shadowOpacity: 0.1,
     //shadowRadius: 6,

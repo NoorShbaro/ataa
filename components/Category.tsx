@@ -22,7 +22,7 @@ const Categories = () => {
 
     const { isDarkMode } = useTheme();
     const currentColors = isDarkMode ? DarkColors : LightColors;
-    const { i18n } = useLanguage();
+    const { i18n, isRTL } = useLanguage();
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -44,10 +44,10 @@ const Categories = () => {
     };
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container,{ direction: isRTL? 'rtl': 'ltr'}]}>
             {loading ? (
                 <View style={{ flexDirection: 'row', marginHorizontal: 10 }}>
-                    <View style={styles.loading}>
+                    <View style={[styles.loading, {marginRight: isRTL? 0: 10, marginLeft:isRTL? 10:0}]}>
                         <MotiView
                             from={{ opacity: 0.5 }}
                             animate={{ opacity: 1 }}
@@ -63,7 +63,7 @@ const Categories = () => {
                             }}
                         />
                     </View>
-                    <View style={styles.loading}>
+                    <View style={[styles.loading, {marginRight: isRTL? 0: 10, marginLeft:isRTL? 10:0}]}>
                         <MotiView
                             from={{ opacity: 0.5 }}
                             animate={{ opacity: 1 }}
@@ -79,7 +79,7 @@ const Categories = () => {
                             }}
                         />
                     </View>
-                    <View style={styles.loading}>
+                    <View style={[styles.loading, {marginRight: isRTL? 0: 10, marginLeft:isRTL? 10:0}]}>
                         <MotiView
                             from={{ opacity: 0.5 }}
                             animate={{ opacity: 1 }}
@@ -101,9 +101,16 @@ const Categories = () => {
                     ref={scrollRef}
                     horizontal
                     showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={styles.itemsWrapper}
+                    contentContainerStyle={[styles.itemsWrapper,
+                        {flexDirection: isRTL ? 'row-reverse' : 'row', direction: isRTL? 'rtl': 'ltr'}]}
+                    // Manually scroll to end for RTL
+                    onContentSizeChange={() => {
+                        if (isRTL && scrollRef.current) {
+                            scrollRef.current.scrollToEnd({ animated: false });
+                        }
+                    }}
                 >
-                    {categories.map((category, index) => {
+                    {(isRTL? [...categories].reverse() :categories).map((category, index) => {
                         const imageUrl = category?.icon
                             ? { uri: `https://be.donation.matrixvert.com/storage/${category.icon}` }
                             : null;
@@ -136,7 +143,7 @@ const Categories = () => {
                 </Text>
             ) : (
                 <Text style={[styles.noCategoryText, { color: currentColors.mainColor }]}>
-                  may the connection be lost please check your connection again
+                    may the connection be lost please check your connection again
                 </Text>
             )}
         </View>
@@ -198,7 +205,6 @@ const styles = StyleSheet.create({
     },
     loading: {
         alignItems: 'center',
-        marginRight: 10
     },
     icon: {
         width: 40,

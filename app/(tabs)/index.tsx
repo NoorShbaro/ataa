@@ -56,7 +56,7 @@ export default function Index() {
 
   const onRefresh = async () => {
     setIsRefreshing(true);
-    setIsLoading(true); 
+    setIsLoading(true);
     try {
       setTimeout(() => {
         setIsLoading(false);
@@ -96,15 +96,15 @@ export default function Index() {
         ) : (
           <ScrollView style={[{
             backgroundColor: currentColors.background,
-          }]} 
-          refreshControl={
-            <RefreshControl
-              refreshing={isRefreshing}
-              onRefresh={onRefresh}
-              colors={[currentColors.calmBlue]}
-              tintColor={currentColors.calmBlue}
-            />
-          } >
+          }]}
+            refreshControl={
+              <RefreshControl
+                refreshing={isRefreshing}
+                onRefresh={onRefresh}
+                colors={[currentColors.calmBlue]}
+                tintColor={currentColors.calmBlue}
+              />
+            } >
             {loading ? (
               <View style={styles.view}>
                 <MotiView
@@ -126,9 +126,9 @@ export default function Index() {
             ) : (
               <Campaign campaigns={campaign} />
             )}
-<View style={{marginVertical: 10}}>
-            <Categories />
-</View>
+            <View style={{ marginVertical: 10 }}>
+              <Categories />
+            </View>
             <LatestCampaign />
 
           </ScrollView>

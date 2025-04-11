@@ -11,7 +11,7 @@ export default function Language() {
   const { isDarkMode } = useTheme();
   const currentColors = isDarkMode ? DarkColors : LightColors;
 
-  const { language, changeLanguage, i18n } = useLanguage();
+  const { language, changeLanguage, i18n, isRTL } = useLanguage();
 
   return (
     <View style={[styles.container, { backgroundColor: currentColors.background }]}>
@@ -19,16 +19,16 @@ export default function Language() {
 
       <Header title={i18n.t('selectLanguage')} />
 
-      <View style={styles.content}>
+      <View style={[styles.content,]}>
         <TouchableOpacity
           style={[
             styles.itemBtn,
-            { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue },
+            { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue, flexDirection: isRTL? 'row-reverse': 'row', },
             { borderBottomColor: currentColors.background },
           ]}
           onPress={() => changeLanguage('en')}
         >
-          <Text style={[styles.itemBtnText, { color: currentColors.mainColor }]}>
+          <Text style={[styles.itemBtnText, { color: currentColors.mainColor, textAlign: isRTL ? 'right' : 'left' }]}>
             {i18n.t('en')}
           </Text>
           {language === 'en' && (
@@ -43,12 +43,12 @@ export default function Language() {
         <TouchableOpacity
           style={[
             styles.itemBtn,
-            { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue },
+            { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue, flexDirection: isRTL? 'row-reverse': 'row', },
             { borderBottomColor: currentColors.background },
           ]}
           onPress={() => changeLanguage('ar')}
         >
-          <Text style={[styles.itemBtnText, { color: currentColors.mainColor }]}>
+          <Text style={[styles.itemBtnText, { color: currentColors.mainColor, textAlign: isRTL ? 'right' : 'left' }]}>
             {i18n.t('ar')}
           </Text>
           {language === 'ar' && (
@@ -76,7 +76,6 @@ const styles = StyleSheet.create({
     paddingVertical: 100,
   },
   itemBtn: {
-    flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 20,

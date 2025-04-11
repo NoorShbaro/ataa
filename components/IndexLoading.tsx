@@ -3,12 +3,14 @@ import { MotiView } from 'moti';
 import { useTheme } from '@/constants/ThemeContext';
 import { DarkColors, LightColors } from '@/constants/Colors';
 import MainHeader from './MainHeader';
+import { useLanguage } from '@/constants/LanguageContext';
 
 const { width } = Dimensions.get('screen');
 
 export default function LoadingIndex() {
     const { isDarkMode } = useTheme();
     const currentColors = isDarkMode ? DarkColors : LightColors;
+    const { isRTL } = useLanguage();
 
     return (
         <View style={[{ backgroundColor: currentColors.background }]}>
@@ -43,10 +45,10 @@ export default function LoadingIndex() {
             </View>
 
             <View style={{
-                marginHorizontal: 10, flexDirection: 'row',
+                marginHorizontal: 15, flexDirection: isRTL ? 'row-reverse' : 'row', 
                 marginTop: 30
             }}>
-                <View style={{alignItems: 'center', marginRight: 10}}>
+                <View style={{alignItems: 'center', marginHorizontal: 5 }}>
                     <MotiView
                         from={{ opacity: 0.5 }}
                         animate={{ opacity: 1 }}
@@ -62,7 +64,7 @@ export default function LoadingIndex() {
                         }}
                     />
                 </View>
-                <View style={{alignItems: 'center', marginRight: 10}}>
+                <View style={{alignItems: 'center', marginHorizontal: 5}}>
                     <MotiView
                         from={{ opacity: 0.5 }}
                         animate={{ opacity: 1 }}
@@ -78,7 +80,7 @@ export default function LoadingIndex() {
                         }}
                     />
                 </View>
-                <View style={{alignItems: 'center', marginRight: 10}}>
+                <View style={{alignItems: 'center', marginHorizontal: 5}}>
                     <MotiView
                         from={{ opacity: 0.5 }}
                         animate={{ opacity: 1 }}
@@ -97,7 +99,7 @@ export default function LoadingIndex() {
                 
             </View>
 
-            <View style={{ padding: 10, marginLeft: 5 }}>
+            <View style={{ padding: 10, marginLeft: isRTL? 0:5,marginRight: isRTL? 5:0 }}>
                 <MotiView
                     from={{ opacity: 0.5 }}
                     animate={{ opacity: 1 }}
@@ -105,7 +107,7 @@ export default function LoadingIndex() {
                     style={{
                         width: '45%',
                         backgroundColor: currentColors.skeletonBase,
-                        alignSelf: 'flex-start',
+                        alignSelf: isRTL? 'flex-end' :'flex-start',
                         marginBottom: 10,
                         paddingHorizontal: 16,
                         paddingVertical: 20,
@@ -120,7 +122,7 @@ export default function LoadingIndex() {
                     style={{
                         width: 200,
                         backgroundColor: currentColors.skeletonBase,
-                        alignSelf: 'flex-start',
+                        alignSelf: isRTL? 'flex-end' :'flex-start',
                         marginBottom: 10,
                         paddingHorizontal: 16,
                         paddingVertical: 20,

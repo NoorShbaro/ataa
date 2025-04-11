@@ -2,7 +2,7 @@
   "expo": {
     "name": "Ataa",
     "slug": "Ataa",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/logo.png",
     "backgroundColor": "#070420",
@@ -27,7 +27,7 @@
       "supportsTablet": true,
       "infoPlist": {
         "ExpoLocalization_supportsRTL": true,
-        "ExpoLocalization_forcesRTL": true,
+        "ExpoLocalization_forcesRTL": false,
         "ITSAppUsesNonExemptEncryption": false
       },
       "bundleIdentifier": "com.ataafinance.app"
@@ -37,7 +37,8 @@
         "foregroundImage": "./assets/images/logo.png",
         "backgroundColor": "#070420"
       },
-      "package": "com.ataafinance.app"
+      "package": "com.ataafinance.app",
+      "supportsRtl": true
     },
     "web": {
       "bundler": "metro",

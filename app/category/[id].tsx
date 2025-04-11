@@ -29,7 +29,7 @@ type Campaign = {
 export default function CampaignList() {
     const { isDarkMode } = useTheme();
     const currentColors = isDarkMode ? DarkColors : LightColors;
-    const { i18n } = useLanguage();
+    const { i18n, isRTL } = useLanguage();
     const { id } = useLocalSearchParams<{ id: string }>();
 
     const [campaigns, setCampaigns] = useState<Campaign[]>([]);
@@ -76,27 +76,74 @@ export default function CampaignList() {
 
         return (
             <TouchableOpacity onPress={() => router.push(`/campaign/${item.id}`)} style={{ marginHorizontal: 10 }}>
+                
                 <View style={[styles.card, { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue }]}>
                     <View style={{ margin: 10, marginVertical: 10 }}>
                         <Image source={imageUrl} style={styles.image} />
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Text style={[styles.campaignTitle, { color: currentColors.mainColor }]}>{item.title}</Text>
-                            <Text style={[styles.date, { color: currentColors.mainColorWithOpacity }]}>{i18n.t('availableTill')}: {item.end_date}</Text>
+                        <View style={{ 
+                            flexDirection: isRTL ? 'row-reverse' : 'row', 
+                            justifyContent: 'space-between',
+                            alignItems: 'center' 
+                        }}>
+                            <Text style={[
+                                styles.campaignTitle, 
+                                { 
+                                    color: currentColors.mainColor,
+                                    textAlign: isRTL ? 'right' : 'left',
+                                    writingDirection: isRTL ? 'rtl' : 'ltr'
+                                }
+                            ]}>
+                                {item.title}
+                            </Text>
+                            <Text style={[
+                                styles.date, 
+                                { 
+                                    color: currentColors.darkGrey,
+                                    textAlign: isRTL ? 'left' : 'right',
+                                    writingDirection: isRTL ? 'rtl' : 'ltr'
+                                }
+                            ]}>
+                                {i18n.t('availableTill')}: {item.end_date}
+                            </Text>
                         </View>
-
-                        {/* Progress Bar */}
+    
+                        {/* Progress Bar - remains unchanged */}
                         <ProgressBar
                             percentage={item.progress.percentage}
                             raised={parseFloat(item.progress.raised)}
                             remaining={item.progress.remaining}
-                            goal={parseFloat(item.goal_amount)} />
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Text style={[styles.percentage, { color: currentColors.mainColor }]}>{i18n.t('collected')}: {item.progress.raised}$</Text>
-                            <Text style={[styles.percentage, { color: currentColors.mainColor }]}>{i18n.t('remaining')}: {item.progress.remaining}$</Text>
+                            goal={parseFloat(item.goal_amount)} 
+                        />
+    
+                        <View style={{ 
+                            flexDirection: isRTL ? 'row-reverse' : 'row', 
+                            justifyContent: 'space-between',
+                            marginTop: 5
+                        }}>
+                            <Text style={[
+                                styles.percentage, 
+                                { 
+                                    color: currentColors.mainColor,
+                                    textAlign: isRTL ? 'right' : 'left',
+                                    writingDirection: isRTL ? 'rtl' : 'ltr'
+                                }
+                            ]}>
+                                {i18n.t('collected')}: {item.progress.raised}$
+                            </Text>
+                            <Text style={[
+                                styles.percentage, 
+                                { 
+                                    color: currentColors.mainColor,
+                                    textAlign: isRTL ? 'left' : 'right',
+                                    writingDirection: isRTL ? 'ltr' : 'rtl'
+                                }
+                            ]}>
+                                {i18n.t('remaining')}: {item.progress.remaining}$
+                            </Text>
                         </View>
                     </View>
-
                 </View>
+        
             </TouchableOpacity>
         );
     };
@@ -132,6 +179,7 @@ export default function CampaignList() {
                     renderItem={renderCampaignItem}
                     contentContainerStyle={[
                         styles.listContainer,
+                        isRTL && { direction: 'rtl' },
                         { flexGrow: 1 }
                     ]}
                     refreshing={isRefreshing}

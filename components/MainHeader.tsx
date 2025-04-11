@@ -6,6 +6,7 @@ import { DarkColors, LightColors } from '@/constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { useAuth } from '@/constants/userContext';
+import { useLanguage } from '@/constants/LanguageContext';
 
 type MainHeaderProps = {
   //title: string;
@@ -16,6 +17,7 @@ const MainHeader = (/*{ title }: MainHeaderProps*/) => {
   const currentColors = isDarkMode ? DarkColors : LightColors;
 
   const { isAuthenticated } = useAuth();
+  const { isRTL } = useLanguage();
 
   return (
     <SafeAreaView
@@ -24,7 +26,7 @@ const MainHeader = (/*{ title }: MainHeaderProps*/) => {
     >
       <View
         style={{
-          flexDirection: 'row',
+          flexDirection: isRTL ? 'row-reverse' : 'row',
           alignItems: 'center',
           justifyContent: 'space-between',
           width: '100%',
@@ -37,7 +39,7 @@ const MainHeader = (/*{ title }: MainHeaderProps*/) => {
           style={{ width: 50, height: 50, resizeMode: 'contain', borderRadius: 30 }}
         />
 
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 15 }}>
+        <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', alignItems: 'center', gap: 15 }}>
           {/* Notification Icon */}
           <TouchableOpacity>
             <Ionicons name="notifications" size={30} color={currentColors.calmBlue} />

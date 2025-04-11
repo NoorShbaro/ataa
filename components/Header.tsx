@@ -6,6 +6,7 @@ import { DarkColors, LightColors } from '@/constants/Colors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { useAuth } from '@/constants/userContext';
+import { useLanguage } from '@/constants/LanguageContext';
 
 type HeaderProps = {
   title: string;
@@ -15,6 +16,7 @@ const Header = ({ title }: HeaderProps) => {
   const { isDarkMode } = useTheme();
   const currentColors = isDarkMode ? DarkColors : LightColors;
   const { resetError } = useAuth();
+  const { isRTL } = useLanguage();
 
   return (
     <SafeAreaView
@@ -29,17 +31,17 @@ const Header = ({ title }: HeaderProps) => {
             router.back();
           }
           }
-          style={styles.backButton}
+          style={[styles.backButton, { left: isRTL ? 'auto' : 16, right: isRTL ? 16 : 'auto' }]}
         >
           <MaterialIcons
-            name="arrow-back-ios"
+            name= {isRTL ? "arrow-forward-ios": "arrow-back-ios"}
             size={24}
             color={currentColors.mainColor}
           />
         </TouchableOpacity>
 
         {/* Title */}
-        <Text style={[styles.title, { color: currentColors.mainColor }]}>
+        <Text style={[styles.title, { color: currentColors.mainColor, textAlign: isRTL ? 'right' : 'left' }]}>
           {title}
         </Text>
       </View>

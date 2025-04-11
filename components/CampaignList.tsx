@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Image, FlatList, RefreshControl } from 'react-native';
 import { DarkColors, LightColors } from '@/constants/Colors';
 import { useTheme } from '@/constants/ThemeContext';
@@ -40,6 +40,8 @@ export default function CampaignList() {
     const [campaigns, setCampaigns] = useState<Campaign[]>([]);
     const [loading, setLoading] = useState(true);
     const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+    const { isRTL } = useLanguage();
+    const scrollViewRef = useRef<ScrollView>(null);
 
     const handleRefreshAll = async () => {
         setIsRefreshing(true);
@@ -98,75 +100,149 @@ export default function CampaignList() {
                 <View style={[styles.card, { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue }]}>
                     <View style={{ margin: 10, marginVertical: 10 }}>
                         <Image source={imageUrl} style={styles.image} />
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Text style={[styles.campaignTitle, { color: currentColors.mainColor }]}>{item.title}</Text>
-                            <Text style={[styles.date, { color: currentColors.darkGrey }]}>{i18n.t('availableTill')}: {item.end_date}</Text>
+                        <View style={{
+                            flexDirection: isRTL ? 'row-reverse' : 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'center'
+                        }}>
+                            <Text style={[
+                                styles.campaignTitle,
+                                {
+                                    color: currentColors.mainColor,
+                                    textAlign: isRTL ? 'right' : 'left',
+                                    writingDirection: isRTL ? 'rtl' : 'ltr'
+                                }
+                            ]}>
+                                {item.title}
+                            </Text>
+                            <Text style={[
+                                styles.date,
+                                {
+                                    color: currentColors.darkGrey,
+                                    textAlign: isRTL ? 'left' : 'right',
+                                    writingDirection: isRTL ? 'rtl' : 'ltr'
+                                }
+                            ]}>
+                                {i18n.t('availableTill')}: {item.end_date}
+                            </Text>
                         </View>
 
-
-
-                        {/* Progress Bar */}
+                        {/* Progress Bar - remains unchanged */}
                         <ProgressBar
                             percentage={item.progress.percentage}
                             raised={parseFloat(item.progress.raised)}
                             remaining={item.progress.remaining}
-                            goal={parseFloat(item.goal_amount)} />
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Text style={[styles.percentage, { color: currentColors.mainColor }]}>{i18n.t('collected')}: {item.progress.raised}$</Text>
-                            <Text style={[styles.percentage, { color: currentColors.mainColor }]}>{i18n.t('remaining')}: {item.progress.remaining}$</Text>
+                            goal={parseFloat(item.goal_amount)}
+                        />
+
+                        <View style={{
+                            flexDirection: isRTL ? 'row-reverse' : 'row',
+                            justifyContent: 'space-between',
+                            marginTop: 5
+                        }}>
+                            <Text style={[
+                                styles.percentage,
+                                {
+                                    color: currentColors.mainColor,
+                                    textAlign: isRTL ? 'right' : 'left',
+                                    writingDirection: isRTL ? 'rtl' : 'ltr'
+                                }
+                            ]}>
+                                {i18n.t('collected')}: {item.progress.raised}$
+                            </Text>
+                            <Text style={[
+                                styles.percentage,
+                                {
+                                    color: currentColors.mainColor,
+                                    textAlign: isRTL ? 'left' : 'right',
+                                    writingDirection: isRTL ? 'ltr' : 'rtl'
+                                }
+                            ]}>
+                                {i18n.t('remaining')}: {item.progress.remaining}$
+                            </Text>
                         </View>
                     </View>
-
                 </View>
             </TouchableOpacity>
         );
     };
 
     return (
-        <View style={[styles.container, { backgroundColor: currentColors.background, marginBottom: 70 }]}>
+        <View style={[styles.container, {
+            backgroundColor: currentColors.background,
+            marginBottom: 70
+        }]}>
             <FlatList
                 data={campaigns}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={renderCampaignItem}
-                contentContainerStyle={styles.listContainer}
+                contentContainerStyle={[
+                    styles.listContainer,
+                    isRTL && { direction: 'rtl' } // RTL content direction
+                ]}
                 refreshing={isRefreshing}
                 onRefresh={handleRefreshAll}
                 refreshControl={
                     <RefreshControl
                         refreshing={isRefreshing}
                         onRefresh={handleRefreshAll}
-                        colors={[currentColors.calmBlue]} // Android
-                        tintColor={currentColors.calmBlue} // iOS
+                        colors={[currentColors.calmBlue]}
+                        tintColor={currentColors.calmBlue}
                     />
                 }
                 ListHeaderComponent={() => (
                     <>
                         {loading ? (
                             <>
-                                <View style={{ flexDirection: 'row' }}>
+                                <View style={{
+                                    flexDirection: isRTL ? 'row-reverse' : 'row',
+                                    justifyContent: isRTL ? 'flex-end' : 'flex-start'
+                                }}>
                                     <MotiView style={[styles.skeleton, {
                                         backgroundColor: currentColors.skeletonBase,
                                     }]} />
-                                    <MotiView style={[styles.skeleton, { marginLeft: 10, backgroundColor: currentColors.skeletonBase }]} />
+                                    <MotiView style={[styles.skeleton, {
+                                        marginHorizontal: 10,
+                                        backgroundColor: currentColors.skeletonBase
+                                    }]} />
                                 </View>
                                 <MotiView style={[styles.skeletonLarge, {
                                     backgroundColor: currentColors.skeletonBase,
                                 }]} />
                             </>
                         ) : categories.length === 0 ? (
-                            <Text style={[styles.noCampaignText, { color: currentColors.mainColor }]}>
+                            <Text style={[styles.noCampaignText, {
+                                color: currentColors.mainColor,
+                            }]}>
                                 {i18n.t('noCategory')}
                             </Text>
                         ) : (
-                            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.scrollView}>
-                                {categories.map((category) => (
+                            <ScrollView
+                                horizontal
+                                showsHorizontalScrollIndicator={false}
+                                style={styles.scrollView}
+                                contentContainerStyle={{
+                                    flexDirection: isRTL ? 'row-reverse' : 'row'
+                                }}
+                                // Manually scroll to end for RTL
+                                ref={scrollViewRef}
+                                onContentSizeChange={() => {
+                                    if (isRTL && scrollViewRef.current) {
+                                        scrollViewRef.current.scrollToEnd({ animated: false });
+                                    }
+                                }}
+                            >
+                                {(isRTL ? [...categories].reverse() : categories).map((category) => (
                                     <TouchableOpacity
                                         key={category.id}
                                         style={[
                                             styles.categoryButton,
                                             {
-                                                backgroundColor:
-                                                    selectedCategory === category.id ? currentColors.button : currentColors.cardBackground,
+                                                backgroundColor: selectedCategory === category.id
+                                                    ? currentColors.button
+                                                    : currentColors.cardBackground,
+                                                marginRight: isRTL ? 0 : 10,
+                                                marginLeft: isRTL ? 10 : 0
                                             },
                                         ]}
                                         onPress={() => setSelectedCategory(category.id)}
@@ -174,7 +250,13 @@ export default function CampaignList() {
                                         <Text
                                             style={[
                                                 styles.categoryText,
-                                                { color: selectedCategory === category.id ? currentColors.white : currentColors.darkGrey },
+                                                {
+                                                    color: selectedCategory === category.id
+                                                        ? currentColors.white
+                                                        : currentColors.darkGrey,
+                                                    textAlign: isRTL ? 'right' : 'left',
+                                                    writingDirection: isRTL ? 'rtl' : 'ltr'
+                                                },
                                             ]}
                                         >
                                             {category.name}
@@ -187,13 +269,15 @@ export default function CampaignList() {
                 )}
                 ListEmptyComponent={() =>
                     !loading && (
-                        <Text style={[styles.noCampaignText, { color: currentColors.mainColor }]}>
+                        <Text style={[styles.noCampaignText, {
+                            color: currentColors.mainColor,
+
+                        }]}>
                             {i18n.t('noCampaign')}
                         </Text>
                     )
                 }
             />
-
         </View>
     );
 }
@@ -271,7 +355,7 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
         paddingHorizontal: 15,
         borderRadius: 8,
-        marginRight: 10,
+        marginHorizontal: 5
     },
     listContainer: {
         paddingBottom: 20,

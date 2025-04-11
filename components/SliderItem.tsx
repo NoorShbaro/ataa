@@ -41,7 +41,7 @@ type Campaigns = {
 };
 
 const SliderItem = ({ slideItem, index, scrollX }: Props) => {
-    const { i18n } = useLanguage();
+    const { i18n, isRTL } = useLanguage();
     const { isDarkMode } = useTheme();
     const currentColors = isDarkMode ? DarkColors : LightColors;
     const { accessToken } = useAuth();
@@ -80,7 +80,7 @@ const SliderItem = ({ slideItem, index, scrollX }: Props) => {
         <Animated.View style={[styles.itemWrapper, rnStyle]} key={slideItem.id}>
             <Image source={imageUrl} style={[styles.image, { shadowColor: currentColors.calmBlue }]} />
             <LinearGradient colors={["transparent", currentColors.calmBlue]} style={[styles.background,]}>
-                <View style={styles.contentWrapper}>
+                <View style={[styles.contentWrapper,{flexDirection: isRTL? 'row-reverse': 'row'}]}>
 
                     <Text style={[styles.title, { color: currentColors.white }]} numberOfLines={2}>{slideItem.title}</Text>
 
@@ -134,7 +134,6 @@ const styles = StyleSheet.create({
     },
     contentWrapper: {
         flex: 1,
-        flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
     },

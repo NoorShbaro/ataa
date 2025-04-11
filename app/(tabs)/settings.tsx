@@ -14,7 +14,7 @@ export default function Settings() {
   const { isDarkMode, toggleTheme } = useTheme();
   const currentColors = isDarkMode ? DarkColors : LightColors;
 
-  const { i18n } = useLanguage();
+  const { i18n, isRTL } = useLanguage();
   const { isAuthenticated } = useAuth();
   const [accessToken, setToken] = useState<string | null>(null);
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
@@ -44,25 +44,25 @@ export default function Settings() {
               ))}
             style={[
               styles.itemBtn,
-              { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue },
+              { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue, flexDirection: isRTL ? 'row-reverse' : 'row', },
               { borderBottomColor: currentColors.background },
             ]}>
             <Text style={[styles.itemBtnText, { color: currentColors.mainColor }]}>
               {i18n.t('profile')}
             </Text>
-            <MaterialIcons name="arrow-forward-ios" size={16} color={currentColors.mainColor} />
+            <MaterialIcons name= {isRTL?"arrow-back-ios":"arrow-forward-ios" } size={16} color={currentColors.mainColor} />
           </TouchableOpacity>
 
 
           <TouchableOpacity onPress={() => router.push('/settings/about')}
             style={[styles.itemBtn,
-            { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue },
+            { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue, flexDirection: isRTL ? 'row-reverse' : 'row', },
             { borderBottomColor: currentColors.background, }
             ]}>
             <Text style={[styles.itemBtnText, { color: currentColors.mainColor }]}>
               {i18n.t('about')}
             </Text>
-            <MaterialIcons name="arrow-forward-ios"
+            <MaterialIcons name= {isRTL?"arrow-back-ios":"arrow-forward-ios" }
               size={16}
               color={currentColors.mainColor}
             />
@@ -70,7 +70,7 @@ export default function Settings() {
 
 
           <TouchableOpacity onPress={() => router.push('/settings/privacy')} style={[styles.itemBtn,
-          { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue },
+          { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue, flexDirection: isRTL ? 'row-reverse' : 'row', },
           { borderBottomColor: currentColors.background, }
           ]}>
             <Text style={[styles.itemBtnText,
@@ -78,7 +78,7 @@ export default function Settings() {
               {i18n.t('privacy')}
             </Text>
             <MaterialIcons
-              name="arrow-forward-ios"
+               name= {isRTL?"arrow-back-ios":"arrow-forward-ios" }
               size={16}
               color={currentColors.mainColor}
             />
@@ -87,7 +87,7 @@ export default function Settings() {
 
           <TouchableOpacity onPress={() => router.push('/settings/termofuse')}
             style={[styles.itemBtn,
-            { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue },
+            { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue, flexDirection: isRTL ? 'row-reverse' : 'row', },
             { borderBottomColor: currentColors.background, }
             ]}>
             <Text style={[styles.itemBtnText,
@@ -95,7 +95,7 @@ export default function Settings() {
               {i18n.t('termsOfUse')}
             </Text>
             <MaterialIcons
-              name="arrow-forward-ios"
+               name= {isRTL?"arrow-back-ios":"arrow-forward-ios" }
               size={16}
               color={currentColors.mainColor}
             />
@@ -108,14 +108,14 @@ export default function Settings() {
                 : '/settings/login'
             ))}
             style={[styles.itemBtn,
-            { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue },
+            { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue, flexDirection: isRTL ? 'row-reverse' : 'row', },
             { borderBottomColor: currentColors.background, }
             ]}
           >
             <Text style={[styles.itemBtnText, { color: currentColors.mainColor }]}>
               {i18n.t('history')}
             </Text>
-            <MaterialIcons name="arrow-forward-ios"
+            <MaterialIcons  name= {isRTL?"arrow-back-ios":"arrow-forward-ios" }
               size={16}
               color={currentColors.mainColor}
             />
@@ -123,13 +123,13 @@ export default function Settings() {
 
 
           <TouchableOpacity style={[styles.itemBtn,
-          { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue },
+          { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue, flexDirection: isRTL ? 'row-reverse' : 'row', },
           { borderBottomColor: currentColors.background, }
           ]} onPress={() => router.push('/settings/language')}>
             <Text style={[styles.itemBtnText, { color: currentColors.mainColor }]}>
               {i18n.t('languages')}
             </Text>
-            <MaterialIcons name="arrow-forward-ios"
+            <MaterialIcons  name= {isRTL?"arrow-back-ios":"arrow-forward-ios" }
               size={16}
               color={currentColors.mainColor}
             />
@@ -138,7 +138,7 @@ export default function Settings() {
 
           <TouchableOpacity
             style={[styles.itemBtn,
-            { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue, flex: 1 },
+            { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue, flex: 1, flexDirection: isRTL ? 'row-reverse' : 'row', },
             { borderBottomColor: currentColors.background, }
             ]}
             onPress={toggleTheme}>
@@ -171,7 +171,6 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   itemBtn: {
-    flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 16,

@@ -11,17 +11,38 @@ interface ProgressBarProps {
     goal: number;
 }
 
-const ProgressBar: React.FC<ProgressBarProps> = ({ percentage, raised, remaining, goal }) => {
+const ProgressBar: React.FC<ProgressBarProps> = ({ percentage }) => {
     const { isDarkMode } = useTheme();
     const currentColors = isDarkMode ? DarkColors : LightColors;
-    const { i18n } = useLanguage();
+    const { isRTL } = useLanguage();
     return (
         <View style={styles.container}>
-            <Text style={[styles.percentage, { color: currentColors.mainColor,alignSelf: 'flex-end', fontSize: 14 }]}>{percentage}%</Text>
-            <View style={[styles.progressBarBackground, { backgroundColor: currentColors.progressBarBackground }]}>
-                <View style={[styles.progressBarFill, { width: `${percentage}%`, backgroundColor: currentColors.calmBlue }]} />
+            <Text style={[
+                styles.percentage, 
+                { 
+                    color: currentColors.mainColor,
+                    alignSelf: isRTL ? 'flex-start' : 'flex-end',
+                    fontSize: 14,
+                    textAlign: isRTL ? 'left' : 'right'
+                }
+            ]}>
+                {percentage}%
+            </Text>
+            <View style={[
+                styles.progressBarBackground, 
+                { 
+                    backgroundColor: currentColors.progressBarBackground,
+                    flexDirection: isRTL ? 'row-reverse' : 'row'
+                }
+            ]}>
+                <View style={[
+                    styles.progressBarFill, 
+                    { 
+                        width: `${percentage}%`, 
+                        backgroundColor: currentColors.calmBlue
+                    }
+                ]} />
             </View>
-            
         </View>
     );
 };

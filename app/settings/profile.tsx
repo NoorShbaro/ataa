@@ -22,7 +22,7 @@ export default function Profile() {
     const { isDarkMode } = useTheme();
     const currentColors = isDarkMode ? DarkColors : LightColors;
 
-    const { i18n } = useLanguage();
+    const { i18n, isRTL } = useLanguage();
 
     const { logout, accessToken } = useAuth();
 
@@ -59,18 +59,18 @@ export default function Profile() {
 
             <View style={styles.content}>
                 {/* Profile Picture */}
-                <View style={[styles.profilePicContainer, { backgroundColor: currentColors.mainColorWithOpacity , shadowColor: currentColors.black,}]}>
+                <View style={[styles.profilePicContainer, { backgroundColor: currentColors.mainColorWithOpacity, shadowColor: currentColors.black, }]}>
                     {profileImage ? (
                         <TouchableOpacity
                             onPress={() => console.log('Change Profile Picture')}
                             style={styles.profilePicWrapper} // Added a wrapper for better control
                         >
-                            <Image source={{ uri: profileImage }} style={[styles.profilePic, {borderColor: currentColors.background}]} />
+                            <Image source={{ uri: profileImage }} style={[styles.profilePic, { borderColor: currentColors.background }]} />
                             <MaterialIcons
                                 name="camera"
                                 size={30}
                                 color={currentColors.mainColor}
-                                style={[styles.changePicIcon,{backgroundColor: currentColors.background,shadowColor: currentColors.black}]}
+                                style={[styles.changePicIcon, { backgroundColor: currentColors.background, shadowColor: currentColors.black }]}
                             />
                         </TouchableOpacity>
                     ) : (
@@ -80,31 +80,46 @@ export default function Profile() {
                         >
                             <Image
                                 source={require('@/assets/images/noProfile.jpg')}
-                                style={[styles.profilePic, {borderColor: currentColors.background}]}
+                                style={[styles.profilePic, { borderColor: currentColors.background }]}
                             />
                             <MaterialIcons
                                 name="camera"
                                 size={30}
                                 color={currentColors.mainColor}
-                                style={[styles.changePicIcon,{backgroundColor: currentColors.background,shadowColor: currentColors.black}]}
+                                style={[styles.changePicIcon, { backgroundColor: currentColors.background, shadowColor: currentColors.black }]}
                             />
                         </TouchableOpacity>
                     )}
                 </View>
 
-                <View style={styles.form}>
+                <View style={[styles.form, { shadowColor: currentColors.calmBlue }]}>
                     <View style={styles.padb}>
                         <TextInput
-                            style={[styles.input, { color: currentColors.mainColor, backgroundColor: currentColors.mainColorWithOpacity }]}
+                            style={[styles.input,
+                            {
+                                color: currentColors.mainColor,
+                                backgroundColor: currentColors.cardBackground,
+                                shadowColor: currentColors.calmBlue,
+                                direction: isRTL ? 'rtl' : 'ltr',
+                                flexDirection: isRTL ? 'row-reverse' : 'row'
+                            }]}
                             placeholder={auth ? auth.name : ""}
                             placeholderTextColor={currentColors.mainColor}
+                            editable={false}
                         />
                     </View>
                     <View style={styles.padb}>
                         <TextInput
-                            style={[styles.input, { color: currentColors.mainColor, backgroundColor: currentColors.mainColorWithOpacity }]}
+                            style={[styles.input, {
+                                color: currentColors.mainColor,
+                                backgroundColor: currentColors.cardBackground,
+                                shadowColor: currentColors.calmBlue,
+                                direction: isRTL ? 'rtl' : 'ltr',
+                                flexDirection: isRTL ? 'row-reverse' : 'row'
+                            }]}
                             placeholder={auth ? auth.email : ""}
                             placeholderTextColor={currentColors.mainColor}
+                            editable={false}
                         />
                     </View>
                     {/*<View style={styles.padb}>
@@ -122,12 +137,29 @@ export default function Profile() {
                         />
                     </View>*/}
                     <TouchableOpacity
-                        onPress={logout} // Attach function to button
-                        style={[styles.itemBtn, { backgroundColor: currentColors.mainColorWithOpacity }]}
+                        onPress={logout}
+                        style={[
+                            styles.itemBtn,
+                            {
+                                backgroundColor: currentColors.cardBackground,
+                                shadowColor: currentColors.calmBlue,
+                                flexDirection: isRTL ? 'row-reverse' : 'row',
+                                alignItems: 'center',
+                            },
+                        ]}
                     >
-                        <Text style={[styles.itemBtnText, { color: currentColors.tint }]}>{i18n.t('logout')}</Text>
-                        <MaterialIcons name="logout" size={16} color={currentColors.tint} />
+                        <Text style={[styles.itemBtnText, { color: currentColors.tint, marginHorizontal: 8 }]}>
+                            {i18n.t('logout')}
+                        </Text>
+                        <MaterialIcons
+                            name="logout"
+                            size={16}
+                            color={currentColors.tint}
+                            style={{ transform: [{ scaleX: isRTL ? -1 : 1 }] }}
+                        />
+
                     </TouchableOpacity>
+
                 </View>
                 {/** <View style={styles.padt}>
                     <TouchableOpacity style={[styles.btn, { backgroundColor: currentColors.button }]}>
@@ -160,16 +192,16 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 10 },
         shadowOpacity: 0.1,
         shadowRadius: 10,
-        elevation: 5, 
+        elevation: 5,
     },
     profilePicWrapper: {
-        position: 'relative', 
+        position: 'relative',
     },
     profilePic: {
         width: 150,
-    height: 150,
-    borderRadius: 75,
-    borderWidth: 3,
+        height: 150,
+        borderRadius: 75,
+        borderWidth: 3,
     },
     profilePicText: {
         fontWeight: 'bold',
@@ -177,14 +209,21 @@ const styles = StyleSheet.create({
     form: {
         width: '100%',
         paddingHorizontal: 16,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.2,
+        shadowRadius: 5,
+        elevation: 5,
     },
     input: {
-        flexDirection: 'row',
         justifyContent: 'space-between',
         paddingHorizontal: 16,
         paddingVertical: 20,
         borderRadius: 10,
         width: '100%',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.2,
+        shadowRadius: 5,
+        elevation: 5,
     },
     itemBtnText: {
         fontSize: 16,
@@ -208,21 +247,24 @@ const styles = StyleSheet.create({
         fontWeight: '500',
     },
     itemBtn: {
-        flexDirection: 'row',
         justifyContent: 'space-between',
         paddingHorizontal: 16,
         paddingVertical: 20,
-        borderRadius: 10
+        borderRadius: 10,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.2,
+        shadowRadius: 5,
+        elevation: 5,
     },
     changePicIcon: {
         position: 'absolute',
-        bottom: 10, 
-        right: 10, 
-        borderRadius: 20, 
-        padding: 5, 
+        bottom: 10,
+        right: 10,
+        borderRadius: 20,
+        padding: 5,
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.3,
         shadowRadius: 4,
-        elevation: 3, 
+        elevation: 3,
     }
 });
