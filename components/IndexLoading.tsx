@@ -41,14 +41,14 @@ export default function LoadingIndex() {
                         height: 200,
                     }}
                 />
-                
+
             </View>
 
             <View style={{
-                marginHorizontal: 15, flexDirection: isRTL ? 'row-reverse' : 'row', 
+                marginHorizontal: 15, flexDirection: isRTL ? 'row-reverse' : 'row',
                 marginTop: 30
             }}>
-                <View style={{alignItems: 'center', marginHorizontal: 5 }}>
+                <View style={{ alignItems: 'center', marginHorizontal: 5 }}>
                     <MotiView
                         from={{ opacity: 0.5 }}
                         animate={{ opacity: 1 }}
@@ -64,23 +64,7 @@ export default function LoadingIndex() {
                         }}
                     />
                 </View>
-                <View style={{alignItems: 'center', marginHorizontal: 5}}>
-                    <MotiView
-                        from={{ opacity: 0.5 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ loop: true, type: 'timing', duration: 1000 }}
-                        style={{
-                            width: 100,
-                                backgroundColor: currentColors.skeletonBase,
-                                marginBottom: 10,
-                                paddingHorizontal: 16,
-                                paddingVertical: 20,
-                                borderRadius: 8,
-                                height: 70,
-                        }}
-                    />
-                </View>
-                <View style={{alignItems: 'center', marginHorizontal: 5}}>
+                <View style={{ alignItems: 'center', marginHorizontal: 5 }}>
                     <MotiView
                         from={{ opacity: 0.5 }}
                         animate={{ opacity: 1 }}
@@ -96,10 +80,26 @@ export default function LoadingIndex() {
                         }}
                     />
                 </View>
-                
+                <View style={{ alignItems: 'center', marginHorizontal: 5 }}>
+                    <MotiView
+                        from={{ opacity: 0.5 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ loop: true, type: 'timing', duration: 1000 }}
+                        style={{
+                            width: 100,
+                            backgroundColor: currentColors.skeletonBase,
+                            marginBottom: 10,
+                            paddingHorizontal: 16,
+                            paddingVertical: 20,
+                            borderRadius: 8,
+                            height: 70,
+                        }}
+                    />
+                </View>
+
             </View>
 
-            <View style={{ padding: 10, marginLeft: isRTL? 0:5,marginRight: isRTL? 5:0 }}>
+            <View style={{ padding: 10, marginLeft: isRTL ? 0 : 5, marginRight: isRTL ? 5 : 0 }}>
                 <MotiView
                     from={{ opacity: 0.5 }}
                     animate={{ opacity: 1 }}
@@ -107,7 +107,7 @@ export default function LoadingIndex() {
                     style={{
                         width: '45%',
                         backgroundColor: currentColors.skeletonBase,
-                        alignSelf: isRTL? 'flex-end' :'flex-start',
+                        alignSelf: isRTL ? 'flex-end' : 'flex-start',
                         marginBottom: 10,
                         paddingHorizontal: 16,
                         paddingVertical: 20,
@@ -122,7 +122,7 @@ export default function LoadingIndex() {
                     style={{
                         width: 200,
                         backgroundColor: currentColors.skeletonBase,
-                        alignSelf: isRTL? 'flex-end' :'flex-start',
+                        alignSelf: isRTL ? 'flex-end' : 'flex-start',
                         marginBottom: 10,
                         paddingHorizontal: 16,
                         paddingVertical: 20,

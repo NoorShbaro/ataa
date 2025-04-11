@@ -107,7 +107,14 @@ export default function Signup() {
                                 value={password}
                                 onChangeText={setPassword}
                             />
-                            <TouchableOpacity onPress={() => setPasswordVisible(!passwordVisible)} style={[styles.eyeIcon, { right: isRTL ? 0 : 16, left: isRTL ? 16 : 0 }]}>
+                            <TouchableOpacity
+                                onPress={() => setPasswordVisible(!passwordVisible)}
+                                style={[
+                                    styles.eyeIcon,
+                                    isRTL ? { left: 16 } : { right: 16 }
+                                ]}
+                            >
+
                                 <MaterialIcons
                                     name={passwordVisible ? 'visibility' : 'visibility-off'}
                                     size={24}
