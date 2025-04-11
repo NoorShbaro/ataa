@@ -23,7 +23,7 @@ export default function Language() {
         <TouchableOpacity
           style={[
             styles.itemBtn,
-            { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue, flexDirection: isRTL? 'row-reverse': 'row', },
+            { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue, flexDirection: isRTL ? 'row-reverse' : 'row', },
             { borderBottomColor: currentColors.background },
           ]}
           onPress={() => changeLanguage('en')}
@@ -43,7 +43,7 @@ export default function Language() {
         <TouchableOpacity
           style={[
             styles.itemBtn,
-            { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue, flexDirection: isRTL? 'row-reverse': 'row', },
+            { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue, flexDirection: isRTL ? 'row-reverse' : 'row', },
             { borderBottomColor: currentColors.background },
           ]}
           onPress={() => changeLanguage('ar')}

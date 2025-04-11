@@ -34,7 +34,7 @@ const Header = ({ title }: HeaderProps) => {
           style={[styles.backButton, { left: isRTL ? 'auto' : 16, right: isRTL ? 16 : 'auto' }]}
         >
           <MaterialIcons
-            name= {isRTL ? "arrow-forward-ios": "arrow-back-ios"}
+            name={isRTL ? "arrow-forward-ios" : "arrow-back-ios"}
             size={24}
             color={currentColors.mainColor}
           />

@@ -80,7 +80,7 @@ export default function LatestCampaign() {
                         {item.end_date}
                     </Text>
                     {/* Progress Bar */}
-                    <View style={{ margin: 10, direction: isRTL? 'rtl': 'ltr' }}>
+                    <View style={{ margin: 10, direction: isRTL ? 'rtl' : 'ltr' }}>
                         <ProgressBar
                             percentage={item.progress.percentage}
                             raised={parseFloat(item.progress.raised)}

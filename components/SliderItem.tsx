@@ -80,12 +80,12 @@ const SliderItem = ({ slideItem, index, scrollX }: Props) => {
         <Animated.View style={[styles.itemWrapper, rnStyle]} key={slideItem.id}>
             <Image source={imageUrl} style={[styles.image, { shadowColor: currentColors.calmBlue }]} />
             <LinearGradient colors={["transparent", currentColors.calmBlue]} style={[styles.background,]}>
-                <View style={[styles.contentWrapper,{flexDirection: isRTL? 'row-reverse': 'row'}]}>
+                <View style={[styles.contentWrapper, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
 
                     <Text style={[styles.title, { color: currentColors.white }]} numberOfLines={2}>{slideItem.title}</Text>
 
 
-                    <View style={{ alignItems: 'center', justifyContent: 'center'}}>
+                    <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                         <TouchableOpacity
                             onPress={() => router.push(`/campaign/${slideItem.id}`)}
                             style={[
@@ -154,10 +154,10 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         borderRadius: 10,
         marginTop: 10,
-      },
-      buttonText: {
+    },
+    buttonText: {
         textAlign: 'center',
         fontWeight: 'bold',
         fontSize: 16,
-      },
+    },
 })

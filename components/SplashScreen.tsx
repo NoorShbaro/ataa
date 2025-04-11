@@ -39,7 +39,7 @@ const CustomSplashScreen: React.FC<CustomSplashScreenProps> = ({ onFinish }) => 
         style={styles.animation}
       />
       <View style={styles.imageContainer}>
-        <Image 
+        <Image
           source={require('@/assets/images/ATAAD.png')}
           style={styles.image}
           resizeMode="contain"
@@ -55,11 +55,11 @@ const styles = StyleSheet.create({
     top: 0, left: 0, right: 0, bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
-    zIndex: 10, 
+    zIndex: 10,
   },
   animation: {
     height: height + 100,
-    width: width +100,
+    width: width + 100,
     resizeMode: 'cover',
   },
   imageContainer: {
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    width: width - 30, 
+    width: width - 30,
     height: 200,
   }
 });

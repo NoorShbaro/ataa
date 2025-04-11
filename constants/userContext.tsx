@@ -60,7 +60,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const checkAuth = async () => {
         const storedAccessToken = await SecureStore.getItemAsync('accessToken');
         if (!storedAccessToken) return;
-    
+
         try {
             await apiClient.get("/donor/me", {
                 headers: { Authorization: `Bearer ${storedAccessToken}` },

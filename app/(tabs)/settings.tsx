@@ -50,7 +50,7 @@ export default function Settings() {
             <Text style={[styles.itemBtnText, { color: currentColors.mainColor }]}>
               {i18n.t('profile')}
             </Text>
-            <MaterialIcons name= {isRTL?"arrow-back-ios":"arrow-forward-ios" } size={16} color={currentColors.mainColor} />
+            <MaterialIcons name={isRTL ? "arrow-back-ios" : "arrow-forward-ios"} size={16} color={currentColors.mainColor} />
           </TouchableOpacity>
 
 
@@ -62,7 +62,7 @@ export default function Settings() {
             <Text style={[styles.itemBtnText, { color: currentColors.mainColor }]}>
               {i18n.t('about')}
             </Text>
-            <MaterialIcons name= {isRTL?"arrow-back-ios":"arrow-forward-ios" }
+            <MaterialIcons name={isRTL ? "arrow-back-ios" : "arrow-forward-ios"}
               size={16}
               color={currentColors.mainColor}
             />
@@ -78,7 +78,7 @@ export default function Settings() {
               {i18n.t('privacy')}
             </Text>
             <MaterialIcons
-               name= {isRTL?"arrow-back-ios":"arrow-forward-ios" }
+              name={isRTL ? "arrow-back-ios" : "arrow-forward-ios"}
               size={16}
               color={currentColors.mainColor}
             />
@@ -95,7 +95,7 @@ export default function Settings() {
               {i18n.t('termsOfUse')}
             </Text>
             <MaterialIcons
-               name= {isRTL?"arrow-back-ios":"arrow-forward-ios" }
+              name={isRTL ? "arrow-back-ios" : "arrow-forward-ios"}
               size={16}
               color={currentColors.mainColor}
             />
@@ -115,7 +115,7 @@ export default function Settings() {
             <Text style={[styles.itemBtnText, { color: currentColors.mainColor }]}>
               {i18n.t('history')}
             </Text>
-            <MaterialIcons  name= {isRTL?"arrow-back-ios":"arrow-forward-ios" }
+            <MaterialIcons name={isRTL ? "arrow-back-ios" : "arrow-forward-ios"}
               size={16}
               color={currentColors.mainColor}
             />
@@ -129,7 +129,7 @@ export default function Settings() {
             <Text style={[styles.itemBtnText, { color: currentColors.mainColor }]}>
               {i18n.t('languages')}
             </Text>
-            <MaterialIcons  name= {isRTL?"arrow-back-ios":"arrow-forward-ios" }
+            <MaterialIcons name={isRTL ? "arrow-back-ios" : "arrow-forward-ios"}
               size={16}
               color={currentColors.mainColor}
             />

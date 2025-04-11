@@ -9,11 +9,11 @@ export default function MainDonation() {
   const { isDarkMode } = useTheme();
   const currentColors = isDarkMode ? DarkColors : LightColors;
 
-  const {i18n} = useLanguage();
+  const { i18n } = useLanguage();
 
   return (
     <View style={[styles.container, { backgroundColor: currentColors.background }]}>
-       <MainHeader />
+      <MainHeader />
       <View style={[styles.view, { backgroundColor: currentColors.background }]}>
         <Text style={{ color: currentColors.mainColor }}>
           {i18n.t('mainDonation')}

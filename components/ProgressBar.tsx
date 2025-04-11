@@ -18,8 +18,8 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ percentage }) => {
     return (
         <View style={styles.container}>
             <Text style={[
-                styles.percentage, 
-                { 
+                styles.percentage,
+                {
                     color: currentColors.mainColor,
                     alignSelf: isRTL ? 'flex-start' : 'flex-end',
                     fontSize: 14,
@@ -29,16 +29,16 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ percentage }) => {
                 {percentage}%
             </Text>
             <View style={[
-                styles.progressBarBackground, 
-                { 
+                styles.progressBarBackground,
+                {
                     backgroundColor: currentColors.progressBarBackground,
                     flexDirection: isRTL ? 'row-reverse' : 'row'
                 }
             ]}>
                 <View style={[
-                    styles.progressBarFill, 
-                    { 
-                        width: `${percentage}%`, 
+                    styles.progressBarFill,
+                    {
+                        width: `${percentage}%`,
                         backgroundColor: currentColors.calmBlue
                     }
                 ]} />

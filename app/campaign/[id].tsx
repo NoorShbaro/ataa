@@ -119,24 +119,24 @@ export default function Donate() {
               <Card style={[styles.card, { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue }]}>
                 <Card.Content>
                   <Image source={imageUrl} style={styles.image} />
-                  <Text style={[styles.title, { color: currentColors.mainColor, alignSelf: isRTL? 'flex-end': 'flex-start' }]}>{campaign?.title}</Text>
-                  <Text style={[styles.description, { color: currentColors.mainColor, alignSelf: isRTL? 'flex-end': 'flex-start' }]}>{campaign?.description}</Text>
-                  <Text style={[styles.date, { color: currentColors.darkGrey, alignSelf: isRTL? 'flex-start': 'flex-end' }]}>
+                  <Text style={[styles.title, { color: currentColors.mainColor, alignSelf: isRTL ? 'flex-end' : 'flex-start' }]}>{campaign?.title}</Text>
+                  <Text style={[styles.description, { color: currentColors.mainColor, alignSelf: isRTL ? 'flex-end' : 'flex-start' }]}>{campaign?.description}</Text>
+                  <Text style={[styles.date, { color: currentColors.darkGrey, alignSelf: isRTL ? 'flex-start' : 'flex-end' }]}>
                     {i18n.t('availableTill')}: {campaign?.end_date}
                   </Text>
-                  <View style={[styles.goalContainer, { backgroundColor: currentColors.mainColorWithOpacity, flexDirection: isRTL ? 'row-reverse' : 'row',  }]}>
+                  <View style={[styles.goalContainer, { backgroundColor: currentColors.mainColorWithOpacity, flexDirection: isRTL ? 'row-reverse' : 'row', }]}>
                     <Text style={[styles.goalLabel, { color: currentColors.darkGrey }]}>{i18n.t('goal')}:</Text>
                     <Text style={[styles.goalAmount, { color: currentColors.mainColor }]}>
                       {parseFloat(campaign?.goal_amount ?? '0')}$
                     </Text>
                   </View>
-                  <View style={{direction: isRTL? 'rtl': 'ltr'}}>
-                  <ProgressBar
-                    percentage={campaign?.progress.percentage ?? 0}
-                    raised={parseFloat(campaign?.progress.raised ?? '0')}
-                    remaining={campaign?.progress.remaining ?? 0}
-                    goal={parseFloat(campaign?.goal_amount ?? '0')}
-                  />
+                  <View style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
+                    <ProgressBar
+                      percentage={campaign?.progress.percentage ?? 0}
+                      raised={parseFloat(campaign?.progress.raised ?? '0')}
+                      remaining={campaign?.progress.remaining ?? 0}
+                      goal={parseFloat(campaign?.goal_amount ?? '0')}
+                    />
                   </View>
                   <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', justifyContent: 'space-between', marginBottom: 20 }}>
                     <Text style={[styles.percentage, { color: currentColors.mainColor }]}>{i18n.t('collected')}: {campaign?.progress.raised}$</Text>
@@ -183,9 +183,9 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     padding: 5,
     shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.2,
-        shadowRadius: 5,
-        elevation: 5,
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
   },
   title: {
     fontSize: 22,

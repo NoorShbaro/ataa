@@ -15,7 +15,7 @@ export default function Campaigns() {
   return (
     <View style={[styles.container, { backgroundColor: currentColors.background }]}>
       <MainHeader />
-      <CampaignList/>
+      <CampaignList />
     </View>
   );
 }

@@ -3,11 +3,11 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 export const ThemeContext = createContext({
   isDarkMode: false,
-  toggleTheme: () => {},
+  toggleTheme: () => { },
 });
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isDarkMode, setIsDarkMode] = useState(false);  
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
     const getStoredTheme = async () => {

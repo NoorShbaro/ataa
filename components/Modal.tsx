@@ -39,8 +39,8 @@ const AmountModal: React.FC<AmountModalProps> = ({ isVisible, accessToken, campa
             });
 
             console.log("Donation Successful:", response.data);
-            setAmount(""); 
-            setShowSuccess(true); 
+            setAmount("");
+            setShowSuccess(true);
         } catch (err: any) {
             console.error("Error:", err.message);
         } finally {
@@ -58,7 +58,7 @@ const AmountModal: React.FC<AmountModalProps> = ({ isVisible, accessToken, campa
                             autoPlay
                             loop={false}
                             style={{ width: 100, height: 100 }}
-                            onAnimationFinish={onClose} 
+                            onAnimationFinish={onClose}
                         />
                         <Text style={[styles.successText, { color: currentColors.mainColor }]}>
                             {i18n.t("donationReceived")}
@@ -66,7 +66,7 @@ const AmountModal: React.FC<AmountModalProps> = ({ isVisible, accessToken, campa
                     </View>
                 ) : (
                     <>
-                        <Text style={[styles.title, { color: currentColors.mainColor, textAlign: isRTL? 'right': 'left' }]}>
+                        <Text style={[styles.title, { color: currentColors.mainColor, textAlign: isRTL ? 'right' : 'left' }]}>
                             {i18n.t("enterAmount")}
                         </Text>
                         <TextInput

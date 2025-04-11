@@ -10,7 +10,7 @@ export default function About() {
   const { isDarkMode } = useTheme();
   const currentColors = isDarkMode ? DarkColors : LightColors;
 
-  const {i18n} = useLanguage();
+  const { i18n } = useLanguage();
 
   return (
     <View style={[styles.container, { backgroundColor: currentColors.background }]}>

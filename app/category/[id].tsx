@@ -76,18 +76,18 @@ export default function CampaignList() {
 
         return (
             <TouchableOpacity onPress={() => router.push(`/campaign/${item.id}`)} style={{ marginHorizontal: 10 }}>
-                
+
                 <View style={[styles.card, { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue }]}>
                     <View style={{ margin: 10, marginVertical: 10 }}>
                         <Image source={imageUrl} style={styles.image} />
-                        <View style={{ 
-                            flexDirection: isRTL ? 'row-reverse' : 'row', 
+                        <View style={{
+                            flexDirection: isRTL ? 'row-reverse' : 'row',
                             justifyContent: 'space-between',
-                            alignItems: 'center' 
+                            alignItems: 'center'
                         }}>
                             <Text style={[
-                                styles.campaignTitle, 
-                                { 
+                                styles.campaignTitle,
+                                {
                                     color: currentColors.mainColor,
                                     textAlign: isRTL ? 'right' : 'left',
                                     writingDirection: isRTL ? 'rtl' : 'ltr'
@@ -96,8 +96,8 @@ export default function CampaignList() {
                                 {item.title}
                             </Text>
                             <Text style={[
-                                styles.date, 
-                                { 
+                                styles.date,
+                                {
                                     color: currentColors.darkGrey,
                                     textAlign: isRTL ? 'left' : 'right',
                                     writingDirection: isRTL ? 'rtl' : 'ltr'
@@ -106,23 +106,23 @@ export default function CampaignList() {
                                 {i18n.t('availableTill')}: {item.end_date}
                             </Text>
                         </View>
-    
+
                         {/* Progress Bar - remains unchanged */}
                         <ProgressBar
                             percentage={item.progress.percentage}
                             raised={parseFloat(item.progress.raised)}
                             remaining={item.progress.remaining}
-                            goal={parseFloat(item.goal_amount)} 
+                            goal={parseFloat(item.goal_amount)}
                         />
-    
-                        <View style={{ 
-                            flexDirection: isRTL ? 'row-reverse' : 'row', 
+
+                        <View style={{
+                            flexDirection: isRTL ? 'row-reverse' : 'row',
                             justifyContent: 'space-between',
                             marginTop: 5
                         }}>
                             <Text style={[
-                                styles.percentage, 
-                                { 
+                                styles.percentage,
+                                {
                                     color: currentColors.mainColor,
                                     textAlign: isRTL ? 'right' : 'left',
                                     writingDirection: isRTL ? 'rtl' : 'ltr'
@@ -131,8 +131,8 @@ export default function CampaignList() {
                                 {i18n.t('collected')}: {item.progress.raised}$
                             </Text>
                             <Text style={[
-                                styles.percentage, 
-                                { 
+                                styles.percentage,
+                                {
                                     color: currentColors.mainColor,
                                     textAlign: isRTL ? 'left' : 'right',
                                     writingDirection: isRTL ? 'ltr' : 'rtl'
@@ -143,7 +143,7 @@ export default function CampaignList() {
                         </View>
                     </View>
                 </View>
-        
+
             </TouchableOpacity>
         );
     };
@@ -186,12 +186,12 @@ export default function CampaignList() {
                     onRefresh={onRefresh}
                     refreshControl={
                         <RefreshControl
-                          refreshing={isRefreshing}
-                          onRefresh={onRefresh}
-                          colors={[currentColors.calmBlue]} // Android
-                          tintColor={currentColors.calmBlue} // iOS
+                            refreshing={isRefreshing}
+                            onRefresh={onRefresh}
+                            colors={[currentColors.calmBlue]} // Android
+                            tintColor={currentColors.calmBlue} // iOS
                         />
-                      }
+                    }
                     ListEmptyComponent={() => (
                         error ? (
                             <Text style={styles.errorText}>{error}</Text>

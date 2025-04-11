@@ -14,7 +14,7 @@ export default function Privacy() {
   return (
     <View style={[styles.container, { backgroundColor: currentColors.background }]}>
       <Stack.Screen options={{ headerShown: false }} />
-      
+
       <Header title={i18n.t('privacy')} />
 
       <View style={styles.content}>

@@ -44,10 +44,10 @@ const Categories = () => {
     };
 
     return (
-        <View style={[styles.container,{ direction: isRTL? 'rtl': 'ltr'}]}>
+        <View style={[styles.container, { direction: isRTL ? 'rtl' : 'ltr' }]}>
             {loading ? (
                 <View style={{ flexDirection: 'row', marginHorizontal: 10 }}>
-                    <View style={[styles.loading, {marginRight: isRTL? 0: 10, marginLeft:isRTL? 10:0}]}>
+                    <View style={[styles.loading, { marginRight: isRTL ? 0 : 10, marginLeft: isRTL ? 10 : 0 }]}>
                         <MotiView
                             from={{ opacity: 0.5 }}
                             animate={{ opacity: 1 }}
@@ -63,7 +63,7 @@ const Categories = () => {
                             }}
                         />
                     </View>
-                    <View style={[styles.loading, {marginRight: isRTL? 0: 10, marginLeft:isRTL? 10:0}]}>
+                    <View style={[styles.loading, { marginRight: isRTL ? 0 : 10, marginLeft: isRTL ? 10 : 0 }]}>
                         <MotiView
                             from={{ opacity: 0.5 }}
                             animate={{ opacity: 1 }}
@@ -79,7 +79,7 @@ const Categories = () => {
                             }}
                         />
                     </View>
-                    <View style={[styles.loading, {marginRight: isRTL? 0: 10, marginLeft:isRTL? 10:0}]}>
+                    <View style={[styles.loading, { marginRight: isRTL ? 0 : 10, marginLeft: isRTL ? 10 : 0 }]}>
                         <MotiView
                             from={{ opacity: 0.5 }}
                             animate={{ opacity: 1 }}
@@ -102,7 +102,7 @@ const Categories = () => {
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     contentContainerStyle={[styles.itemsWrapper,
-                        {flexDirection: isRTL ? 'row-reverse' : 'row', direction: isRTL? 'rtl': 'ltr'}]}
+                    { flexDirection: isRTL ? 'row-reverse' : 'row', direction: isRTL ? 'rtl' : 'ltr' }]}
                     // Manually scroll to end for RTL
                     onContentSizeChange={() => {
                         if (isRTL && scrollRef.current) {
@@ -110,7 +110,7 @@ const Categories = () => {
                         }
                     }}
                 >
-                    {(isRTL? [...categories].reverse() :categories).map((category, index) => {
+                    {(isRTL ? [...categories].reverse() : categories).map((category, index) => {
                         const imageUrl = category?.icon
                             ? { uri: `https://be.donation.matrixvert.com/storage/${category.icon}` }
                             : null;

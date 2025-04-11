@@ -5,7 +5,7 @@ import { Colors } from '@/constants/Colors';
 
 type Props = {
   setSearchQuery: Function,
-  onSubmitSearch: () => void 
+  onSubmitSearch: () => void
 };
 
 const SearchBar = ({ setSearchQuery, onSubmitSearch }: Props) => {

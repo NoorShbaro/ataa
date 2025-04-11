@@ -139,7 +139,7 @@ const CampaignSlider = ({ campaigns }: Props) => {
                   setIsAutoPlay(true);
                 }}
               />
-              
+
             </>)}
         </View>
       </View>

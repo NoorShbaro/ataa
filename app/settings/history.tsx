@@ -61,18 +61,18 @@ export default function Notification() {
 
   const renderItem = ({ item }: { item: History }) => (
     <View style={[styles.card, { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue }]}>
-      <View style={{ flexDirection: isRTL? 'row-reverse':'row', justifyContent: 'space-between', }}>
+      <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', justifyContent: 'space-between', }}>
         <Text style={[styles.campaignText, { color: currentColors.mainColor }]}>{item.campaign_name}</Text>
         <Text style={[styles.date, { color: currentColors.darkGrey }]}>{item.donated_at}</Text>
       </View>
 
-      <Text style={[styles.amountText, { color: currentColors.button, textAlign: isRTL? 'right': 'left' }]}>${item.amount}</Text>
-      <Text style={[styles.status, { color: item.status === 'pending' ? currentColors.mustard : currentColors.green, textAlign: isRTL? 'right': 'left' }]}>
+      <Text style={[styles.amountText, { color: currentColors.button, textAlign: isRTL ? 'right' : 'left' }]}>${item.amount}</Text>
+      <Text style={[styles.status, { color: item.status === 'pending' ? currentColors.mustard : currentColors.green, textAlign: isRTL ? 'right' : 'left' }]}>
         {item.status}
       </Text>
 
       {item.status === 'pending' && (
-        <Text style={[styles.note, { color: currentColors.darkGrey, marginTop: 5, textAlign: isRTL? 'right': 'left' }]}>
+        <Text style={[styles.note, { color: currentColors.darkGrey, marginTop: 5, textAlign: isRTL ? 'right' : 'left' }]}>
           {i18n.t('contact')}
         </Text>
       )}
