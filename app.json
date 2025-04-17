@@ -2,7 +2,7 @@
   "expo": {
     "name": "Ataa",
     "slug": "Ataa",
-    "version": "1.0.1",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./assets/images/logo.png",
     "backgroundColor": "#070420",
@@ -16,6 +16,7 @@
     "newArchEnabled": true,
     "extra": {
       "supportsRTL": true,
+      "forceRTL": false,
       "router": {
         "origin": false
       },

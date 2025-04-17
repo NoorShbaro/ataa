@@ -98,28 +98,33 @@ const Categories = () => {
                 </View>
             ) : categories.length > 0 ? (
                 <ScrollView
-                    ref={scrollRef}
                     horizontal
+                    ref={scrollRef}
                     showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={[styles.itemsWrapper,
-                    { flexDirection: isRTL ? 'row-reverse' : 'row', direction: isRTL ? 'rtl' : 'ltr' }]}
-                    // Manually scroll to end for RTL
-                    onContentSizeChange={() => {
-                        if (isRTL && scrollRef.current) {
-                            scrollRef.current.scrollToEnd({ animated: false });
-                        }
-                    }}
+                    contentContainerStyle={[
+                        styles.itemsWrapper,
+                        {
+                            //flexDirection: isRTL ? 'row-reverse' : 'row', // Reverse layout direction
+                            justifyContent: 'flex-start'
+                        },
+                    ]}
+                    
                 >
-                    {(isRTL ? [...categories].reverse() : categories).map((category, index) => {
+                    {categories.map((category, index) => {
                         const imageUrl = category?.icon
-                            ? { uri: `https://be.donation.matrixvert.com/storage/${category.icon}` }
+                            ? { uri: `https://be.donation.matrixvert.com/${category.icon}` }
                             : null;
 
                         return (
                             <TouchableOpacity
                                 key={category.id}
-                                ref={(el) => (itemRef.current[index] = el)}
-                                style={[styles.item, { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue }]}
+                                style={[
+                                    styles.item,
+                                    {
+                                        backgroundColor: currentColors.cardBackground,
+                                        shadowColor: currentColors.calmBlue
+                                    },
+                                ]}
                                 onPress={() => router.push(`/category/${category.id}`)}
                             >
                                 <View style={styles.categoryContainer}>
@@ -128,12 +133,20 @@ const Categories = () => {
                                     ) : (
                                         <FontAwesome name="folder" size={24} color={currentColors.mainColor} />
                                     )}
-                                    <Text style={[styles.itemText, { color: currentColors.mainColor }]}>
+                                    <Text
+                                        style={[
+                                            styles.itemText,
+                                            {
+                                                color: currentColors.mainColor,
+                                                textAlign: isRTL ? 'right' : 'left', // Adjust text alignment for RTL
+                                                writingDirection: isRTL ? 'rtl' : 'ltr', // Enforce proper writing direction
+                                            },
+                                        ]}
+                                    >
                                         {category.name}
                                     </Text>
                                 </View>
                             </TouchableOpacity>
-
                         );
                     })}
                 </ScrollView>

@@ -42,7 +42,7 @@ export default function LatestCampaign() {
 
     const [campaigns, setCampaigns] = useState<Campaigns[]>([]);
     const [loading, setLoading] = useState(true);
-    const scrollViewRef = useRef<FlatList>(null);
+    const scrollRef = useRef<FlatList>(null);
 
     useEffect(() => {
         fetchCampaigns();
@@ -60,6 +60,7 @@ export default function LatestCampaign() {
         } finally {
             setLoading(false);
         }
+
     };
 
     const renderItem = ({ item }: { item: Campaigns }) => {
@@ -71,21 +72,40 @@ export default function LatestCampaign() {
         //const remaining = item.goal_amount - item.amount_raised;
 
         return (
-            <TouchableOpacity onPress={() => router.push(`/campaign/${item.id}`)} style={{ marginBottom: 50 }}>
-                <View style={[styles.card, { backgroundColor: currentColors.cardBackground, borderColor: currentColors.button, shadowColor: currentColors.calmBlue }]}>
+            <TouchableOpacity
+                onPress={() => router.push(`/campaign/${item.id}`)}
+                style={{
+                    marginBottom: 10,
+                    marginStart: isRTL ? 10 : 0, // Dynamically set spacing for RTL
+                    marginEnd: isRTL ? 0 : 10,
+                }}
+            >
+                <View
+                    style={[
+                        styles.card,
+                        {
+                            backgroundColor: currentColors.cardBackground,
+                            borderColor: currentColors.button,
+                            shadowColor: currentColors.calmBlue,
+                            marginStart: isRTL ? 10 : 0, // Adjust card layout for RTL
+                            marginEnd: isRTL ? 0 : 10,
+                        },
+                    ]}
+                >
                     <Image source={imageUrl} style={styles.image} />
-                    <Text style={[styles.campaignTitle, { color: currentColors.mainColor }]}>{item.title}</Text>
-
+                    <Text style={[styles.campaignTitle, { color: currentColors.mainColor }]}>
+                        {item.title}
+                    </Text>
                     <Text style={[styles.date, { color: currentColors.darkGrey }]}>
                         {item.end_date}
                     </Text>
-                    {/* Progress Bar */}
                     <View style={{ margin: 10, direction: isRTL ? 'rtl' : 'ltr' }}>
                         <ProgressBar
                             percentage={item.progress.percentage}
                             raised={parseFloat(item.progress.raised)}
                             remaining={item.progress.remaining}
-                            goal={parseFloat(item.goal_amount)} />
+                            goal={parseFloat(item.goal_amount)}
+                        />
                     </View>
                 </View>
             </TouchableOpacity>
@@ -111,6 +131,7 @@ export default function LatestCampaign() {
                             paddingVertical: 20,
                             borderRadius: 10,
                             height: 40,
+                            marginHorizontal: 10
                         }}
                     />
                     <MotiView
@@ -126,6 +147,7 @@ export default function LatestCampaign() {
                             paddingVertical: 20,
                             borderRadius: 10,
                             height: 250,
+                            marginHorizontal: 10
                         }}
                     />
                 </>
@@ -133,24 +155,35 @@ export default function LatestCampaign() {
                 <Text style={[styles.noCampaignText, { color: currentColors.mainColor }]}>{i18n.t('noCampaign')}</Text>
             ) : (
                 <>
-                    <Text style={[styles.title, { color: currentColors.mainColor, textAlign: isRTL ? 'right' : 'left', marginLeft: isRTL ? 0 : 10, marginRight: isRTL ? 10 : 0 }]}>
+                    <Text style={[styles.title,
+                    {
+                        color: currentColors.mainColor,
+                        textAlign: isRTL ? 'right' : 'left',
+                        marginStart: isRTL ? 0 : 10,
+                        marginEnd: isRTL ? 10 : 0
+                    }]}>
                         {i18n.t('latestCampaign')}</Text>
                     <FlatList
                         data={campaigns}
+                        ref={scrollRef}
                         keyExtractor={(item) => item.id.toString()}
                         renderItem={renderItem}
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
                         contentContainerStyle={[
                             styles.listContainer,
                             {
-                                flexDirection: isRTL ? 'row-reverse' : 'row',
+                                //flexDirection: isRTL ? 'row-reverse' : 'row',
+                                justifyContent: 'flex-start'
                             },
                         ]}
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        inverted={isRTL} // 👈 This is the trick!
-                        ref={scrollViewRef}
+                        // onContentSizeChange={() => {
+                        //    if (isRTL && scrollRef.current) {
+                        //        scrollRef.current.scrollToEnd({ animated: false }); // Auto-scroll to end for RTL
+                        //    }
+                        // }}
+                        inverted={isRTL}
                     />
-
                 </>
             )}
         </View>

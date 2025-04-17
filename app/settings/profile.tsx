@@ -59,7 +59,7 @@ export default function Profile() {
 
             <View style={styles.content}>
                 {/* Profile Picture */}
-                <View style={[styles.profilePicContainer, { backgroundColor: currentColors.mainColorWithOpacity, shadowColor: currentColors.black, }]}>
+                <View style={[styles.profilePicContainer, { backgroundColor: currentColors.mainColorWithOpacity, shadowColor: currentColors.calmBlue, }]}>
                     {profileImage ? (
                         <TouchableOpacity
                             onPress={() => console.log('Change Profile Picture')}
@@ -70,7 +70,7 @@ export default function Profile() {
                                 name="camera"
                                 size={30}
                                 color={currentColors.mainColor}
-                                style={[styles.changePicIcon, { backgroundColor: currentColors.background, shadowColor: currentColors.black }]}
+                                style={[styles.changePicIcon, { backgroundColor: currentColors.background, shadowColor: currentColors.calmBlue }]}
                             />
                         </TouchableOpacity>
                     ) : (
@@ -85,8 +85,8 @@ export default function Profile() {
                             <MaterialIcons
                                 name="camera"
                                 size={30}
-                                color={currentColors.mainColor}
-                                style={[styles.changePicIcon, { backgroundColor: currentColors.background, shadowColor: currentColors.black }]}
+                                color={currentColors.calmBlue}
+                                style={[styles.changePicIcon, { backgroundColor: currentColors.background, shadowColor: currentColors.calmBlue }]}
                             />
                         </TouchableOpacity>
                     )}
@@ -100,8 +100,6 @@ export default function Profile() {
                                 color: currentColors.mainColor,
                                 backgroundColor: currentColors.cardBackground,
                                 shadowColor: currentColors.calmBlue,
-                                direction: isRTL ? 'rtl' : 'ltr',
-                                flexDirection: isRTL ? 'row-reverse' : 'row'
                             }]}
                             placeholder={auth ? auth.name : ""}
                             placeholderTextColor={currentColors.mainColor}
@@ -114,8 +112,6 @@ export default function Profile() {
                                 color: currentColors.mainColor,
                                 backgroundColor: currentColors.cardBackground,
                                 shadowColor: currentColors.calmBlue,
-                                direction: isRTL ? 'rtl' : 'ltr',
-                                flexDirection: isRTL ? 'row-reverse' : 'row'
                             }]}
                             placeholder={auth ? auth.email : ""}
                             placeholderTextColor={currentColors.mainColor}
@@ -142,7 +138,7 @@ export default function Profile() {
                             styles.itemBtn,
                             {
                                 backgroundColor: currentColors.cardBackground,
-                                shadowColor: currentColors.calmBlue,
+                                shadowColor: currentColors.tint,
                                 flexDirection: isRTL ? 'row-reverse' : 'row',
                                 alignItems: 'center',
                             },
@@ -189,9 +185,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 50,
-        shadowOffset: { width: 0, height: 10 },
-        shadowOpacity: 0.1,
-        shadowRadius: 10,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.2,
+        shadowRadius: 5,
         elevation: 5,
     },
     profilePicWrapper: {

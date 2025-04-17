@@ -1,7 +1,8 @@
 import { createContext, useState, useEffect, useContext } from 'react';
-import { I18nManager } from 'react-native';
+import { I18nManager, Platform, NativeModules, Alert, AppState } from 'react-native'; // Added missing imports
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { I18n } from 'i18n-js';
+import * as Updates from 'expo-updates';
 import * as Localization from 'expo-localization';
 import en from '@/locale/en/translation.json';
 import ar from '@/locale/ar/translation.json';
@@ -11,11 +12,10 @@ const LanguageContext = createContext();
 // Translations
 const translations = { en, ar };
 const i18n = new I18n(translations);
-const deviceLocales = Localization.getLocales();
-i18n.locale = deviceLocales[0]?.languageCode || 'en';
 i18n.enableFallback = true;
 
 const LANGUAGE_KEY = 'app_language';
+const RTL_KEY = 'app_rtl';
 
 export const useLanguage = () => {
   const context = useContext(LanguageContext);
@@ -27,63 +27,77 @@ export const useLanguage = () => {
 
 export const LanguageProvider = ({ children }) => {
   const [language, setLanguage] = useState('en');
-  const [isRTL, setIsRTL] = useState(false);
 
-  useEffect(() => {
-    // Load stored language on app load
-    const loadLanguage = async () => {
-      const storedLanguage = await AsyncStorage.getItem(LANGUAGE_KEY);
-      const lang = storedLanguage || deviceLocales[0]?.languageCode || 'en';
-      const rtl = lang === 'ar';
+  const [isRTL, setIsRTL] = useState(false); // <-- now dynamic
 
-      setLanguage(lang);
-      setIsRTL(rtl);
-      i18n.locale = lang;
-
-      // Force RTL layout if needed
-      if (I18nManager.isRTL !== rtl) {
-        I18nManager.forceRTL(rtl);
-        // You might need to restart your app here for changes to take effect
-        // Alternatively, you can reload the app's main component
-      }
-    };
-    loadLanguage();
-  }, []);
-
-  const changeLanguage = async (lang) => {
-    const rtl = lang === 'ar';
-
-    setLanguage(lang);
-    setIsRTL(rtl);
-    i18n.locale = lang;
-    await AsyncStorage.setItem(LANGUAGE_KEY, lang);
-
-    // Force RTL layout if needed
-    if (I18nManager.isRTL !== rtl) {
-      I18nManager.forceRTL(rtl);
-      // You might need to restart your app here for changes to take effect
-      // Alternatively, you can reload the app's main component
+  // 1. Enhanced RTL application with retries
+  const applyRTL = async (rtlValue) => {
+    try {
+      setIsRTL(rtlValue);
+      console.log('Applying RTL:', rtlValue);
+    } catch (error) {
+      console.error('Error applying RTL:', error);
+      setIsRTL(false);
     }
   };
 
-  const RTLWrapper = ({ children }) => {
-    const { isRTL } = useLanguage();
+  // 2. Load language and apply RTL on initial load
+  useEffect(() => {
+    const loadLanguage = async () => {
+      try {
+        const storedLanguage = await AsyncStorage.getItem(LANGUAGE_KEY);
+        const storedRTL = await AsyncStorage.getItem(RTL_KEY);
 
-    useEffect(() => {
-      if (I18nManager.isRTL !== isRTL) {
-        I18nManager.forceRTL(isRTL);
-        // Note: Some layout changes might still require a restart
+        const lang = storedLanguage || 'en';
+        const rtl = storedRTL !== null ? JSON.parse(storedRTL) : lang === 'ar';
+
+        i18n.locale = lang;
+        setLanguage(lang);
+        await applyRTL(rtl);
+      } catch (error) {
+        console.error('Error loading language:', error);
       }
-    }, [isRTL]);
+    };
 
-    return children;
+    loadLanguage();
+  }, []);
+
+  // 3. Re-apply RTL when app comes back to foreground
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', async (nextAppState) => {
+      if (nextAppState === 'active') {
+        const rtl = language === 'ar';
+        await applyRTL(rtl);
+      }
+    });
+
+    return () => subscription.remove();
+  }, [language]);
+
+  const changeLanguage = async (lang) => {
+    try {
+      console.log('Changing Language to:', lang); // Add this log
+      const rtl = lang === 'ar';
+      await AsyncStorage.setItem(LANGUAGE_KEY, lang);
+      await AsyncStorage.setItem(RTL_KEY, JSON.stringify(rtl));
+
+      i18n.locale = lang;
+      setLanguage(lang);
+      await applyRTL(rtl);
+
+      if (Platform.OS === 'android') {
+        setTimeout(() => {
+          Updates.reloadAsync();
+        }, 100);
+      }
+    } catch (error) {
+      console.error('Error changing language:', error);
+    }
   };
 
   return (
     <LanguageContext.Provider value={{ language, changeLanguage, i18n, isRTL }}>
-      <RTLWrapper>
-        {children}
-      </RTLWrapper>
+      {children}
     </LanguageContext.Provider>
   );
 };

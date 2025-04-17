@@ -42,6 +42,7 @@ export default function CampaignList() {
     const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
     const { isRTL } = useLanguage();
     const scrollViewRef = useRef<ScrollView>(null);
+    const reversedCategories = isRTL ? [...categories].reverse() : categories;
 
     const handleRefreshAll = async () => {
         setIsRefreshing(true);
@@ -97,7 +98,10 @@ export default function CampaignList() {
 
         return (
             <TouchableOpacity onPress={() => router.push(`/campaign/${item.id}`)}>
-                <View style={[styles.card, { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue }]}>
+                <View style={[styles.card, {
+                    backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue,
+                    //transform: [{ scaleX: isRTL ? -1 : 1 }]
+                }]}>
                     <View style={{ margin: 10, marginVertical: 10 }}>
                         <Image source={imageUrl} style={styles.image} />
                         <View style={{
@@ -178,7 +182,7 @@ export default function CampaignList() {
                 renderItem={renderCampaignItem}
                 contentContainerStyle={[
                     styles.listContainer,
-                    isRTL && { direction: 'rtl' } // RTL content direction
+                    isRTL && { direction: 'rtl' }
                 ]}
                 refreshing={isRefreshing}
                 onRefresh={handleRefreshAll}
@@ -222,17 +226,13 @@ export default function CampaignList() {
                                 showsHorizontalScrollIndicator={false}
                                 style={styles.scrollView}
                                 contentContainerStyle={{
-                                    flexDirection: isRTL ? 'row-reverse' : 'row'
+                                    //flexDirection: isRTL ? 'row-reverse' : 'row',
+                                    justifyContent: 'flex-start'
                                 }}
-                                // Manually scroll to end for RTL
                                 ref={scrollViewRef}
-                                onContentSizeChange={() => {
-                                    if (isRTL && scrollViewRef.current) {
-                                        scrollViewRef.current.scrollToEnd({ animated: false });
-                                    }
-                                }}
+                                
                             >
-                                {(isRTL ? [...categories].reverse() : categories).map((category) => (
+                                {categories.map((category) => (
                                     <TouchableOpacity
                                         key={category.id}
                                         style={[
@@ -241,8 +241,8 @@ export default function CampaignList() {
                                                 backgroundColor: selectedCategory === category.id
                                                     ? currentColors.button
                                                     : currentColors.cardBackground,
-                                                marginRight: isRTL ? 0 : 10,
-                                                marginLeft: isRTL ? 10 : 0
+                                                marginEnd: isRTL ? 0 : 10,
+                                                marginStart: isRTL ? 10 : 0
                                             },
                                         ]}
                                         onPress={() => setSelectedCategory(category.id)}

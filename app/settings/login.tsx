@@ -45,10 +45,8 @@ export default function Login() {
                                 color: currentColors.mainColor,
                                 backgroundColor: currentColors.cardBackground,
                                 shadowColor: currentColors.calmBlue,
-                                direction: isRTL ? 'rtl' : 'ltr',
-                                flexDirection: isRTL ? 'row-reverse' : 'row'
                             }]}
-                            placeholder={i18n.t('email')}
+                            placeholder='Email'
                             placeholderTextColor={currentColors.mainColor}
                             value={email}
                             onChangeText={setEmail}
@@ -57,16 +55,14 @@ export default function Login() {
                         />
                     </View>
                     <View style={styles.padb}>
-                        <View style={[styles.inputContainer, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+                        <View style={[styles.inputContainer, { flexDirection: 'row' }]}>
                             <TextInput
                                 style={[styles.input, {
                                     color: currentColors.mainColor,
                                     backgroundColor: currentColors.cardBackground,
                                     shadowColor: currentColors.calmBlue,
-                                    direction: isRTL ? 'rtl' : 'ltr',
-                                    flexDirection: isRTL ? 'row-reverse' : 'row'
                                 }]}
-                                placeholder={i18n.t('pass')}
+                                placeholder='Password'
                                 placeholderTextColor={currentColors.mainColor}
                                 secureTextEntry={!passwordVisible}
                                 value={password}
@@ -76,7 +72,7 @@ export default function Login() {
                                 onPress={() => setPasswordVisible(!passwordVisible)}
                                 style={[
                                     styles.eyeIcon,
-                                    isRTL ? { left: 16 } : { right: 16 }
+                                    { right: 16 }
                                 ]}
                             >
 

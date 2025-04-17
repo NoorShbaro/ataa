@@ -1,28 +1,28 @@
 import React from 'react';
-import { StyleSheet, View, TouchableOpacity, Text, Image } from 'react-native';
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { StyleSheet, View, TouchableOpacity, Image } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@/constants/ThemeContext';
 import { DarkColors, LightColors } from '@/constants/Colors';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { useAuth } from '@/constants/userContext';
 import { useLanguage } from '@/constants/LanguageContext';
 
-type MainHeaderProps = {
-  //title: string;
-};
-
-const MainHeader = (/*{ title }: MainHeaderProps*/) => {
+const MainHeader = () => {
   const { isDarkMode } = useTheme();
   const currentColors = isDarkMode ? DarkColors : LightColors;
-
   const { isAuthenticated } = useAuth();
   const { isRTL } = useLanguage();
+
+  const insets = useSafeAreaInsets();
+
+  // Prevent rendering until insets are available (especially important on iOS)
+  if (!insets) return null;
 
   return (
     <SafeAreaView
       edges={['top']}
-      style={[{ backgroundColor: currentColors.background }]}
+      style={{ backgroundColor: currentColors.background }}
     >
       <View
         style={{
@@ -31,26 +31,41 @@ const MainHeader = (/*{ title }: MainHeaderProps*/) => {
           justifyContent: 'space-between',
           width: '100%',
           paddingHorizontal: 20,
-          paddingTop: 10
+          paddingTop: 10,
+          paddingBottom: 10, // add some bottom spacing too just in case
         }}
       >
         <Image
-          source={isDarkMode ? require('@/assets/images/ATAAD.png') : require('@/assets/images/ATAAL.png')}
-          style={{ width: 50, height: 50, resizeMode: 'contain', borderRadius: 30 }}
+          source={
+            isDarkMode
+              ? require('@/assets/images/ATAAD.png')
+              : require('@/assets/images/ATAAL.png')
+          }
+          style={{
+            width: 50,
+            height: 50,
+            resizeMode: 'contain',
+            borderRadius: 30,
+            bottom: 5,
+          }}
         />
 
-        <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', alignItems: 'center', gap: 15 }}>
-          {/* Notification Icon */}
+        <View
+          style={{
+            flexDirection: isRTL ? 'row-reverse' : 'row',
+            alignItems: 'center',
+            gap: 15,
+          }}
+        >
           <TouchableOpacity>
             <Ionicons name="notifications" size={30} color={currentColors.calmBlue} />
           </TouchableOpacity>
 
-          {/* Profile Icon */}
-          <TouchableOpacity onPress={() => (
-            router.push(
-              isAuthenticated ? '/settings/profile'
-                : '/settings/login'
-            ))}>
+          <TouchableOpacity
+            onPress={() =>
+              router.push(isAuthenticated ? '/settings/profile' : '/settings/login')
+            }
+          >
             <Ionicons name="person-circle" size={35} color={currentColors.calmBlue} />
           </TouchableOpacity>
         </View>
@@ -60,22 +75,3 @@ const MainHeader = (/*{ title }: MainHeaderProps*/) => {
 };
 
 export default MainHeader;
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 16,
-    height: 60,
-  },
-  backButton: {
-    position: 'absolute',
-    left: 16,
-    zIndex: 1,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-});
