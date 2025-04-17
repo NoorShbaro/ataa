@@ -138,7 +138,7 @@ export default function Donate() {
                       goal={parseFloat(campaign?.goal_amount ?? '0')}
                     />
                   </View>
-                  <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', justifyContent: 'space-between', marginBottom: 20 }}>
+                  <View style={{ flexDirection:'row', justifyContent: 'space-between', marginBottom: 20 }}>
                     <Text style={[styles.percentage, { color: currentColors.mainColor }]}>{i18n.t('collected')}: {campaign?.progress.raised}$</Text>
                     <Text style={[styles.percentage, { color: currentColors.mainColor }]}>{i18n.t('remaining')}: {campaign?.progress.remaining}$</Text>
                   </View>
