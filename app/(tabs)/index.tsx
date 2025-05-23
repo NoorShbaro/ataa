@@ -94,7 +94,19 @@ export default function Index() {
         isLoading ? (
           <LoadingIndex />
         ) : (
-          <Text style={[styles.noCampaigns,{ color: currentColors.mainColor,}]}>{i18n.t('noCampaign')}</Text>
+          <ScrollView style={[{
+            backgroundColor: currentColors.background,
+          }]}
+            refreshControl={
+              <RefreshControl
+                refreshing={isRefreshing}
+                onRefresh={onRefresh}
+                colors={[currentColors.calmBlue]}
+                tintColor={currentColors.calmBlue}
+              />
+            } >
+            <Text style={[styles.noCampaigns, { color: currentColors.mainColor, }]}>{i18n.t('noCampaign')}</Text>
+          </ScrollView>
         )
       }
     </View>
