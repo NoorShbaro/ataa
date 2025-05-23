@@ -374,9 +374,11 @@ const styles = StyleSheet.create({
         marginBottom: 20
     },
     noCampaignText: {
-        fontSize: 16,
-        textAlign: 'center',
-        marginTop: 10,
+        alignSelf: 'center',
+        fontWeight: '600',
+        letterSpacing: 0.5,
+        fontSize: 20,
+        marginTop: 20,
     },
     categoryButton: {
         paddingVertical: 8,

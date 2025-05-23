@@ -102,7 +102,7 @@ export default function CampaignList() {
                                         color: currentColors.darkGrey,
                                         textAlign: isRTL ? 'left' : 'right',
                                         writingDirection: isRTL ? 'rtl' : 'ltr',
-                                        alignSelf: isRTL? 'flex-start': 'flex-end'
+                                        alignSelf: isRTL ? 'flex-start' : 'flex-end'
                                     }
                                 ]}>
                                     {i18n.t('availableTill')}: {item.end_date}
@@ -114,9 +114,9 @@ export default function CampaignList() {
                                         color: currentColors.darkGrey,
                                         textAlign: isRTL ? 'left' : 'right',
                                         writingDirection: isRTL ? 'rtl' : 'ltr',
-                                        alignSelf: isRTL? 'flex-start': 'flex-end'
+                                        alignSelf: isRTL ? 'flex-start' : 'flex-end'
                                     }
-                                    ]}>
+                                ]}>
                                     {item.ngo || 'Unknown'}
                                 </Text>
                             </View>
@@ -271,9 +271,11 @@ const styles = StyleSheet.create({
         marginBottom: 20
     },
     noCampaignText: {
-        fontSize: 16,
-        textAlign: 'center',
-        marginTop: 10,
+        alignSelf: 'center',
+        fontWeight: '600',
+        letterSpacing: 0.5,
+        fontSize: 20,
+        marginTop: 20,
     },
     listContainer: {
         paddingBottom: 20,

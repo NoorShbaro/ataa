@@ -15,7 +15,9 @@ export default function MainDonation() {
     <View style={[styles.container, { backgroundColor: currentColors.background }]}>
       <MainHeader />
       <View style={[styles.view, { backgroundColor: currentColors.background }]}>
-        <Text style={{ color: currentColors.mainColor }}>
+        <Text style={[styles.text, {
+          color: currentColors.mainColor,
+        }]}>
           {i18n.t('mainDonation')}
         </Text>
       </View>
@@ -30,5 +32,12 @@ const styles = StyleSheet.create({
   view: {
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  text: {
+    alignSelf: 'center',
+    fontWeight: '600',
+    letterSpacing: 0.5,
+    fontSize: 20,
+    marginTop: 20,
   }
 });

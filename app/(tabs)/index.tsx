@@ -87,6 +87,20 @@ export default function Index() {
     }
   };
 
+  if (!campaign.length) {
+    return (<View style={[styles.container, { backgroundColor: currentColors.background }]}>
+      <MainHeader />
+      {
+        isLoading ? (
+          <LoadingIndex />
+        ) : (
+          <Text style={[styles.noCampaigns,{ color: currentColors.mainColor,}]}>{i18n.t('noCampaign')}</Text>
+        )
+      }
+    </View>
+    )
+  }
+
   return (
     <View style={[styles.container, { backgroundColor: currentColors.background }]}>
       <MainHeader />
@@ -156,5 +170,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     paddingTop: 30,
     marginBottom: 30
+  },
+  noCampaigns: {
+    alignSelf: 'center',
+    fontWeight: '600',
+    letterSpacing: 0.5,
+    fontSize: 20,
+    marginTop: 20,
   }
 });
