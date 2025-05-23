@@ -20,10 +20,7 @@ type Campaigns = {
     created_at: string;
     featured_image: string;
     category_id: number;
-    ngo: {
-        id: number;
-        name: string;
-    }
+    ngo: string,
     category: {
         id: number;
         name: string;
@@ -68,15 +65,12 @@ export default function LatestCampaign() {
             ? { uri: `${item.featured_image}` }
             : require('@/assets/images/empty.jpg');
 
-        //const percentage = Math.min(100, Math.round((item.amount_raised / item.goal_amount) * 100));
-        //const remaining = item.goal_amount - item.amount_raised;
-
         return (
             <TouchableOpacity
                 onPress={() => router.push(`/campaign/${item.id}`)}
                 style={{
                     marginBottom: 10,
-                    marginStart: isRTL ? 10 : 0, // Dynamically set spacing for RTL
+                    marginStart: isRTL ? 10 : 0,
                     marginEnd: isRTL ? 0 : 10,
                 }}
             >
@@ -87,18 +81,31 @@ export default function LatestCampaign() {
                             backgroundColor: currentColors.cardBackground,
                             borderColor: currentColors.button,
                             shadowColor: currentColors.calmBlue,
-                            marginStart: isRTL ? 10 : 0, // Adjust card layout for RTL
+                            marginStart: isRTL ? 10 : 0,
                             marginEnd: isRTL ? 0 : 10,
                         },
                     ]}
                 >
                     <Image source={imageUrl} style={styles.image} />
+
+                    {/* Campaign Title */}
                     <Text style={[styles.campaignTitle, { color: currentColors.mainColor }]}>
                         {item.title}
                     </Text>
-                    <Text style={[styles.date, { color: currentColors.darkGrey }]}>
-                        {item.end_date}
-                    </Text>
+
+                    <View style={{ justifyContent: 'space-between', flexDirection: isRTL ? 'row-reverse' : 'row' }}>
+                        {/* NGO Name */}
+                        <Text style={[styles.ngoName, { color: currentColors.darkGrey }]}>
+                            {item.ngo || 'Unknown'}
+                        </Text>
+
+                        {/* End Date */}
+                        <Text style={[styles.date, { color: currentColors.darkGrey }]}>
+                            {item.end_date}
+                        </Text>
+                    </View>
+
+                    {/* Progress Bar */}
                     <View style={{ margin: 10, direction: isRTL ? 'rtl' : 'ltr' }}>
                         <ProgressBar
                             percentage={item.progress.percentage}
@@ -222,6 +229,12 @@ const styles = StyleSheet.create({
         //shadowRadius: 4,
         //elevation: 3,
     },
+    ngoName: {
+        fontSize: 14,
+        fontWeight: '500',
+        marginTop: 4,
+        marginHorizontal: 15
+    },
     image: {
         width: '100%',
         height: 150,
@@ -236,7 +249,7 @@ const styles = StyleSheet.create({
     },
     date: {
         fontSize: 14,
-        paddingRight: 15,
+        marginHorizontal: 15,
         fontWeight: '500',
         marginVertical: 5,
         alignSelf: 'flex-end'

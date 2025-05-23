@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, TouchableOpacity, Image, ActivityIndicator, Dimensions, ScrollView, RefreshControl } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, Image, ActivityIndicator, Dimensions, ScrollView, RefreshControl, Alert } from 'react-native';
 import { router, Stack, useLocalSearchParams } from 'expo-router';
 import { DarkColors, LightColors } from '@/constants/Colors';
 import { useTheme } from '@/constants/ThemeContext';
@@ -14,6 +14,7 @@ import LoadingSingle from '@/components/SingleLoading';
 import AmountModal from '@/components/Modal';
 import { Card } from 'react-native-paper';
 import Header from '@/components/Header';
+import PaymentMethodBottomSheet from '@/components/PaymentMethodBottomSheet';
 
 type Campaigns = {
   id: number;
@@ -44,11 +45,17 @@ export default function Donate() {
 
   const { i18n } = useLanguage();
   const { accessToken } = useAuth();
-  const [isModalVisible, setModalVisible] = useState(false);
+  //const [isModalVisible, setModalVisible] = useState(false);
   const [selectedCampaignId, setSelectedCampaignId] = useState<number | null>(null);
 
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const { isRTL } = useLanguage();
+  const [visible, setVisible] = useState(false);
+
+  const handleSelect = (method: 'cash' | 'credit') => {
+    setVisible(false);
+    Alert.alert('Selected Method', method.toUpperCase());
+  };
 
   const onRefresh = async () => {
     setIsRefreshing(true);
@@ -67,7 +74,8 @@ export default function Donate() {
       router.push('/settings/login'); // Redirect if not logged in
     } else {
       setSelectedCampaignId(campaignId);
-      setModalVisible(true);
+      //setModalVisible(true);
+      setVisible(true)
     }
   };
 
@@ -121,9 +129,19 @@ export default function Donate() {
                   <Image source={imageUrl} style={styles.image} />
                   <Text style={[styles.title, { color: currentColors.mainColor, alignSelf: isRTL ? 'flex-end' : 'flex-start' }]}>{campaign?.title}</Text>
                   <Text style={[styles.description, { color: currentColors.mainColor, alignSelf: isRTL ? 'flex-end' : 'flex-start' }]}>{campaign?.description}</Text>
-                  <Text style={[styles.date, { color: currentColors.darkGrey, alignSelf: isRTL ? 'flex-start' : 'flex-end' }]}>
-                    {i18n.t('availableTill')}: {campaign?.end_date}
-                  </Text>
+                  
+                  <View style={{ justifyContent: 'space-between', flexDirection: isRTL ? 'row-reverse' : 'row' }}>
+                    {/* NGO Name */}
+                    <Text style={[styles.ngoName, { color: currentColors.darkGrey, alignSelf: isRTL ? 'flex-start' : 'flex-end' }]}>
+                      {campaign?.ngo || 'Unknown'}
+                    </Text>
+
+                    {/* End Date */}
+                    <Text style={[styles.date, { color: currentColors.darkGrey, alignSelf: isRTL ? 'flex-start' : 'flex-end' }]}>
+                      {i18n.t('availableTill')}: {campaign?.end_date}
+                    </Text>
+                  </View>
+
                   <View style={[styles.goalContainer, { backgroundColor: currentColors.mainColorWithOpacity, flexDirection: isRTL ? 'row-reverse' : 'row', }]}>
                     <Text style={[styles.goalLabel, { color: currentColors.darkGrey }]}>{i18n.t('goal')}:</Text>
                     <Text style={[styles.goalAmount, { color: currentColors.mainColor }]}>
@@ -138,7 +156,7 @@ export default function Donate() {
                       goal={parseFloat(campaign?.goal_amount ?? '0')}
                     />
                   </View>
-                  <View style={{ flexDirection:'row', justifyContent: 'space-between', marginBottom: 20 }}>
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
                     <Text style={[styles.percentage, { color: currentColors.mainColor }]}>{i18n.t('collected')}: {campaign?.progress.raised}$</Text>
                     <Text style={[styles.percentage, { color: currentColors.mainColor }]}>{i18n.t('remaining')}: {campaign?.progress.remaining}$</Text>
                   </View>
@@ -154,17 +172,31 @@ export default function Donate() {
 
       )}
       {selectedCampaignId !== null && (
-        <AmountModal
-          isVisible={isModalVisible}
-          onClose={() => setModalVisible(false)}
-          accessToken={accessToken}
+        <PaymentMethodBottomSheet
+          isVisible={visible}
+          onClose={() => setVisible(false)}
           campaignId={selectedCampaignId}
+          accessToken={accessToken}
+          onSuccess={() => console.log('Donation Completed')}
         />
       )}
 
     </SafeAreaView>
   );
 }
+
+{/** 
+        <AmountModal
+          isVisible={isModalVisible}
+          onClose={() => setModalVisible(false)}
+          accessToken={accessToken}
+          campaignId={selectedCampaignId}
+        /> 
+        <PaymentMethodBottomSheet
+          isVisible={visible}
+          onClose={() => setVisible(false)}
+          onSelect={handleSelect}
+        />*/}
 
 const styles = StyleSheet.create({
   container: {
@@ -203,6 +235,13 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     alignSelf: 'flex-end'
   },
+  ngoName: {
+        fontSize: 14,
+        fontWeight: '500',
+        //marginTop: 4,
+        marginHorizontal: 15,
+        marginBottom: 15,
+    },
   goalContainer: {
     justifyContent: 'space-between',
     padding: 10,

@@ -119,16 +119,31 @@ export default function CampaignList() {
                             ]}>
                                 {item.title}
                             </Text>
-                            <Text style={[
-                                styles.date,
-                                {
-                                    color: currentColors.darkGrey,
-                                    textAlign: isRTL ? 'left' : 'right',
-                                    writingDirection: isRTL ? 'rtl' : 'ltr'
-                                }
-                            ]}>
-                                {i18n.t('availableTill')}: {item.end_date}
-                            </Text>
+                            <View>
+                                <Text style={[
+                                    styles.date,
+                                    {
+                                        color: currentColors.darkGrey,
+                                        textAlign: isRTL ? 'left' : 'right',
+                                        writingDirection: isRTL ? 'rtl' : 'ltr',
+                                        alignSelf: isRTL ? 'flex-start' : 'flex-end'
+                                    }
+                                ]}>
+                                    {i18n.t('availableTill')}: {item.end_date}
+                                </Text>
+                                {/* NGO Name */}
+                                <Text style={[
+                                    styles.ngoName,
+                                    {
+                                        color: currentColors.darkGrey,
+                                        textAlign: isRTL ? 'left' : 'right',
+                                        writingDirection: isRTL ? 'rtl' : 'ltr',
+                                        alignSelf: isRTL ? 'flex-start' : 'flex-end'
+                                    }
+                                ]}>
+                                    {item.ngo || 'Unknown'}
+                                </Text>
+                            </View>
                         </View>
 
                         {/* Progress Bar - remains unchanged */}
@@ -230,7 +245,7 @@ export default function CampaignList() {
                                     justifyContent: 'flex-start'
                                 }}
                                 ref={scrollViewRef}
-                                
+
                             >
                                 {categories.map((category) => (
                                     <TouchableOpacity
@@ -342,9 +357,21 @@ const styles = StyleSheet.create({
     date: {
         fontSize: 14,
         fontWeight: '500',
-        alignSelf: 'flex-end',
+        //alignSelf: 'flex-end',
         bottom: 0,
-        margin: 10,
+        margin: 0,
+        top: 5,
+        marginHorizontal: 15,
+        marginTop: 10
+    },
+    ngoName: {
+        fontSize: 14,
+        fontWeight: '500',
+        marginTop: 0,
+        marginHorizontal: 15,
+        //alignSelf: 'flex-end',
+        top: 3,
+        marginBottom: 20
     },
     noCampaignText: {
         fontSize: 16,

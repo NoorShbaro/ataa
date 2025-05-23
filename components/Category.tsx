@@ -17,7 +17,6 @@ type Category = {
 
 const Categories = () => {
     const scrollRef = useRef<ScrollView>(null);
-    const itemRef = useRef<(React.ElementRef<typeof TouchableOpacity> | null)[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
 
     const { isDarkMode } = useTheme();

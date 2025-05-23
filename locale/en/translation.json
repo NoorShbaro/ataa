@@ -50,5 +50,10 @@
     "noCampaign": "No campaigns available.",
     "noCategory": "No categories available.",
     "contact": "Our team will contact you as soon as possible.",
-    "retry": "Retry"
+    "retry": "Retry",
+    "choose" : "Choose Payment Method",
+    "cash": "Pay with Cash",
+    "credit" : "Pay with Credit",
+    "confirm" : "Confirm Donation",
+    "payby" : "Paying by:"
 }
