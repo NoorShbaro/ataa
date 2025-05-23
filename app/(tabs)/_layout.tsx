@@ -37,15 +37,15 @@ export default function TabLayout() {
         ),
       }
     },
-    {
-      name: "mainDonation",
-      options: {
-        title: `${i18n.t('mainDonation')}`,
-        tabBarIcon: ({ color, focused }: TabIconProps) => (
-          <Ionicons name={focused ? 'heart' : 'heart-outline'} color={color} size={24} />
-        ),
-      }
-    },
+    // {
+    //   name: "mainDonation",
+    //   options: {
+    //     title: `${i18n.t('mainDonation')}`,
+    //     tabBarIcon: ({ color, focused }: TabIconProps) => (
+    //       <Ionicons name={focused ? 'heart' : 'heart-outline'} color={color} size={24} />
+    //     ),
+    //   }
+    // },
     {
       name: "settings",
       options: {
