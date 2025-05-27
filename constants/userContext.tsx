@@ -4,6 +4,7 @@ import { Alert, AppState } from 'react-native';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import apiClient from './apiClient';
+import axios from 'axios';
 
 const TOKEN_REFRESH_INTERVAL = 60 * 1000;
 
@@ -18,6 +19,8 @@ type AuthContextType = {
     resetError: () => void;
     isChecked: boolean; // Add this if needed
     toggleCheckbox: () => void; // Add this if needed
+    cooldown : number;
+    canSubmit: boolean;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -31,6 +34,11 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [isChecked, setIsChecked] = useState(false);
     const refreshTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     //const isRefreshingRef = useRef(false);
+
+    const [cooldown, setCooldown] = useState(0);   // seconds left
+    const cooldownSeconds = 60;                   // one-minute lockout
+
+    const canSubmit = cooldown === 0;
 
     const toggleCheckbox = () => {
         setIsChecked(!isChecked);
@@ -133,6 +141,15 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }, (expiresIn - 10) * 1000); // Refresh 10 seconds before expiry
     };*/
 
+    const startCooldown = () => setCooldown(cooldownSeconds);
+
+    useEffect(() => {
+        if (cooldown === 0) return;
+        const id = setInterval(() => setCooldown(c => c - 1), 1000);
+        return () => clearInterval(id);
+    }, [cooldown]);
+
+
     const login = async (email: string, password: string) => {
         if (!email || !password) {
             alert('Please Fill All Fields');
@@ -159,7 +176,12 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
             router.replace('/settings/profile');
         } catch (error) {
             console.error('Login failed', error);
-            setError('Invalid email or password.');
+            if (axios.isAxiosError(error) && error.response?.status === 429) {
+                setError(`Too many attempts. Try again in ${cooldownSeconds}s.`);
+                startCooldown();                         // kick off the timer
+            } else {
+                setError('Invalid email or password.');
+            }
         }
     };
 
@@ -308,7 +330,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const isAuthenticated = !!accessToken;
 
     return (
-        <AuthContext.Provider value={{ accessToken, refreshToken, login, signup, logout, isAuthenticated, error, resetError, isChecked, toggleCheckbox }}>
+        <AuthContext.Provider value={{ accessToken, refreshToken, login, signup, logout, isAuthenticated, error, resetError, isChecked, toggleCheckbox, cooldown, canSubmit }}>
             {children}
         </AuthContext.Provider>
     );

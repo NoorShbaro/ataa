@@ -17,7 +17,7 @@ export default function Login() {
     const [password, setPassword] = useState('');
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const { login, error } = useAuth();
+    const { login, error, cooldown, canSubmit } = useAuth();
 
     const handleLogin = () => {
         setIsLoading(true);
@@ -52,6 +52,7 @@ export default function Login() {
                             onChangeText={setEmail}
                             keyboardType="email-address"
                             autoCapitalize="none"
+                            editable={cooldown? false: true}
                         />
                     </View>
                     <View style={styles.padb}>
@@ -67,6 +68,7 @@ export default function Login() {
                                 secureTextEntry={!passwordVisible}
                                 value={password}
                                 onChangeText={setPassword}
+                                editable={cooldown? false: true}
                             />
                             <TouchableOpacity
                                 onPress={() => setPasswordVisible(!passwordVisible)}
@@ -74,6 +76,7 @@ export default function Login() {
                                     styles.eyeIcon,
                                     { right: 16 }
                                 ]}
+                                disabled={ cooldown > 0 }
                             >
 
                                 <MaterialIcons
@@ -89,11 +92,12 @@ export default function Login() {
                 {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
                 <View style={styles.padt}>
-                    <TouchableOpacity onPress={handleLogin} style={[styles.btn, { backgroundColor: currentColors.button }]} disabled={isLoading}>
+                    <TouchableOpacity onPress={handleLogin} style={[styles.btn, { backgroundColor: currentColors.button }]} disabled={isLoading || cooldown > 0 || !email || !password}
+>
                         {isLoading ? (
                             <ActivityIndicator color={currentColors.background} />
                         ) : (
-                            <Text style={[styles.textBtn, { color: currentColors.background }]}>{i18n.t('login')}</Text>
+                            <Text style={[styles.textBtn, { color: currentColors.background }]}>{canSubmit? i18n.t('login') : cooldown}</Text>
                         )}
                     </TouchableOpacity>
                 </View>
