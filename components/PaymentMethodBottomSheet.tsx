@@ -3,6 +3,7 @@ import { DarkColors, LightColors } from '@/constants/Colors';
 import { useLanguage } from '@/constants/LanguageContext';
 import { useTheme } from '@/constants/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import LottieView from 'lottie-react-native';
 import React, { useCallback, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, TextInput, ActivityIndicator, TouchableWithoutFeedback, Keyboard, KeyboardAvoidingView, Platform } from 'react-native';
@@ -71,7 +72,8 @@ const PaymentMethodBottomSheet: React.FC<Props> = ({
         }
       );
       // console.log('Donation Successful:', response.data);
-      setShowSuccess(true);
+      // setShowSuccess(true);
+      router.replace('/settings/DonationSuccessScreen');
     } catch (err: any) {
       console.error('Error:', err.message);
     } finally {
@@ -96,7 +98,7 @@ const PaymentMethodBottomSheet: React.FC<Props> = ({
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={[styles.container,{backgroundColor: currentColors.cardBackground}]}>
-            {showSuccess ? (
+            {/* {showSuccess ? (
               <View style={styles.successContainer}>
                 <LottieView
                   source={require("@/assets/Lottie/Animation - 1743166826870.json")}
@@ -109,7 +111,8 @@ const PaymentMethodBottomSheet: React.FC<Props> = ({
                   {i18n.t("donationReceived")}
                 </Text>
               </View>
-            ) : step === 'choose' ? (
+            ) :  */}
+            {step === 'choose' ? (
               <>
                 <Text style={[styles.title,{color: currentColors.mainColor}]}>{i18n.t("choose")}</Text>
                 <TouchableOpacity
