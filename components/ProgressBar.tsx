@@ -22,7 +22,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ percentage }) => {
                 styles.progressBarBackground,
                 {
                     backgroundColor: currentColors.progressBarBackground,
-                    flexDirection: isRTL ? 'row-reverse' : 'row'
+                    flexDirection:  'row'
                 }
             ]}>
                 <View style={[
@@ -41,7 +41,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ percentage }) => {
                         color: currentColors.mainColor,
                         alignSelf: isRTL ? 'flex-start' : 'flex-end',
                         fontSize: 14,
-                        textAlign: isRTL ? 'left' : 'right'
+                        // textAlign: isRTL ? 'left' : 'right'
                     }
                 ]}>
                     {i18n.t('raised')}: 
@@ -52,7 +52,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ percentage }) => {
                         color: currentColors.mainColor,
                         alignSelf: isRTL ? 'flex-start' : 'flex-end',
                         fontSize: 14,
-                        textAlign: isRTL ? 'left' : 'right'
+                        // textAlign: isRTL ? 'left' : 'right'
                     }
                 ]}>
                     {percentage}%

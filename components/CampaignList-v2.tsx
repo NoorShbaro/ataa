@@ -96,8 +96,8 @@ export default function CampaignList_v2() {
             ? { uri: item.featured_image }
             : require('@/assets/images/empty.jpg');
 
-        const flexDir = isRTL ? 'row-reverse' : 'row';
-        const textAlign = isRTL ? 'right' : 'left';
+        const flexDir = 'row';
+        const textAlign = 'left';
 
         return (
             <TouchableOpacity onPress={() => router.push(`/campaign/${item.id}`)}>
@@ -118,14 +118,14 @@ export default function CampaignList_v2() {
                             style={[
                                 styles.thumb,
                                 {
-                                    marginEnd: isRTL ? 0 : 10,
-                                    marginStart: isRTL ? 10 : 0,
+                                    marginLeft: isRTL ? 0 : 10,
+                                    marginRight: isRTL ? 10 : 0
                                 },
                             ]}
                         />
 
                         {/* text + progress */}
-                        <View style={{ flex: 1 }}>
+                        <View style={{ flex: 1, marginLeft: isRTL ? 0 : 10, marginRight: isRTL ? 10 : 0 }}>
                             <Text
                                 numberOfLines={2}
                                 style={[
@@ -136,11 +136,11 @@ export default function CampaignList_v2() {
                                 {item.title}
                             </Text>
 
-                            <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row' }}>
-                                <Text style={[styles.by, { color: currentColors.darkGrey, alignSelf: isRTL ? 'flex-start' : 'flex-end', marginLeft: isRTL ? 0 : 15, marginRight: isRTL ? 15 : 0 }]}>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Text style={[styles.by, { color: currentColors.darkGrey, marginLeft: isRTL ? 0 : 15, marginRight: isRTL ? 15 : 0 }]}>
                                     {i18n.t('by')}:
                                 </Text>
-                                <Text style={[styles.ngo, { color: currentColors.calmBlue, alignSelf: isRTL ? 'flex-start' : 'flex-end', marginLeft: isRTL ? 0 : 5, marginRight: isRTL ? 5 : 0 }]}>
+                                <Text style={[styles.ngo, { color: currentColors.calmBlue, marginLeft: isRTL ? 0 : 5, marginRight: isRTL ? 5 : 0 }]}>
                                     {item?.ngo || 'Unknown'}
                                 </Text>
                             </View>

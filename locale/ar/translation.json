@@ -59,5 +59,8 @@
     "ngoWillContactSoon": "ستتواصل معك المنظمة في أقرب وقت ممكن.",
     "goBack" : "رجوع",
     "by": "بقلم",
-    "raised" : "تم جمع"
+    "raised" : "تم جمع",
+    "description": "وصف",
+    "fundRaisedFrom":"تم جمع من",
+    "till":"حتى"
 }

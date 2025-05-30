@@ -59,5 +59,8 @@
     "ngoWillContactSoon": "The NGO will contact you as soon as possible.",
     "goBack" : "Go Back",
     "by" : "By",
-    "raised": " Raised"
+    "raised": " Raised",
+    "description": "Description",
+    "fundRaisedFrom" :"fund raised from",
+    "till": "Till"
 }

@@ -4,7 +4,7 @@ import { DarkColors, LightColors } from '@/constants/Colors';
 import { useTheme } from '@/constants/ThemeContext';
 import { useLanguage } from '@/constants/LanguageContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { MaterialIcons } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useAuth } from '@/constants/userContext';
 import { useEffect, useState } from 'react';
 import apiClient from '@/constants/apiClient';
@@ -104,7 +104,7 @@ export default function Donate() {
     <SafeAreaView style={[styles.container, { backgroundColor: currentColors.background }]}>
       <Stack.Screen options={{ headerShown: false }} />
 
-      <Header title={''} />
+
 
       {/* Content */}
       {isLoading ? (
@@ -124,52 +124,143 @@ export default function Donate() {
             error ? (
               <Text style={styles.errorText}>{error}</Text>
             ) : (
-              <Card style={[styles.card, { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue }]}>
-                <Card.Content>
-                  <Image source={imageUrl} style={styles.image} />
-                  <Text style={[styles.title, { color: currentColors.mainColor, alignSelf: isRTL ? 'flex-end' : 'flex-start' }]}>{campaign?.title}</Text>
-                  <Text style={[styles.description, { color: currentColors.mainColor, alignSelf: isRTL ? 'flex-end' : 'flex-start' }]}>{campaign?.description}</Text>
+              <>
+                {/* 1️⃣  Hero image – flush to the top */}
+                <View style={{ position: 'relative' }}>
+                  {/* 🔙 Back button */}
+                  <TouchableOpacity
+                    onPress={() => router.back()}       // or router.back()
+                    style={{
+                      position: 'absolute',
+                      top: 40,                                // drop a bit below the status bar
+                      left: isRTL ? undefined : 16,
+                      right: isRTL ? 16 : undefined,
+                      zIndex: 10,
+                      backgroundColor: currentColors.cardBackground + 'AA', // translucent circle
+                      borderRadius: 20,
+                      padding: 6,
+                    }}
+                  >
+                    <Ionicons
+                      name={isRTL ? 'arrow-forward' : 'arrow-back'}
+                      size={24}
+                      color={currentColors.mainColor}
+                    />
+                  </TouchableOpacity>
 
-                  <View style={{ justifyContent: 'space-between', flexDirection: isRTL ? 'row-reverse' : 'row' }}>
-                    {/* NGO Name */}
-                    <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row' }}>
-                      <Text style={[styles.by, { color: currentColors.darkGrey, alignSelf: isRTL ? 'flex-start' : 'flex-end', marginLeft: isRTL? 0: 15, marginRight: isRTL? 15: 0 }]}>
-                        {i18n.t('by')}:
-                      </Text>
-                      <Text style={[styles.ngoName, { color: currentColors.calmBlue, alignSelf: isRTL ? 'flex-start' : 'flex-end', marginLeft: isRTL? 0: 5, marginRight: isRTL? 5: 0 }]}>
-                        {campaign?.ngo || 'Unknown'}
-                      </Text>
+                  {/* 1️⃣ Hero image – flush to the top */}
+                  <Image source={imageUrl} style={[styles.image, { margin: 0 }]} />
+                </View>
+                {/* <Header title={''} /> */}
+                <Card style={[styles.card, { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue }]}>
+                  <Card.Content>
+                    {/* 2️⃣  Title */}
+                    <Text
+                      style={[
+                        styles.title,
+                        { color: currentColors.mainColor, textAlign: isRTL ? 'right' : 'left' },
+                      ]}
+                    >
+                      {campaign?.title}
+                    </Text>
+
+                    {/* 3️⃣  “by” NGO name + Till date (single row) */}
+                    <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', justifyContent: 'space-between', marginBottom: 10 }}>
+                      <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row' }}>
+                        <Text style={[styles.by, { color: currentColors.darkGrey, alignSelf: isRTL ? 'flex-start' : 'flex-end', marginLeft: isRTL ? 0 : 15, marginRight: isRTL ? 15 : 0 }]}>
+                          {i18n.t('by')}:
+                        </Text>
+                        <Text style={[styles.ngoName, { color: currentColors.calmBlue, alignSelf: isRTL ? 'flex-start' : 'flex-end', marginLeft: isRTL ? 0 : 5, marginRight: isRTL ? 5 : 0 }]}>
+                          {campaign?.ngo || 'Unknown'}
+                        </Text>
+                      </View>
+
+                      <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row' }}>
+                        <Text style={[styles.by, { color: currentColors.darkGrey, alignSelf: isRTL ? 'flex-start' : 'flex-end', marginLeft: isRTL ? 0 : 15, marginRight: isRTL ? 15 : 0 }]}>
+                          {i18n.t('till')}:
+                        </Text>
+                        <Text style={[styles.till, { color: currentColors.darkGrey, alignSelf: isRTL ? 'flex-start' : 'flex-end', marginLeft: isRTL ? 0 : 5, marginRight: isRTL ? 5 : 0 }]}>
+                          {campaign?.end_date}
+                        </Text>
+                      </View>
                     </View>
 
-                    {/* End Date */}
-                    <Text style={[styles.date, { color: currentColors.darkGrey, alignSelf: isRTL ? 'flex-start' : 'flex-end' }]}>
-                      {i18n.t('availableTill')}: {campaign?.end_date}
-                    </Text>
-                  </View>
+                    {/* 4️⃣  Raised / Goal  */}
 
-                  <View style={[styles.goalContainer, { backgroundColor: currentColors.mainColorWithOpacity, flexDirection: isRTL ? 'row-reverse' : 'row', }]}>
-                    <Text style={[styles.goalLabel, { color: currentColors.darkGrey }]}>{i18n.t('goal')}:</Text>
-                    <Text style={[styles.goalAmount, { color: currentColors.mainColor }]}>
-                      {parseFloat(campaign?.goal_amount ?? '0')}$
+                    <View
+                      style={{
+                        flexDirection: isRTL ? 'row-reverse' : 'row',
+                        justifyContent: 'space-evenly',
+                        // marginVertical: 5,
+
+                      }}
+                    >
+                      {/* <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row', justifyContent: "space-between" }}> */}
+                      <Text style={[styles.raised, {
+                        color: currentColors.darkGrey,
+                        // alignSelf: isRTL ? 'flex-start' : 'flex-end',
+                        //  marginLeft: isRTL ? 0 : 15, 
+                        //  marginRight: isRTL ? 15 : 0 
+                      }]}>
+                        ${campaign?.progress.raised}
+                      </Text>
+                      <Text style={[styles.fund, {
+                        color: currentColors.darkGrey,
+                        // alignSelf: isRTL ? 'flex-start' : 'flex-end', 
+                        // marginLeft: isRTL ? 0 : 5, 
+                        // marginRight: isRTL ? 5 : 0
+                      }]}>
+                        {i18n.t('fundRaisedFrom')}
+                      </Text>
+                      <Text style={[styles.raised, { color: currentColors.darkGrey }]}>
+                        ${campaign?.goal_amount}
+                      </Text>
+                      {/* </View> */}
+
+
+                    </View>
+
+                    {/* 5️⃣  Progress bar */}
+                    <View style={{ margin: 10, direction: isRTL ? 'rtl' : 'ltr' }}>
+                      <ProgressBar
+                        percentage={campaign?.progress.percentage ?? 0}
+                        raised={parseFloat(campaign?.progress.raised ?? '0')}
+                        remaining={campaign?.progress.remaining ?? 0}
+                        goal={parseFloat(campaign?.goal_amount ?? '0')}
+                      />
+                    </View>
+
+                    {/* 6️⃣  Donate button */}
+                    <TouchableOpacity
+                      onPress={() => handleDonatePress(campaign?.id || 0)}
+                      style={[styles.donateButton, { backgroundColor: currentColors.button }]}
+                    >
+                      <Text style={[styles.donateText, { color: currentColors.white }]}>
+                        {i18n.t('donateNow')}
+                      </Text>
+                    </TouchableOpacity>
+
+                    {/* 7️⃣  Description */}
+                    <Text
+                      style={[
+                        styles.des,
+                        { color: currentColors.mainColor, textAlign: isRTL ? 'right' : 'left' },
+                      ]}
+                    >
+                      {i18n.t('description')}
                     </Text>
-                  </View>
-                  <View style={{ direction: isRTL ? 'rtl' : 'ltr' }}>
-                    <ProgressBar
-                      percentage={campaign?.progress.percentage ?? 0}
-                      raised={parseFloat(campaign?.progress.raised ?? '0')}
-                      remaining={campaign?.progress.remaining ?? 0}
-                      goal={parseFloat(campaign?.goal_amount ?? '0')}
-                    />
-                  </View>
-                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
-                    <Text style={[styles.percentage, { color: currentColors.mainColor }]}>{i18n.t('collected')}: {campaign?.progress.raised}$</Text>
-                    <Text style={[styles.percentage, { color: currentColors.mainColor }]}>{i18n.t('remaining')}: {campaign?.progress.remaining}$</Text>
-                  </View>
-                  <TouchableOpacity onPress={() => handleDonatePress(campaign?.id || 0)} style={[styles.donateButton, { backgroundColor: currentColors.button }]}>
-                    <Text style={[styles.donateText, { color: currentColors.white }]}>{i18n.t('donateNow')}</Text>
-                  </TouchableOpacity>
-                </Card.Content>
-              </Card>
+                    <Text
+                      style={[
+                        styles.description,
+                        { color: currentColors.mainColor, textAlign: isRTL ? 'right' : 'left' },
+                      ]}
+                    >
+                      {campaign?.description}
+                    </Text>
+                  </Card.Content>
+                </Card>
+              </>
+
             )
           }
 
@@ -209,12 +300,59 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: width * 0.5,
+    height: 400,
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
     resizeMode: 'cover',
-    alignSelf: 'center',
-    marginBottom: 20,
-    borderRadius: 15,
   },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginTop: 8,
+  },
+  des: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 20,
+  },
+  ngo: {
+    fontSize: 16,
+    marginTop: 2,
+  },
+  raised: {
+    fontSize: 16,
+    fontWeight: '700',
+    marginTop: 5,
+    // marginHorizontal: 15,
+    marginBottom: 5,
+  },
+  till: {
+    fontSize: 14,
+    marginTop: 10
+  },
+  donateButton: {
+    marginTop: 12,
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  donateText: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  description: {
+    fontSize: 15,
+    marginTop: 14,
+    lineHeight: 22,
+  },
+  // image: {
+  //   width: '100%',
+  //   height: width * 0.5,
+  //   resizeMode: 'cover',
+  //   alignSelf: 'center',
+  //   marginBottom: 20,
+  //   borderRadius: 15,
+  // },
   card: {
     margin: 10,
     borderRadius: 15,
@@ -224,16 +362,16 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 5,
   },
-  title: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  description: {
-    fontSize: 16,
-    marginBottom: 10,
-    marginLeft: 10
-  },
+  // title: {
+  //   fontSize: 22,
+  //   fontWeight: 'bold',
+  //   marginBottom: 10,
+  // },
+  // description: {
+  //   fontSize: 16,
+  //   marginBottom: 10,
+  //   marginLeft: 10
+  // },
   date: {
     fontSize: 14,
     fontWeight: '500',
@@ -243,15 +381,21 @@ const styles = StyleSheet.create({
   ngoName: {
     fontSize: 16,
     fontWeight: '700',
-    //marginTop: 4,
+    marginTop: 10,
     // marginHorizontal: 15,
-    marginBottom: 15,
+    // marginBottom: 5,
   },
   by: {
     fontSize: 14,
     fontWeight: '500',
-    //marginTop: 4,
-    marginBottom: 15,
+    marginTop: 10,
+    // marginBottom: 5,
+  },
+  fund: {
+    fontSize: 14,
+    fontWeight: '500',
+    marginTop: 5,
+    // marginBottom: 5,
   },
   goalContainer: {
     justifyContent: 'space-between',
@@ -267,18 +411,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  donateButton: {
-    alignSelf: 'center',
-    padding: 15,
-    //backgroundColor: '#4A5568',
-    borderRadius: 10,
-    width: '60%',
-    alignItems: 'center',
-  },
-  donateText: {
-    color: 'white',
-    fontSize: 18,
-  },
+  // donateButton: {
+  //   alignSelf: 'center',
+  //   padding: 15,
+  //   //backgroundColor: '#4A5568',
+  //   borderRadius: 10,
+  //   width: '60%',
+  //   alignItems: 'center',
+  // },
+  // donateText: {
+  //   color: 'white',
+  //   fontSize: 18,
+  // },
   percentage: {
     fontSize: 12,
     //marginTop: 5,
