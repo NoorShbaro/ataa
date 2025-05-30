@@ -73,7 +73,7 @@ const PaymentMethodBottomSheet: React.FC<Props> = ({
       );
       // console.log('Donation Successful:', response.data);
       // setShowSuccess(true);
-      router.replace('/settings/DonationSuccessScreen');
+      router.replace('/success/DonationSuccessScreen');
     } catch (err: any) {
       console.error('Error:', err.message);
     } finally {
