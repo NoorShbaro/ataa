@@ -97,7 +97,7 @@ const PaymentMethodBottomSheet: React.FC<Props> = ({
       //style={{ flex: 1 }}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={[styles.container,{backgroundColor: currentColors.cardBackground}]}>
+          <View style={[styles.container, { backgroundColor: currentColors.cardBackground }]}>
             {/* {showSuccess ? (
               <View style={styles.successContainer}>
                 <LottieView
@@ -114,19 +114,19 @@ const PaymentMethodBottomSheet: React.FC<Props> = ({
             ) :  */}
             {step === 'choose' ? (
               <>
-                <Text style={[styles.title,{color: currentColors.mainColor}]}>{i18n.t("choose")}</Text>
+                <Text style={[styles.title, { color: currentColors.mainColor }]}>{i18n.t("choose")}</Text>
                 <TouchableOpacity
-                  style={[styles.optionButton, {backgroundColor: currentColors.progressBarBackground}]}
+                  style={[styles.optionButton, { backgroundColor: currentColors.progressBarBackground }]}
                   onPress={() => handleSelect('cash')}
                 >
-                  <Text style={[styles.optionText,{color: currentColors.mainColor}]}>{i18n.t("cash")}</Text>
+                  <Text style={[styles.optionText, { color: currentColors.mainColor }]}>{i18n.t("cash")}</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  style={[styles.optionButton, {backgroundColor: currentColors.calmBlue}]}
+                  style={[styles.optionButton, { backgroundColor: currentColors.calmBlue }]}
                   onPress={() => handleSelect('credit')}
                 >
-                  <Text style={[styles.optionText, {color: currentColors.background}]}>{i18n.t("credit")}</Text>
+                  <Text style={[styles.optionText, { color: currentColors.background }]}>{i18n.t("credit")}</Text>
                 </TouchableOpacity>
               </>
             ) : (
@@ -134,16 +134,14 @@ const PaymentMethodBottomSheet: React.FC<Props> = ({
                 <Text style={styles.title}>
                   {i18n.t("enterAmount")}
                 </Text>
-                {/*<Text style={styles.methodLabel}>
-                  {i18n.t("payby")} <Text style={styles.highlight}>{method?.toUpperCase()}</Text>
-                </Text>*/}
+
                 <View style={styles.inputWrapper}>
                   <TextInput
                     placeholder={i18n.t("enterAmount")}
                     value={amount}
                     onChangeText={setAmount}
                     keyboardType="numeric"
-                    style={[styles.inputWithIcon, {borderColor: currentColors.lightGrey}]}
+                    style={[styles.inputWithIcon, { borderColor: currentColors.lightGrey }]}
                   />
                   {amount !== '' && (
                     <Ionicons
@@ -154,6 +152,31 @@ const PaymentMethodBottomSheet: React.FC<Props> = ({
                     />
                   )}
                 </View>
+
+                {/* 💡 Suggested Amount Buttons */}
+                <View style={styles.suggestionsWrapper}>
+                  {[10, 20, 30, 40, 50, 100].map((val, index) => (
+                    <TouchableOpacity
+                      key={val}
+                      style={[
+                        styles.suggestionButton,
+                        {
+                          backgroundColor:
+                            amount === String(val) ? currentColors.button : currentColors.mainColorWithOpacity,
+                          width: '30%',
+                          marginRight: (index + 1) % 3 === 0 ? 0 : '5%',
+                        },
+                      ]}
+                      onPress={() => setAmount(String(val))}
+                    >
+                      <Text style={{ color: currentColors.white, fontWeight: '600', textAlign: 'center' }}>
+                        ${val}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+
+
                 <TouchableOpacity
                   style={[
                     styles.button,
@@ -167,6 +190,7 @@ const PaymentMethodBottomSheet: React.FC<Props> = ({
                   </Text>
                 </TouchableOpacity>
               </>
+
             )}
           </View>
         </TouchableWithoutFeedback>
@@ -191,9 +215,24 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
   },
+  suggestionsWrapper: {
+  flexDirection: 'row',
+  flexWrap: 'wrap',
+  justifyContent: 'space-between',
+  marginBottom: 20,
+  rowGap: 10,
+},
+
+suggestionButton: {
+  paddingVertical: 10,
+  borderRadius: 20,
+},
+
+
   button: {
     paddingVertical: 12,
     borderRadius: 8,
+    marginBottom: 50
   },
   optionButton: {
     padding: 15,
