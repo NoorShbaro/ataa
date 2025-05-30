@@ -57,5 +57,6 @@
     "confirm" : "Confirm Donation",
     "payby" : "Paying by:",
     "ngoWillContactSoon": "The NGO will contact you as soon as possible.",
-    "goBack" : "Go Back"
+    "goBack" : "Go Back",
+    "by" : "By"
 }

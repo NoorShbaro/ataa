@@ -95,9 +95,14 @@ export default function LatestCampaign() {
 
                     <View style={{ justifyContent: 'space-between', flexDirection: isRTL ? 'row-reverse' : 'row' }}>
                         {/* NGO Name */}
-                        <Text style={[styles.ngoName, { color: currentColors.darkGrey }]}>
-                            {item.ngo || 'Unknown'}
-                        </Text>
+                        <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row' }}>
+                            <Text style={[styles.by, { color: currentColors.darkGrey, alignSelf: isRTL ? 'flex-start' : 'flex-end', marginLeft: isRTL ? 0 : 15, marginRight: isRTL ? 15 : 0 }]}>
+                                {i18n.t('by')}:
+                            </Text>
+                            <Text style={[styles.ngoName, { color: currentColors.calmBlue, alignSelf: isRTL ? 'flex-start' : 'flex-end', marginLeft: isRTL ? 0 : 5, marginRight: isRTL ? 5 : 0 }]}>
+                                {item?.ngo || 'Unknown'}
+                            </Text>
+                        </View>
 
                         {/* End Date */}
                         <Text style={[styles.date, { color: currentColors.darkGrey }]}>
@@ -230,10 +235,21 @@ const styles = StyleSheet.create({
         //elevation: 3,
     },
     ngoName: {
+        fontSize: 16,
+        fontWeight: '700',
+        marginTop: 4,
+        marginHorizontal: 15,
+        marginVertical: 5,
+        //marginTop: 4,
+        // marginHorizontal: 15,
+        // marginBottom: 15,
+    },
+    by: {
         fontSize: 14,
         fontWeight: '500',
-        marginTop: 4,
-        marginHorizontal: 15
+        marginVertical: 5,
+        //marginTop: 4,
+        // marginBottom: 15,
     },
     image: {
         width: '100%',

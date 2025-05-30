@@ -132,17 +132,14 @@ export default function CampaignList() {
                                     {i18n.t('availableTill')}: {item.end_date}
                                 </Text>
                                 {/* NGO Name */}
-                                <Text style={[
-                                    styles.ngoName,
-                                    {
-                                        color: currentColors.darkGrey,
-                                        textAlign: isRTL ? 'left' : 'right',
-                                        writingDirection: isRTL ? 'rtl' : 'ltr',
-                                        alignSelf: isRTL ? 'flex-start' : 'flex-end'
-                                    }
-                                ]}>
-                                    {item.ngo || 'Unknown'}
-                                </Text>
+                                <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row' }}>
+                                    <Text style={[styles.by, { color: currentColors.darkGrey, alignSelf: isRTL ? 'flex-start' : 'flex-end', marginLeft: isRTL ? 0 : 15, marginRight: isRTL ? 15 : 0 }]}>
+                                        {i18n.t('by')}:
+                                    </Text>
+                                    <Text style={[styles.ngoName, { color: currentColors.calmBlue, alignSelf: isRTL ? 'flex-start' : 'flex-end', marginLeft: isRTL ? 0 : 5, marginRight: isRTL ? 5 : 0 }]}>
+                                        {item?.ngo || 'Unknown'}
+                                    </Text>
+                                </View>
                             </View>
                         </View>
 
@@ -365,13 +362,22 @@ const styles = StyleSheet.create({
         marginTop: 10
     },
     ngoName: {
-        fontSize: 14,
-        fontWeight: '500',
         marginTop: 0,
         marginHorizontal: 15,
         //alignSelf: 'flex-end',
         top: 3,
-        marginBottom: 20
+        marginBottom: 20,
+        fontSize: 16,
+        fontWeight: '700',
+        //marginTop: 4,
+        // marginHorizontal: 15,
+        // marginBottom: 15,
+    },
+    by: {
+        fontSize: 14,
+        fontWeight: '500',
+        //marginTop: 4,
+        marginBottom: 15,
     },
     noCampaignText: {
         alignSelf: 'center',
