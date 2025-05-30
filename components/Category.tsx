@@ -127,11 +127,11 @@ const Categories = () => {
                                 onPress={() => router.push(`/category/${category.id}`)}
                             >
                                 <View style={styles.categoryContainer}>
-                                    {imageUrl ? (
+                                    {/* {imageUrl ? (
                                         <Image source={imageUrl} style={styles.icon} />
                                     ) : (
                                         <FontAwesome name="folder" size={24} color={currentColors.mainColor} />
-                                    )}
+                                    )} */}
                                     <Text
                                         style={[
                                             styles.itemText,
@@ -188,11 +188,12 @@ const styles = StyleSheet.create({
     categoryContainer: {
         alignItems: 'center',
         justifyContent: 'center',
-        width: 80,
-        height: 50
+        // width: 80,
+        // height: 50
     },
     itemText: {
         fontSize: 14,
+        fontWeight: '600',
         //color: Colors.darkGrey,
         letterSpacing: 0.5,
     },

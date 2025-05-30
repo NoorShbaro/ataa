@@ -70,93 +70,69 @@ export default function CampaignList() {
     };
 
     const renderCampaignItem = ({ item }: { item: Campaign }) => {
-        const imageUrl = item.featured_image
-            ? { uri: `${item.featured_image}` }
+        const imageSource = item.featured_image
+            ? { uri: item.featured_image }
             : require('@/assets/images/empty.jpg');
 
+        const flexDir = isRTL ? 'row-reverse' : 'row';
+        const textAlign = isRTL ? 'right' : 'left';
+
         return (
-            <TouchableOpacity onPress={() => router.push(`/campaign/${item.id}`)} style={{ marginHorizontal: 10 }}>
-
-                <View style={[styles.card, { backgroundColor: currentColors.cardBackground, shadowColor: currentColors.calmBlue }]}>
-                    <View style={{ margin: 10, marginVertical: 10 }}>
-                        <Image source={imageUrl} style={styles.image} />
-                        <View style={{
-                            flexDirection: isRTL ? 'row-reverse' : 'row',
-                            justifyContent: 'space-between',
-                            alignItems: 'center'
-                        }}>
-                            <Text style={[
-                                styles.campaignTitle,
+            <TouchableOpacity onPress={() => router.push(`/campaign/${item.id}`)} style={{ paddingHorizontal: 20, }}>
+                <View
+                    style={[
+                        styles.card,
+                        {
+                            backgroundColor: currentColors.cardBackground,
+                            shadowColor: currentColors.calmBlue,
+                        },
+                    ]}
+                >
+                    {/* row container */}
+                    <View style={{ flexDirection: flexDir, alignItems: 'center', padding: 12 }}>
+                        {/* thumbnail */}
+                        <Image
+                            source={imageSource}
+                            style={[
+                                styles.thumb,
                                 {
-                                    color: currentColors.mainColor,
-                                    textAlign: isRTL ? 'right' : 'left',
-                                    writingDirection: isRTL ? 'rtl' : 'ltr'
-                                }
-                            ]}>
-                                {item.title}
-                            </Text>
-                            <View>
-                                <Text style={[
-                                    styles.date,
-                                    {
-                                        color: currentColors.darkGrey,
-                                        textAlign: isRTL ? 'left' : 'right',
-                                        writingDirection: isRTL ? 'rtl' : 'ltr',
-                                        alignSelf: isRTL ? 'flex-start' : 'flex-end'
-                                    }
-                                ]}>
-                                    {i18n.t('availableTill')}: {item.end_date}
-                                </Text>
-                                {/* NGO Name */}
-                                <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row' }}>
-                                    <Text style={[styles.by, { color: currentColors.darkGrey, alignSelf: isRTL ? 'flex-start' : 'flex-end', marginLeft: isRTL ? 0 : 15, marginRight: isRTL ? 15 : 0 }]}>
-                                        {i18n.t('by')}:
-                                    </Text>
-                                    <Text style={[styles.ngoName, { color: currentColors.calmBlue, alignSelf: isRTL ? 'flex-start' : 'flex-end', marginLeft: isRTL ? 0 : 5, marginRight: isRTL ? 5 : 0 }]}>
-                                        {item?.ngo || 'Unknown'}
-                                    </Text>
-                                </View>
-                            </View>
-
-                        </View>
-
-                        {/* Progress Bar - remains unchanged */}
-                        <ProgressBar
-                            percentage={item.progress.percentage}
-                            raised={parseFloat(item.progress.raised)}
-                            remaining={item.progress.remaining}
-                            goal={parseFloat(item.goal_amount)}
+                                    marginEnd: isRTL ? 0 : 10,
+                                    marginStart: isRTL ? 10 : 0,
+                                },
+                            ]}
                         />
 
-                        <View style={{
-                            flexDirection: isRTL ? 'row-reverse' : 'row',
-                            justifyContent: 'space-between',
-                            marginTop: 5
-                        }}>
-                            <Text style={[
-                                styles.percentage,
-                                {
-                                    color: currentColors.mainColor,
-                                    textAlign: isRTL ? 'right' : 'left',
-                                    writingDirection: isRTL ? 'rtl' : 'ltr'
-                                }
-                            ]}>
-                                {i18n.t('collected')}: {item.progress.raised}$
+                        {/* text + progress */}
+                        <View style={{ flex: 1 }}>
+                            <Text
+                                numberOfLines={2}
+                                style={[
+                                    styles.title,
+                                    { color: currentColors.mainColor, textAlign },
+                                ]}
+                            >
+                                {item.title}
                             </Text>
-                            <Text style={[
-                                styles.percentage,
-                                {
-                                    color: currentColors.mainColor,
-                                    textAlign: isRTL ? 'left' : 'right',
-                                    writingDirection: isRTL ? 'ltr' : 'rtl'
-                                }
-                            ]}>
-                                {i18n.t('remaining')}: {item.progress.remaining}$
-                            </Text>
+
+                            <View style={{ flexDirection: isRTL ? 'row-reverse' : 'row' }}>
+                                <Text style={[styles.by, { color: currentColors.darkGrey, alignSelf: isRTL ? 'flex-start' : 'flex-end', marginLeft: isRTL ? 0 : 15, marginRight: isRTL ? 15 : 0 }]}>
+                                    {i18n.t('by')}:
+                                </Text>
+                                <Text style={[styles.ngo, { color: currentColors.calmBlue, alignSelf: isRTL ? 'flex-start' : 'flex-end', marginLeft: isRTL ? 0 : 5, marginRight: isRTL ? 5 : 0 }]}>
+                                    {item?.ngo || 'Unknown'}
+                                </Text>
+                            </View>
+
+                            {/* progress bar */}
+                            <ProgressBar
+                                percentage={item.progress.percentage}
+                                raised={parseFloat(item.progress.raised)}
+                                remaining={item.progress.remaining}
+                                goal={parseFloat(item.goal_amount)}
+                            />
                         </View>
                     </View>
                 </View>
-
             </TouchableOpacity>
         );
     };
@@ -181,7 +157,37 @@ export default function CampaignList() {
                             paddingHorizontal: 16,
                             paddingVertical: 20,
                             borderRadius: 10,
-                            height: 300,
+                            height: 100,
+                        }}
+                    />
+                    <MotiView
+                        from={{ opacity: 0.5 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ loop: true, type: 'timing', duration: 1000 }}
+                        style={{
+                            width: '100%',
+                            backgroundColor: currentColors.skeletonBase,
+                            alignSelf: 'flex-start',
+                            marginBottom: 10,
+                            paddingHorizontal: 16,
+                            paddingVertical: 20,
+                            borderRadius: 10,
+                            height: 100,
+                        }}
+                    />
+                    <MotiView
+                        from={{ opacity: 0.5 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ loop: true, type: 'timing', duration: 1000 }}
+                        style={{
+                            width: '100%',
+                            backgroundColor: currentColors.skeletonBase,
+                            alignSelf: 'flex-start',
+                            marginBottom: 10,
+                            paddingHorizontal: 16,
+                            paddingVertical: 20,
+                            borderRadius: 10,
+                            height: 100,
                         }}
                     />
                 </View>
@@ -226,14 +232,34 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     card: {
+        marginVertical: 8,
         borderRadius: 10,
-        marginBottom: 15,
-        width: '100%',
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.2,
-        shadowRadius: 5,
-        elevation: 5,
+        elevation: 3,
     },
+    thumb: {
+        width: 150,
+        height: 100,
+        borderRadius: 6,
+        resizeMode: 'cover',
+    },
+    title: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginBottom: 4,
+    },
+    ngo: {
+        fontSize: 16,
+        marginBottom: 6,
+    },
+    // card: {
+    //     borderRadius: 10,
+    //     marginBottom: 15,
+    //     width: '100%',
+    //     shadowOffset: { width: 0, height: 4 },
+    //     shadowOpacity: 0.2,
+    //     shadowRadius: 5,
+    //     elevation: 5,
+    // },
     image: {
         width: '100%',
         height: 150,
@@ -273,7 +299,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '500',
         //marginTop: 4,
-        marginBottom: 20,
+        marginBottom: 6,
     },
     noCampaignText: {
         alignSelf: 'center',

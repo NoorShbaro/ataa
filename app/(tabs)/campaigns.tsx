@@ -3,7 +3,7 @@ import { DarkColors, LightColors } from '@/constants/Colors';
 import { useTheme } from '@/constants/ThemeContext';
 import { useLanguage } from '@/constants/LanguageContext';
 import MainHeader from '@/components/MainHeader';
-import CampaignList from '@/components/CampaignList';
+import CampaignList_v2 from '@/components/CampaignList-v2';
 
 export default function Campaigns() {
 
@@ -15,7 +15,7 @@ export default function Campaigns() {
   return (
     <View style={[styles.container, { backgroundColor: currentColors.background }]}>
       <MainHeader />
-      <CampaignList />
+      <CampaignList_v2 />
     </View>
   );
 }

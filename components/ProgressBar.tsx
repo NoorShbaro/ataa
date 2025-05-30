@@ -15,19 +15,9 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ percentage }) => {
     const { isDarkMode } = useTheme();
     const currentColors = isDarkMode ? DarkColors : LightColors;
     const { isRTL } = useLanguage();
+    const { i18n } = useLanguage();
     return (
         <View style={styles.container}>
-            <Text style={[
-                styles.percentage,
-                {
-                    color: currentColors.mainColor,
-                    alignSelf: isRTL ? 'flex-start' : 'flex-end',
-                    fontSize: 14,
-                    textAlign: isRTL ? 'left' : 'right'
-                }
-            ]}>
-                {percentage}%
-            </Text>
             <View style={[
                 styles.progressBarBackground,
                 {
@@ -42,6 +32,31 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ percentage }) => {
                         backgroundColor: currentColors.calmBlue
                     }
                 ]} />
+            </View>
+
+            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <Text style={[
+                    styles.percentage,
+                    {
+                        color: currentColors.mainColor,
+                        alignSelf: isRTL ? 'flex-start' : 'flex-end',
+                        fontSize: 14,
+                        textAlign: isRTL ? 'left' : 'right'
+                    }
+                ]}>
+                    {i18n.t('raised')}: 
+                </Text>
+                <Text style={[
+                    styles.percentage,
+                    {
+                        color: currentColors.mainColor,
+                        alignSelf: isRTL ? 'flex-start' : 'flex-end',
+                        fontSize: 14,
+                        textAlign: isRTL ? 'left' : 'right'
+                    }
+                ]}>
+                    {percentage}%
+                </Text>
             </View>
         </View>
     );
