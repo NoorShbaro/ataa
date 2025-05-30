@@ -173,7 +173,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
             //setRefreshTimeout(expiresIn);
 
-            router.replace('/settings/profile');
+            router.replace('/success/ProfileSuccessScreen');
         } catch (error) {
             console.error('Login failed', error);
             if (axios.isAxiosError(error) && error.response?.status === 429) {
@@ -206,7 +206,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
             //setRefreshTimeout(expiresIn);
 
-            router.replace('/settings/profile');
+            router.replace('/success/ProfileSuccessScreen');
         } catch (error) {
             console.error('Signup failed', error);
             console.log(name, email, password);

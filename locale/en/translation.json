@@ -62,5 +62,7 @@
     "raised": " Raised",
     "description": "Description",
     "fundRaisedFrom" :"fund raised from",
-    "till": "Till"
+    "till": "Till",
+    "success": "Success",
+    "newAccount":"Welcome! Your account is all set now."
 }

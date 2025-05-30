@@ -62,5 +62,7 @@
     "raised" : "تم جمع",
     "description": "وصف",
     "fundRaisedFrom":"تم جمع من",
-    "till":"حتى"
+    "till":"حتى",
+    "success": "تم",
+    "newAccount":"أهلاً بك! حسابك جاهز الآن."
 }
